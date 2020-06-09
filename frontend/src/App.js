@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import jwt_decode from "jwt-decode"
-import setAuthToken from "./utils/authActions"
+import setAuthToken from "./utils/setAuthToken"
 import { setCurrentUser, logoutUser} from "./actions/authActions"
 
 
@@ -16,7 +16,7 @@ import Register from './components/Register'
 import Login from './components/Login'
 import Landing from './components/Landing'
 import PrivateRoute from "./components/private-route/PrivateRoute"
-import Dashboard from "./components/dashboard/Dashboard"
+import Dashboard from "./components/StudentDashboard"
 
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;

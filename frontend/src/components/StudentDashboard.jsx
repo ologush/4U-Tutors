@@ -23,3 +23,5 @@ class StudentDashboard extends Component {
         );
     }
 }
+
+export default StudentDashboard;

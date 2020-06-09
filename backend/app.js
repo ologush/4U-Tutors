@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-
+const db = require("./config/keys").mongoURI;
+var passport = require("passport");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -32,7 +33,7 @@ app.use(bodyParser.json());
 mongoose
   .connect(
     db,
-    { userNewUrlParser: true }
+    { useNewUrlParser: true }
   )
   .then(() => console.log("MongoDB successfully connected"))
   .catch(err => console.log(err));

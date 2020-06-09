@@ -4,6 +4,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../actions/authActions";
 import classnames from "classnames"
+import Card from "@material-ui/core/Card"
+import CardContent from "@material-ui/core/CardContent"
+import Typography from "@material-ui/core/Typography"
+import CardActions from "@material-ui/core/CardActions"
+import TextField from "@material-ui/core/TextField"
+import Button from "@material-ui/core/Button"
 
 class Login extends Component {
     constructor() {
@@ -14,6 +20,9 @@ class Login extends Component {
             password: "",
             errors: {}
         };
+
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
@@ -52,9 +61,39 @@ class Login extends Component {
     render() {
         const { errors } = this.state;
         return(
-            <div>
+            <Card>
+                <CardContent>
+                    <Typography variant="h3">
+                        Login
+                    </Typography>
+                </CardContent>
+                <form onSubmit={this.onSubmit}>
 
-            </div>
+                
+                <CardActions>
+                    <TextField error={errors.email} id="email" onChange={this.onChange} label="Email" helperText="Please provide a valid Queen's University Email" className={classnames("", {
+                        invalid: errors.email || errors.emailNotFound
+                    })}/>
+                    <span className="red-text">
+                        {errors.email}
+                        {errors.emailNotFound}
+                    </span>
+                </CardActions>
+                <CardActions>
+                    <TextField error={errors.password} id="password" onChange={this.onChange} label="Password" className={classnames("", {
+                        invalid: errors.password || errors.passwordIncorrect
+                    })}/>
+                    <span className="red-text">
+                        {errors.password}
+                        {errors.passwordIncorrect}
+                    </span>
+                </CardActions>
+
+                <CardActions>
+                    <Button type="Submit">Login</Button>
+                </CardActions>
+                </form>
+            </Card>
         );
     }
 
