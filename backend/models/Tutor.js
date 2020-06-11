@@ -15,3 +15,5 @@ const TutorSchema = new Schema({
          required: true
      }
 });
+
+module.exports = Tutor = mongoose.model('tutors', TutorSchema);
