@@ -1,27 +1,28 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-    name: {
+const postingSchema = new Schema({
+    studentID: {
         type: String,
         required: true
     },
-    dateOfBirth: {
+    course: {
         type: String,
         required: true
     },
-    email: {
+    infoTags: {
+        type: Array,
+        required: true
+    },
+    description: {
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true
-    },
-    authLevel: {
+    year: {
         type: Number,
-        default: 0
+        required: true
     }
+
 });
 
-module.exports = User = mongoose.model('users', userSchema);
+module.exports = Posting = mongoose.model('postings', postingSchema);

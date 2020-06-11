@@ -8,6 +8,7 @@ const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 
 const User = require('../models/User');
+const Lesson = require('../models/Lesson');
 
 router.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -63,7 +64,9 @@ router.post('/login', (req, res) => {
           if(isMatch) {
             const payload = {
               id: user.id,
-              name: user.name
+              name: user.name,
+              email: user.email,
+              authLevel: user.authLevel
             };
 
             jwt.sign(
@@ -84,6 +87,18 @@ router.post('/login', (req, res) => {
           }
         });
     });
+});
+
+router.post('/getLessons', (req, res) => {
+  Lesson.findMany({ studentID: req.body.studentID })
+    .then(docs => {
+      if(docs) {
+        return res.json(docs);
+      } else {
+        return res.status(400).json({ noLessonsFound: "You have no Lessons" });
+      }
+    })
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

@@ -93,6 +93,7 @@ class NavBar extends Component {
     }
 
     handleAccountMenu(e) {
+        console.log(this.props.auth.user);
         this.setState({
             anchorEl: e.currentTarget,
             openAccountMenu: true
@@ -157,7 +158,7 @@ class NavBar extends Component {
                                 
 
                                 {studentRoutes.map((option) => (
-
+                                    
                                 (this.props.auth.user.authLevel >= option.authLevel ?
                                 
                                     <MenuItem key={option.name} id={option.path} selected={option === 'Pyxis'} onClick={this.handleClose}>
