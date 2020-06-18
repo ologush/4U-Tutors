@@ -17,6 +17,7 @@ import Login from './components/Login'
 import Landing from './components/Landing'
 import PrivateRoute from "./components/private-route/PrivateRoute"
 import Dashboard from "./components/StudentDashboard"
+import DisplayLessons from "./components/DisplayLessons"
 
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
@@ -50,6 +51,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            <PrivateRoute exact path="/displayLessons" component={DisplayLessons} />
           </Switch>
         </div>
       </Router>

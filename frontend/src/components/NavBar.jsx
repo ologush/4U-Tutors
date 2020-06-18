@@ -31,6 +31,11 @@ const studentRoutes = [
         name: "Search for Tutors",
         path: "./TutorSearch",
         authLevel: 0
+    },
+    {
+        name: "Display Lessons",
+        path: "./displayLessons",
+        authLevel: 0
     }
 ];
 
