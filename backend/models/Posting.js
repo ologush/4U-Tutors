@@ -21,6 +21,10 @@ const postingSchema = new Schema({
     year: {
         type: Number,
         required: true
+    },
+    studentName: {
+        type: String,
+        required: true
     }
 
 });

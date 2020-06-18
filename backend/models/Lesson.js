@@ -13,6 +13,18 @@ const lessonSchema = new Schema({
     dateAndTime: {
         type: String,
         required: true
+    },
+    subject: {
+        type: String,
+        required: true
+    },
+    tutorName: {
+        type: String,
+        required: true
+    },
+    studentName: {
+        type: String,
+        required: true
     }
 });
 

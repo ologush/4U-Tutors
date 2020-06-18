@@ -35,9 +35,14 @@ class DisplayLessons extends Component {
         return(
             <div>
                 <Typography variant="h1">These are your lessons</Typography>
-
+                
                 {this.state.lessons.map((lesson) => (
+                    <div>
                     <Typography variant="h4">{lesson.dateAndTime}</Typography>
+                    <Typography variant="h4">{lesson.subject}</Typography>
+                    <Typography variant="h4">{lesson.studentName}</Typography>
+                    <Typography variant="h4">{lesson.tutorName}</Typography>
+                    </div>
                 ))}
             </div>
         );
