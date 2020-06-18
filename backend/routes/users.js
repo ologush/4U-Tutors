@@ -90,7 +90,7 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/getLessons', (req, res) => {
-  Lesson.findMany({ studentID: req.body.studentID })
+  Lesson.find({ studentID: req.body.studentID })
     .then(docs => {
       if(docs) {
         return res.json(docs);

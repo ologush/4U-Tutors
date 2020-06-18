@@ -5,9 +5,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
 
+
 const Tutor = require('../models/Tutor');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
+const Posting = require('../models/Posting');
+
 //Add input validation
 
 router.post('/register', (req, res) => {
@@ -78,7 +81,7 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/findLessons', (req, res) => {
-    Lesson.findMany({ tutorID: req.body.tutorID})
+    Lesson.find({ tutorID: req.body.tutorID})
         .then(docs => {
             if(docs) {
                 return res.json(docs);
@@ -88,5 +91,7 @@ router.post('/findLessons', (req, res) => {
         })
         .catch(err => console.log(err));
 });
+
+
 
 module.exports = router;
