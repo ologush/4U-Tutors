@@ -26,6 +26,7 @@ router.post('/addPosting', (req, res) => {
                     .then(posting => res.json(posting))
                     .catch(err => console.log(err));
             } else {
+                console.log("The user doesnt exist");
                 return res.status(400).json( {userError: "User does not exist"} );
             }
         })
