@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import Lobby from './Lobby';
 import axios from 'axios';
+import Room from './Room';
 
  const VideoChat = () => {
      const [username, setUsername] = useState('');
@@ -41,9 +42,7 @@ import axios from 'axios';
      if(token) {
          render = (
              <div>
-                 <p>Username: {username}</p>
-                 <p>Room name: {roomName}</p>
-                 <p>Token: {token}</p>
+                 <Room roomName={roomName} token={token} handleLogout={handleLogout} />
              </div>
          );
      } else {
