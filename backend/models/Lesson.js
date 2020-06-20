@@ -25,6 +25,10 @@ const lessonSchema = new Schema({
     studentName: {
         type: String,
         required: true
+    },
+    videoChatToken: {
+        type: String,
+        required: true
     }
 });
 
