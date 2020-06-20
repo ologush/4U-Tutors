@@ -8,7 +8,7 @@ const Lesson = require('../models/Lesson');
 
 router.post('/addPosting', (req, res) => {
     //add the validation here see other routes
-
+    
     User.findOne({ _id: req.body.studentID })
         .then(user => {
             if(user) {
@@ -17,7 +17,8 @@ router.post('/addPosting', (req, res) => {
                     course: req.body.course,
                     infoTags: req.body.infoTags,
                     description: req.body.description,
-                    year: req.body.year
+                    year: req.body.year,
+                    studentName: req.body.studentName
                 });
 
                 newPosting
@@ -25,6 +26,7 @@ router.post('/addPosting', (req, res) => {
                     .then(posting => res.json(posting))
                     .catch(err => console.log(err));
             } else {
+                console.log("The user doesnt exist");
                 return res.status(400).json( {userError: "User does not exist"} );
             }
         })
@@ -49,18 +51,16 @@ router.post('/getPostingsByTags', (req, res) => {
 });
 
 router.post('/setMatch', (req, res) => {
-    const newLesson = new Lesson({
-        studentID: req.body.studentID,
-        tutorID: req.body.tutorID,
-        dateAndTime: req.body.dateAndTime
-    });
-
+    
     Posting.findOneAndDelete({ _id: req.body.postingID })
         .then(posting => {
             const newLesson = new Lesson({
                 studentID: posting.studentID,
                 tutorID: req.body.tutorID,
-                dateAndTime: req.body.dateAndTime
+                dateAndTime: req.body.dateAndTime,
+                subject: posting.course,
+                tutorName: req.body.tutorName,
+                studentName: posting.studentName
             });
 
             newLesson.save()
