@@ -8,7 +8,7 @@ const Lesson = require('../models/Lesson');
 
 router.post('/addPosting', (req, res) => {
     //add the validation here see other routes
-
+    
     User.findOne({ _id: req.body.studentID })
         .then(user => {
             if(user) {
