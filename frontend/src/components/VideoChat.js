@@ -2,12 +2,15 @@ import React, { useState, useCallback } from 'react'
 import Lobby from './Lobby';
 import axios from 'axios';
 import Room from './Room';
+import { useSelector } from 'react-redux'
 
- const VideoChat = () => {
+
+ const VideoChat = ({ match }) => {
      const [username, setUsername] = useState('');
      const [roomName, setRoomName] = useState('');
      const [token, setToken] = useState(null);
 
+     const user = useSelector(state => state.auth.user);
 
      const handleUsernameChange = useCallback(event => {
          setUsername(event.target.value);
@@ -23,8 +26,8 @@ import Room from './Room';
          axios
             .get("/videoChat/token", {
                 params: {
-                    identity: username,
-                    room: roomName
+                    identity: user.name,
+                    room: match.params.meetingID
                 }
             })
             .then(res => {

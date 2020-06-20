@@ -17,7 +17,9 @@ class DisplayLessons extends Component {
 
         this.state = {
             lessons: []
-        }
+        };
+
+        this.enterLesson = this.enterLesson.bind(this);
 
     }
 
@@ -30,7 +32,16 @@ class DisplayLessons extends Component {
                     lessons: res.data
                 });
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
+    }
+
+    enterLesson(e) {
+        e.preventDefault();
+        //const name = e.target.name;
+        console.log(e.target.id);
+        const url = "/videoChat/" + e.target.id;
+
+        this.props.history.push(url);
     }
 
     render() {
@@ -40,10 +51,13 @@ class DisplayLessons extends Component {
                 
                 {this.state.lessons.map((lesson) => (
                     <div>
+
                     <Typography variant="h4">{lesson.dateAndTime}</Typography>
                     <Typography variant="h4">{lesson.subject}</Typography>
                     <Typography variant="h4">{lesson.studentName}</Typography>
                     <Typography variant="h4">{lesson.tutorName}</Typography>
+                    
+                    <button id={lesson._id} onClick={this.enterLesson}>Enter Lesson</button>
                     </div>
                 ))}
             </div>
@@ -56,7 +70,8 @@ DisplayLessons.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    errors: state.errors
 });
 
 export default connect(

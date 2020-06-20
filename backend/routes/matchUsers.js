@@ -54,29 +54,17 @@ router.post('/setMatch', (req, res) => {
     Posting.findOneAndDelete({ _id: req.body.postingID })
         .then(posting => {
 
-            axios
-                .get('http://localhost:3001/videoChat/token', {
-                    params: {
-                        identity: posting.studentID,
-                        roomName: posting.studentName
-                    }
-                })
-                .then(token => {
-                    const newLesson = new Lesson({
-                        studentID: posting.studentID,
-                        tutorID: req.body.tutorID,
-                        dateAndTime: req.body.dateAndTime,
-                        subject: posting.course,
-                        tutorName: req.body.tutorName,
-                        studentName: posting.studentName,
-                        videoChatToken: token.data
-                    });
+            const newLesson = new Lesson({
+                studentID: posting.studentID,
+                tutorID: req.body.tutorID,
+                dateAndTime: req.body.dateAndTime,
+                subject: posting.course,
+                tutorName: req.body.tutorName,
+                studentName: posting.studentName
+            });
 
-                    newLesson.save()
-                        .then(lesson => res.json(lesson))
-                        .catch(err => console.log(err))
-
-                })
+            newLesson.save()
+                .then(lesson => res.json(lesson))
                 .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
