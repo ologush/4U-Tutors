@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button"
-
+import { setCurrentLesson } from "../actions/lessonActions"
 
 import { Link, withRouter } from "react-router-dom"
 
@@ -37,11 +37,12 @@ class DisplayLessons extends Component {
 
     enterLesson(e) {
         e.preventDefault();
-        //const name = e.target.name;
-        console.log(e.target.id);
-        const url = "/videoChat/" + e.target.id;
 
-        this.props.history.push(url);
+        console.log(e.target.id);
+
+        this.props.setCurrentLesson(this.state.lessons[e.target.id]);
+
+        this.props.history.push('/videoChat');
     }
 
     render() {
@@ -49,7 +50,7 @@ class DisplayLessons extends Component {
             <div>
                 <Typography variant="h1">These are your lessons</Typography>
                 
-                {this.state.lessons.map((lesson) => (
+                {this.state.lessons.map((lesson, index) => (
                     <div>
 
                     <Typography variant="h4">{lesson.dateAndTime}</Typography>
@@ -57,7 +58,7 @@ class DisplayLessons extends Component {
                     <Typography variant="h4">{lesson.studentName}</Typography>
                     <Typography variant="h4">{lesson.tutorName}</Typography>
                     
-                    <button id={lesson._id} onClick={this.enterLesson}>Enter Lesson</button>
+                    <button id={index} onClick={this.enterLesson}>Enter Lesson</button>
                     </div>
                 ))}
             </div>
@@ -66,7 +67,8 @@ class DisplayLessons extends Component {
 }
 
 DisplayLessons.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    setCurrentLesson: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -75,5 +77,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { setCurrentLesson }
 )(withRouter(DisplayLessons));

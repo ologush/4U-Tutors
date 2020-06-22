@@ -9,28 +9,8 @@ const Lobby = ({
 }) => {
     return(
         <form onSubmit={handleSubmit}>
-            <h2>Enter a room</h2>
-            <div>
-                <label htmlFor="name">Name:</label>
-                <input 
-                    type="text"
-                    id="field"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    required
-                />
-            </div>
-
-            <div>
-                <label htmlFor="room">Room name</label>
-                <input 
-                    type="text"
-                    id="room"
-                    value={roomName}
-                    onChange={handleRoomNameChange}
-                    required
-                />
-            </div>
+            <h2>Welcome username</h2>
+            <h2>Lobby for lesson: {roomName}</h2>
 
             <button type="submit">Submit</button>
 

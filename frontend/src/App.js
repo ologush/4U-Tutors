@@ -55,7 +55,7 @@ function App() {
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/displayLessons" component={DisplayLessons} />
             <PrivateRoute exact path="/makePosting" component={MakePosting} />
-            <PrivateRoute exact path="/videoChat/:meetingID" component={VideoChat} />
+            <PrivateRoute exact path="/videoChat" component={VideoChat} />
           </Switch>
         </div>
       </Router>

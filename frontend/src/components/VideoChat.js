@@ -2,16 +2,18 @@ import React, { useState, useCallback } from 'react'
 import Lobby from './Lobby';
 import axios from 'axios';
 import Room from './Room';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { endLesson } from '../actions/lessonActions'
 
 
- const VideoChat = ({ match }) => {
+ const VideoChat = ({}) => {
      const [username, setUsername] = useState('');
      const [roomName, setRoomName] = useState('');
      const [token, setToken] = useState(null);
 
      const user = useSelector(state => state.auth.user);
-
+     const lesson = useSelector(state => state.lesson.lesson);
+     const dispatch = useDispatch();
      const handleUsernameChange = useCallback(event => {
          setUsername(event.target.value);
      }, []);
@@ -23,11 +25,12 @@ import { useSelector } from 'react-redux'
      const handleSubmit = useCallback(async event => {
          event.preventDefault();
 
+         console.log(lesson);
          axios
             .get("/videoChat/token", {
                 params: {
                     identity: user.name,
-                    room: match.params.meetingID
+                    room: lesson._id
                 }
             })
             .then(res => {
@@ -38,6 +41,7 @@ import { useSelector } from 'react-redux'
 
      const handleLogout = useCallback(event => {
          setToken(null);
+         dispatch(endLesson());
      }, []);
 
      let render;
@@ -51,8 +55,8 @@ import { useSelector } from 'react-redux'
      } else {
          render = (
              <Lobby 
-                username={username}
-                roomName={roomName}
+                username={user.name}
+                roomName={lesson.subject}
                 handleUsernameChange={handleUsernameChange}
                 handleRoomNameChange={handleRoomNameChange}
                 handleSubmit={handleSubmit}

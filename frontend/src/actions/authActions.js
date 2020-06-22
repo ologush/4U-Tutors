@@ -59,4 +59,4 @@ export const logoutUser = () => dispatch => {
     setAuthToken(false);
 
     dispatch(setCurrentUser({}));
-}
+};
