@@ -13,6 +13,8 @@ const Posting = require('../models/Posting');
 
 //Add input validation
 
+const validateLoginInput = require("../validation/login");
+
 router.post('/register', (req, res) => {
     Tutor.findOne({ email: req.body.email })
         .then(tutor => {
@@ -41,10 +43,20 @@ router.post('/register', (req, res) => {
 
 //add input validation
 router.post('/login', (req, res) => {
+
+    const { errors, isValid } = validateLoginInput(req.body);
+
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    
+
     const email = req.body.email;
+    console.log(req.body.email);
     const password = req.body.password;
 
-    Tutor.findOne({ email })
+    Tutor.findOne({ email: email })
         .then(tutor => {
             if(tutor) {
                 bcrypt.compare(password, tutor.password)
@@ -70,17 +82,19 @@ router.post('/login', (req, res) => {
                                 }
                             );
                         } else {
+                            console.log("Password incorrect");
                             return res.status(400).json({ passwordIncorrect: "Password was Entered incorrectly"});
                         }
                         
                     });
             } else {
+                console.log("email incorrect");
                 return res.status(400).json({ tutorNotFound: "No account with this email exists"});
             }
         });
 });
 
-router.post('/findLessons', (req, res) => {
+router.post('/getLessons', (req, res) => {
     Lesson.find({ tutorID: req.body.tutorID})
         .then(docs => {
             if(docs) {
