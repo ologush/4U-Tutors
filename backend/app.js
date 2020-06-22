@@ -12,6 +12,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var matchingRouter = require('./routes/matchUsers');
 var tutorRouter = require('./routes/tutors');
+var videoChatRouter = require('./routes/videochat');
 
 var app = express();
 
@@ -48,6 +49,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/match', matchingRouter);
 app.use('/tutors', tutorRouter);
+app.use('/videoChat', videoChatRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

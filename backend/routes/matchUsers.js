@@ -4,6 +4,7 @@ var router = express.Router();
 const Posting = require('../models/Posting');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
+const axios = require('axios');
 //Add a validation layer
 
 router.post('/addPosting', (req, res) => {
@@ -46,14 +47,13 @@ router.post('/getPostingsByTags', (req, res) => {
             return res.json(docs);
         })
         .catch(err => console.log(err));
-
-    
 });
 
 router.post('/setMatch', (req, res) => {
     
     Posting.findOneAndDelete({ _id: req.body.postingID })
         .then(posting => {
+
             const newLesson = new Lesson({
                 studentID: posting.studentID,
                 tutorID: req.body.tutorID,
@@ -65,7 +65,7 @@ router.post('/setMatch', (req, res) => {
 
             newLesson.save()
                 .then(lesson => res.json(lesson))
-                .catch(err => console.log(err));
+                .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
 });

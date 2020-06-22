@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button"
-
+import { setCurrentLesson } from "../actions/lessonActions"
 
 import { Link, withRouter } from "react-router-dom"
 
@@ -17,7 +17,9 @@ class DisplayLessons extends Component {
 
         this.state = {
             lessons: []
-        }
+        };
+
+        this.enterLesson = this.enterLesson.bind(this);
 
     }
 
@@ -30,7 +32,17 @@ class DisplayLessons extends Component {
                     lessons: res.data
                 });
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
+    }
+
+    enterLesson(e) {
+        e.preventDefault();
+
+        console.log(e.target.id);
+
+        this.props.setCurrentLesson(this.state.lessons[e.target.id]);
+
+        this.props.history.push('/videoChat');
     }
 
     render() {
@@ -38,12 +50,15 @@ class DisplayLessons extends Component {
             <div>
                 <Typography variant="h1">These are your lessons</Typography>
                 
-                {this.state.lessons.map((lesson) => (
+                {this.state.lessons.map((lesson, index) => (
                     <div>
+
                     <Typography variant="h4">{lesson.dateAndTime}</Typography>
                     <Typography variant="h4">{lesson.subject}</Typography>
                     <Typography variant="h4">{lesson.studentName}</Typography>
                     <Typography variant="h4">{lesson.tutorName}</Typography>
+                    
+                    <button id={index} onClick={this.enterLesson}>Enter Lesson</button>
                     </div>
                 ))}
             </div>
@@ -52,13 +67,16 @@ class DisplayLessons extends Component {
 }
 
 DisplayLessons.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    setCurrentLesson: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    errors: state.errors
 });
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    { setCurrentLesson }
 )(withRouter(DisplayLessons));
