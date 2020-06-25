@@ -107,7 +107,9 @@ class MakePosting extends Component {
 
         axios
             .post("/match/addPosting", submissionData)
-            .then(res => console.log(res))
+            .then(res => {
+                this.props.history.push('/myPostings');
+            })
             .catch(err => console.log(err));
         
         

@@ -9,6 +9,7 @@ const validateLoginInput = require('../validation/login');
 
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
+const Posting = require('../models/Posting');
 
 router.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -97,6 +98,27 @@ router.post('/getLessons', (req, res) => {
       } else {
         return res.status(400).json({ noLessonsFound: "You have no Lessons" });
       }
+    })
+    .catch(err => console.log(err));
+});
+
+//Will probably have to change to a get method along with other routes
+router.post('/getPostings', (req, res) => {
+  Posting.find({ studentID: req.body.studentID })
+    .then(docs => {
+      if(docs) {
+        return res.json(docs);
+      } else {
+        return res.status(400).json({ noPostingsFound: "You have no postings made from this account"});
+      }
+    })
+    .catch(err => console.log(err))
+});
+
+router.post('/deletePosting', (req, res) => {
+  Posting.findOneAndDelete({ _id: req.body.postingID })
+    .then(del => {
+      res.json(del);
     })
     .catch(err => console.log(err));
 });

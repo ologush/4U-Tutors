@@ -21,54 +21,19 @@ const accountOptions = [
     "Logout"
 ];
 
-const studentRoutes = [
-    {
-        name: "Home",
-        path: "./HomePage",
-        authLevel: 0
-    },
-    {
-        name: "Search for Tutors",
-        path: "./TutorSearch",
-        authLevel: 0
-    },
-    {
-        name: "Display Lessons",
-        path: "./displayLessons",
-        authLevel: 0
-    },
-    {
-        name: "Make Lesson Posting",
-        path: "./makePosting",
-        authLevel: 0
-    },
-    {
-        name: "My Postings",
-        path: "./myPostings",
-        authLevel: 0
-    }
-];
 
 const tutorRoutes = [
     {
         name: "Home",
-        path: "./HomePage",
-        authLevel: 0
+        path: "./HomePage"
     },
     {
-        name: "My Students",
-        path: "./MyStudents",
-        authLevel: 0
+        name: "My Lessons",
+        path: "./myLessons"
     },
     {
-        name: "Upcoming Lessons",
-        path: "./UpcomingLessons",
-        authLevel: 0
-    },
-    {
-        name: "Find Students",
-        path: "./FindStudents",
-        authLevel: 0
+        name: "Find Postings",
+        path: "./findPostings"
     }
 ];
 
@@ -172,18 +137,13 @@ class NavBar extends Component {
                             >
                                 
 
-                                {studentRoutes.map((option) => (
+                                {tutorRoutes.map((option) => (
                                     
-                                (this.props.auth.user.authLevel >= option.authLevel ?
+                                
                                 
                                     <MenuItem key={option.name} id={option.path} selected={option === 'Pyxis'} onClick={this.handleClose}>
                                         {option.name}
                                     </MenuItem> 
-                                : null )
-                                    
-                                
-                                    
-                                    
                                 ))}
                             </Menu>
 
