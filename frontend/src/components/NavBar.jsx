@@ -41,6 +41,11 @@ const studentRoutes = [
         name: "Make Lesson Posting",
         path: "./makePosting",
         authLevel: 0
+    },
+    {
+        name: "My Postings",
+        path: "./myPostings",
+        authLevel: 0
     }
 ];
 

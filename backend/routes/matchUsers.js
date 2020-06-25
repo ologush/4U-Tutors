@@ -49,8 +49,18 @@ router.post('/getPostingsByTags', (req, res) => {
         .catch(err => console.log(err));
 });
 
+router.get('/getPostings', (req, res) => {
+    Posting.find()
+        .then(docs => {
+            return res.json(docs);
+        })
+        .catch(err => console.log(err));
+});
+
 router.post('/setMatch', (req, res) => {
     
+   
+
     Posting.findOneAndDelete({ _id: req.body.postingID })
         .then(posting => {
 

@@ -95,9 +95,12 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/getLessons', (req, res) => {
+
+    
     Lesson.find({ tutorID: req.body.tutorID})
         .then(docs => {
             if(docs) {
+                console.log(docs);
                 return res.json(docs);
             } else {
                 return res.status(400).json({ noLessonsFound: "You have no lessons"})

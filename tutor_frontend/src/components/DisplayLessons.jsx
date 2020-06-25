@@ -25,7 +25,7 @@ class DisplayLessons extends Component {
 
     componentDidMount() {
         axios
-            .post("/tutors/getLessons", {studentID: this.props.auth.user.id})
+            .post("/tutors/getLessons", {tutorID: this.props.auth.user.id})
             .then(res => {
                 console.log(res.data);
                 this.setState({

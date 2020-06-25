@@ -9,6 +9,7 @@ import { setCurrentUser, logoutUser } from "./actions/authActions"
 import { Provider } from "react-redux"
 import store from "./store"
 
+import BookingPage from "./components/BookingPage"
 import Register from "./components/Register"
 import Login from "./components/Login"
 import Landing from "./components/Landing"
@@ -16,6 +17,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute"
 import Dashboard from "./components/TutorDashboard"
 import DisplayLessons from "./components/DisplayLessons"
 import VideoChat from "./components/VideoChat"
+import FindPostings from "./components/FindPostings"
 
 import NavBar from "./components/NavBar"
 
@@ -47,8 +49,10 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
-            <PrivateRoute exact path="/displayLessons" component={DisplayLessons} />
+            <PrivateRoute exact path="/myLessons" component={DisplayLessons} />
             <PrivateRoute exact path="/videoChat" component={VideoChat} />
+            <PrivateRoute exact path="/findPostings" component={FindPostings} />
+            <PrivateRoute exact path="/booking" component={BookingPage} />
           </Switch>
         </div>
       </Router>
