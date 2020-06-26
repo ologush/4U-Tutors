@@ -8,7 +8,8 @@ import { endLesson } from '../actions/lessonActions'
 
  const VideoChat = ({}) => {
      const [username, setUsername] = useState('');
-     const [roomName, setRoomName] = useState('');
+     
+     const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
      const [token, setToken] = useState(null);
 
      const user = useSelector(state => state.auth.user);
