@@ -35,6 +35,23 @@ router.post('/addPosting', (req, res) => {
 
 });
 
+router.post("/editPosting", (req, res) => {
+
+    const update = {
+        studentID: req.body.studentID,
+        course: req.body.course,
+        infoTags: req.body.infoTags,
+        description: req.body.description,
+        year: req.body.year,
+        studentName: req.body.studentName
+    };
+    Posting.findOneAndUpdate({ _id: req.body.postingID }, update)
+        .then(doc => {
+            res.json(doc);
+        })
+        .catch(err => console.log(err))
+});
+
 router.post('/getPostingsByTags', (req, res) => {
     const tags = req.body.tags;
     console.log(tags);

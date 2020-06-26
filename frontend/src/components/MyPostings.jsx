@@ -18,7 +18,7 @@ class MyPostings extends Component {
         };
 
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleEdit = this.handleEdit.bind(this);
+        
     }
 
     componentWillMount() {
@@ -45,9 +45,7 @@ class MyPostings extends Component {
             .catch(err => console.log(err));
     }
 
-    handleEdit(e) {
-
-    }
+    
 
 
     render() {
@@ -61,7 +59,13 @@ class MyPostings extends Component {
                         <Typography variant="h2">Description: {posting.description}</Typography>
                         <Typography variant="h2">Year: {posting.year}</Typography>
                         <button id={index} name="delete" onClick={this.handleDelete}>Delete</button>
-                        <button id={index} name="edit">Edit</button>
+                        <Link to={{
+                            pathname: "/makePosting",
+                            posting: this.state.postings[index]
+                        }}>
+                            <button id={index} name="edit">Edit</button>
+                        </Link>
+                        
                     </div>
                 ))}
             </div>
