@@ -136,19 +136,21 @@ class MakePosting extends Component {
 
         
 
-        const submissionData = {
-            studentID: this.props.auth.user.id,
-            course: this.state.course,
-            description: this.state.description,
-            year: this.state.year,
-            studentName: this.props.auth.user.name,
-            infoTags: chosenTags,
-            postingID: this.props.location.posting._id
-        }
+        
 
-        console.log(submissionData);
+        
 
         if(!isEmpty(this.props.location.posting)) {
+            const submissionData = {
+                studentID: this.props.auth.user.id,
+                course: this.state.course,
+                description: this.state.description,
+                year: this.state.year,
+                studentName: this.props.auth.user.name,
+                infoTags: chosenTags,
+                postingID: this.props.location.posting._id
+            }
+
             axios
                 .post("/match/editPosting", submissionData)
                 .then(res => {
@@ -157,6 +159,14 @@ class MakePosting extends Component {
                 .catch(err => console.log(err));
 
         } else {
+            const submissionData = {
+                studentID: this.props.auth.user.id,
+                course: this.state.course,
+                description: this.state.description,
+                year: this.state.year,
+                studentName: this.props.auth.user.name,
+                infoTags: chosenTags
+            };
             axios
                 .post("/match/addPosting", submissionData)
                 .then(res => {
@@ -246,7 +256,8 @@ MakePosting.propTypes = {
 };
 
 MakePosting.defaultProps = {
-    posting: null
+    posting: null,
+
 };
 
 const mapStateToProps = state => ({
