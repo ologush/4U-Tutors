@@ -4,6 +4,7 @@ import axios from 'axios';
 import Room from './Room';
 import { useSelector, useDispatch } from 'react-redux'
 import { endLesson } from '../actions/lessonActions'
+import ChatWindow from "./ChatWindow"
 
 
  const VideoChat = ({}) => {
@@ -50,18 +51,23 @@ import { endLesson } from '../actions/lessonActions'
      if(token) {
          render = (
              <div>
-                 <Room roomName={roomName} token={token} handleLogout={handleLogout} />
+                <Room roomName={roomName} token={token} handleLogout={handleLogout} />
+                <ChatWindow />
              </div>
          );
      } else {
          render = (
-             <Lobby 
-                username={user.name}
-                roomName={lesson.subject}
-                handleUsernameChange={handleUsernameChange}
-                handleRoomNameChange={handleRoomNameChange}
-                handleSubmit={handleSubmit}
-             />
+             <div>
+                <Lobby 
+                    username={user.name}
+                    roomName={lesson.subject}
+                    handleUsernameChange={handleUsernameChange}
+                    handleRoomNameChange={handleRoomNameChange}
+                    handleSubmit={handleSubmit}
+                />
+             
+             </div>
+             
          );
      }
 
