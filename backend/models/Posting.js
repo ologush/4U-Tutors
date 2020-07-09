@@ -25,8 +25,24 @@ const postingSchema = new Schema({
     studentName: {
         type: String,
         required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    availableTimes: {
+        type: Array,
+        required: true
+    },
+    datePosted: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    otherStudentIDs: {
+        type: String,
+        required: false
     }
-
 });
 
 module.exports = Posting = mongoose.model('postings', postingSchema);

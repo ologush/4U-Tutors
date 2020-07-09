@@ -11,7 +11,7 @@ const lessonSchema = new Schema({
         required: true
     },
     dateAndTime: {
-        type: String,
+        type: Date,
         required: true
     },
     subject: {
@@ -25,6 +25,23 @@ const lessonSchema = new Schema({
     studentName: {
         type: String,
         required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    dateCreated: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    nextDates: {
+        type: Array,
+        required: false
+    },
+    otherStudentIDs: {
+        type: Array,
+        required: false
     }
 });
 

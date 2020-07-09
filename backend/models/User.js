@@ -17,10 +17,6 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    },
-    authLevel: {
-        type: Number,
-        default: 0
     }
 });
 
