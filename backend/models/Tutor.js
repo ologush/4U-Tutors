@@ -14,6 +14,7 @@ const TutorSchema = new Schema({
          type: String,
          required: true
      }
+
 });
 
 module.exports = Tutor = mongoose.model('tutors', TutorSchema);

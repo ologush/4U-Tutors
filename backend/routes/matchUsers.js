@@ -9,7 +9,7 @@ const axios = require('axios');
 
 router.post('/addPosting', (req, res) => {
     //add the validation here see other routes
-    
+    console.log(req.body);
     User.findOne({ _id: req.body.studentID })
         .then(user => {
             if(user) {
@@ -19,7 +19,14 @@ router.post('/addPosting', (req, res) => {
                     infoTags: req.body.infoTags,
                     description: req.body.description,
                     year: req.body.year,
-                    studentName: req.body.studentName
+                    studentName: req.body.studentName,
+                    type: req.body.type,
+                    availableTimes: req.body.availableTimes,
+                    datePosted: req.body.datePosted,
+                    otherStudentIDs: req.body.otherStudentIDs,
+                    numberOfParticipants: req.body.numberOfParticipants,
+                    numberOfRecurringLessons: req.body.numberOfRecurringLessons,
+                    otherStudentEmails: req.body.otherStudentEmails
                 });
 
                 newPosting
@@ -43,7 +50,13 @@ router.post("/editPosting", (req, res) => {
         infoTags: req.body.infoTags,
         description: req.body.description,
         year: req.body.year,
-        studentName: req.body.studentName
+        studentName: req.body.studentName,
+        type: req.body.type,
+        availableTimes: req.body.availableTimes,
+        datePosted: req.body.datePosted,
+        otherStudentIDs: req.body.otherStudentIDs,
+        numberOfParticipants: req.body.numberOfParticipants,
+        numberOfRecurringLessons: req.body.numberOfRecurringLessons
     };
     Posting.findOneAndUpdate({ _id: req.body.postingID }, update)
         .then(doc => {

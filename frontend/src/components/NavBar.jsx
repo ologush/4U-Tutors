@@ -173,13 +173,11 @@ class NavBar extends Component {
                                 
 
                                 {studentRoutes.map((option) => (
-                                    
-                                (this.props.auth.user.authLevel >= option.authLevel ?
-                                
+                                                                    
                                     <MenuItem key={option.name} id={option.path} selected={option === 'Pyxis'} onClick={this.handleClose}>
                                         {option.name}
                                     </MenuItem> 
-                                : null )
+                                
                                     
                                 
                                     
