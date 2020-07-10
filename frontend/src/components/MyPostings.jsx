@@ -32,6 +32,7 @@ class MyPostings extends Component {
                 });
             })
             .catch(err => console.log(err))
+            
     }
 
     handleDelete(e) {
@@ -54,6 +55,7 @@ class MyPostings extends Component {
                 <Typography variant="h1">This is your postings page</Typography>
                 {this.state.postings.map((posting, index) => (
                     <div>
+                        {console.log(this.state.postings)}
                         <Typography variant="h2">Course: {posting.course}</Typography>
                         <Typography variant="h2">Tags: {posting.tags}</Typography>
                         <Typography variant="h2">Description: {posting.description}</Typography>

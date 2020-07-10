@@ -16,9 +16,13 @@ class MultipleDateTimePicker extends Component {
     constructor(props) {
         super(props);
         console.log(this.props.alreadySelectedDates);
+        let dates = [];
+        this.props.alreadySelectedDates.forEach((value, index) => {
+            dates.push(new Date(value));
+        });
         this.state = {
             currentDate: new Date(),
-            selectedDates: this.props.alreadySelectedDates
+            selectedDates: dates
         }
 
         console.log(this.state.selectedDates);
