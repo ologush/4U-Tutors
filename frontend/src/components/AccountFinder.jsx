@@ -11,10 +11,20 @@ class AccountFinder extends Component {
     constructor(props) {
         super(props);
 
+        let users = [];
+
+        this.props.addedEmails.forEach((value, index) => {
+            users.push({email: value, _id: this.props.addedStudentIDs[index]});
+        });
+
         this.state = {
             currentEmailEntry: "",
-            addedUsers: []
+            addedUsers: users
         };
+
+        console.log(this.props.addedEmails);
+
+        console.log(this.state.addedUsers);
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -78,7 +88,9 @@ class AccountFinder extends Component {
             <div>
                 {
                     this.state.addedUsers.map(user => (
+                       
                         <div>
+                            {console.log(user)}
                             <Typography variant="h6">{user.email}</Typography>
                             <button id={user._id} onClick={this.deleteStudent}>
                                 X
@@ -97,7 +109,9 @@ class AccountFinder extends Component {
 AccountFinder.propTypes = {
     addStudent: PropTypes.func.isRequired,
     deleteStudent: PropTypes.func.isRequired,
-    maxEmails: PropTypes.bool
+    maxEmails: PropTypes.number,
+    addedEmails: PropTypes.array,
+    addedStudentIDs: PropTypes.array
 };
 AccountFinder.defaultProps = {
     isEnabled: true

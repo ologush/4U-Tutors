@@ -131,7 +131,8 @@ class MakePosting extends Component {
             otherStudentIDs: [],
             type: "",
             numberOfParticipants: 0,
-            numberOfRecurringLessons: 0
+            numberOfRecurringLessons: 0,
+            availableDates: []
         }
 
         
@@ -157,8 +158,16 @@ class MakePosting extends Component {
                 infoTags: infoTags,
                 description: this.props.location.posting.description,
                 year: this.props.location.posting.year,
-                studentName: this.props.location.posting.studentName
+                studentName: this.props.location.posting.studentName,
+                type: this.props.location.posting.type,
+                availableDates: this.props.location.posting.availableTimes,
+                otherStudentIDs: this.props.location.posting.otherStudentIDs,
+                numberOfParticipants: this.props.location.posting.numberOfParticipants,
+                numberOfRecurringLessons: this.props.location.posting.numberOfRecurringLessons,
+                otherStudentEmails: this.props.location.posting.otherStudentEmails
             }
+
+            console.log();
 
         
         }
@@ -175,6 +184,8 @@ class MakePosting extends Component {
         this.handleSelect = this.handleSelect.bind(this);
         this.addStudent = this.addStudent.bind(this);
         this.deleteStudent = this.deleteStudent.bind(this);
+        this.addDate = this.addDate.bind(this);
+        this.removeDate = this.removeDate.bind(this);
     }
 
     onSubmit() {
@@ -202,8 +213,16 @@ class MakePosting extends Component {
                 year: this.state.year,
                 studentName: this.props.auth.user.name,
                 infoTags: chosenTags,
-                postingID: this.props.location.posting._id
+                postingID: this.props.location.posting._id,
+                type: this.state.type,
+                availableTimes: this.state.availableDates,
+                otherStudentIDs: this.state.otherStudentIDs,
+                numberOfParticipants: this.state.numberOfParticipants,
+                numberOfRecurringLessons: this.state.numberOfRecurringLessons,
+                otherStudentEmails: this.state.otherStudentEmails
             }
+            console.log(this.props.location.posting)
+            
 
             axios
                 .post("/match/editPosting", submissionData)
@@ -219,7 +238,13 @@ class MakePosting extends Component {
                 description: this.state.description,
                 year: this.state.year,
                 studentName: this.props.auth.user.name,
-                infoTags: chosenTags
+                infoTags: chosenTags,
+                type: this.state.type,
+                availableTimes: this.state.availableDates,
+                otherStudentIDs: this.state.otherStudentIDs,
+                numberOfParticipants: this.state.numberOfParticipants,
+                numberOfRecurringLesons: this.state.numberOfRecurringLessons,
+                otherStudentEmails: this.state.otherStudentEmails
             };
             axios
                 .post("/match/addPosting", submissionData)
@@ -268,7 +293,6 @@ class MakePosting extends Component {
     }
 
     addStudent(student) {
-        console.log(this.state.otherStudentIDs);
         this.setState(prevState => ({
             otherStudentEmails: [...prevState.otherStudentEmails, student.email],
             otherStudentIDs: [...prevState.otherStudentIDs, student._id]
@@ -276,14 +300,29 @@ class MakePosting extends Component {
     }
 
     deleteStudent(studentID) {
-       
         this.setState(prevState => ({
             otherStudentIDs: prevState.otherStudentIDs.filter((id, index) => {
                 return id != studentID
             })
         }));
+    }
 
-        console.log(this.state.otherStudentIDs);
+    addDate(dateToAdd) {
+        
+        this.setState(prevState => ({
+            availableDates: [...prevState.availableDates, dateToAdd]
+        }));
+
+        console.log(this.state.availableDates);
+    }
+
+    removeDate(dateToRemove) {
+        this.setState(prevState => ({
+            availableDates: prevState.availableDates.filter(date => {
+                return date != dateToRemove;
+            })
+        }));
+        console.log(this.state.availableDates);
     }
    
 
@@ -345,7 +384,7 @@ class MakePosting extends Component {
 
                                 </Select>
                                 <Typography variant="h4">Enter the participants emails associated with their account</Typography>
-                                <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} />
+                                <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
                                 </div>
 
                             ) : null
@@ -377,7 +416,9 @@ class MakePosting extends Component {
                         
                     }
 
+                    <Typography variant="h4">Select the times that you are available:</Typography>
                     
+                    <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
 
 
                     

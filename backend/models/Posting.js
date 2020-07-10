@@ -40,8 +40,19 @@ const postingSchema = new Schema({
         default: Date.now()
     },
     otherStudentIDs: {
-        type: String,
+        type: Array,
         required: false
+    },
+    numberOfParticipants: {
+        type: Number,
+        required: true,
+        default: 1
+    },
+    numberOfRecurringLessons: {
+        type: Number
+    },
+    otherStudentEmails: {
+        type: Array
     }
 });
 
