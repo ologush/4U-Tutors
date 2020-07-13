@@ -27,9 +27,11 @@ class BookingPage extends Component {
 
         const submissionData = {
             tutorID: this.props.auth.user.id,
-            dateAndTime: this.state.dateAndTime,
+            dateAndTime: e.target.id,
             postingID: this.props.posting._id,
-            tutorName: this.props.auth.user.name
+            tutorName: this.props.auth.user.name,
+            nextDates: "a", //have to figure out how this is determined
+            otherStudentIDs: this.props.posting.otherStudentIDs
         };
 
         console.log(submissionData);
@@ -37,9 +39,11 @@ class BookingPage extends Component {
         axios
             .post("/match/setMatch", submissionData)
             .then(res => {
-                console.log(res);
+                window.location.href = "/myLessons"
             })
             .catch(err => console.log(err))
+
+        
     }
 
     onChange(e) {
@@ -57,9 +61,16 @@ class BookingPage extends Component {
                 <Typography variant="h4">{this.props.posting.description}</Typography>
                 <Typography variant="h4">{this.props.posting.studentName}</Typography>
 
-                <TextField onChange={this.onChange} id="dateAndTime" label="Date and Time" />
+                
 
-                <button onClick={this.handleSubmit}>Book!</button>
+                
+                {this.props.posting.availableTimes.map(time => (
+                    <div>
+                        {console.log(typeof time)}
+                        <Typography variant="h5">{time}</Typography>
+                        <button id={time} onClick={this.handleSubmit}>Book</button>
+                    </div>
+                ))}
 
             </div>
         );

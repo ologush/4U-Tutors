@@ -278,14 +278,19 @@ class MakePosting extends Component {
     handleSelect(e) {
 
         console.log(e.target);
+        const selector = e.target.name;
 
-        switch(e.target.name) {
+        switch(selector) {
             case "LESSON_TYPE":
                 this.setState({type: e.target.value});
+                break;
             case "GROUP_SIZE":
+                console.log("hmmm")
                 this.setState({numberOfParticipants: e.target.value});
+                break;
             case "RECURRING_NUMBER":
                 this.setState({numberOfRecurringLessons: e.target.value});
+                break;
             default:
                 break;
         }

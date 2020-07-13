@@ -5,6 +5,8 @@ const Posting = require('../models/Posting');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 const axios = require('axios');
+
+
 //Add a validation layer
 
 router.post('/addPosting', (req, res) => {
@@ -94,17 +96,44 @@ router.post('/setMatch', (req, res) => {
     Posting.findOneAndDelete({ _id: req.body.postingID })
         .then(posting => {
 
-            const newLesson = new Lesson({
+            // let newLesson = new Lesson({
+            //     studentID: posting.studentID,
+            //     tutorID: req.body.tutorID,
+            //     dateAndTime: req.body.dateAndTime,
+            //     subject: posting.course,
+            //     tutorName: req.body.tutorName,
+            //     studentName: posting.studentName,
+            //     type: posting.type
+            // });
+
+            let newLessonProto = {
                 studentID: posting.studentID,
                 tutorID: req.body.tutorID,
                 dateAndTime: req.body.dateAndTime,
                 subject: posting.course,
                 tutorName: req.body.tutorName,
-                studentName: posting.studentName
-            });
+                studentName: posting.studentName,
+                type: posting.type
+            }
+
+            if(posting.type == "SINGLE_RECURRING" || posting.type == "GROUP_RECURRING") {
+                newLessonProto.nextDates = req.body.nextDates;
+            }
+
+            if(posting.type == "GROUP_SINGLE" || posting.type == "GROUP_RECURRING") {
+                newLessonProto.otherStudentIDs = req.body.otherStudentIDs;
+            }
+
+            const newLesson = new Lesson(newLessonProto);
+
+
 
             newLesson.save()
-                .then(lesson => res.json(lesson))
+                .then(lesson => {
+                    res.json(lesson);
+
+                    
+                })
                 .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
