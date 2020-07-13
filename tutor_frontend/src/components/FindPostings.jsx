@@ -38,7 +38,7 @@ class FindPostings extends Component {
 
     componentWillMount() {
 
-        //Accesses the database twice
+        //Accesses the db twice
         
         axios
             .get("/match/getPostings")
@@ -49,6 +49,8 @@ class FindPostings extends Component {
                 });
             })
             .catch(err => console.log(err))
+
+
     }
 
     render() {
