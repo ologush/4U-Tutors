@@ -11,6 +11,11 @@ import CardActions from "@material-ui/core/CardActions"
 import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
 
+
+const styles = {
+    
+}
+
 class Login extends Component {
     constructor() {
         super();
@@ -80,7 +85,7 @@ class Login extends Component {
                     </span>
                 </CardActions>
                 <CardActions>
-                    <TextField error={errors.password} id="password" onChange={this.onChange} label="Password" className={classnames("", {
+                    <TextField type="password" error={errors.password} id="password" onChange={this.onChange} label="Password" className={classnames("", {
                         invalid: errors.password || errors.passwordIncorrect
                     })}/>
                     <span className="red-text">
@@ -90,7 +95,7 @@ class Login extends Component {
                 </CardActions>
 
                 <CardActions>
-                    <Button type="Submit">Login</Button>
+                    <Button type="Submit" variant="contained" color="primary">Login</Button>
                 </CardActions>
                 </form>
             </Card>

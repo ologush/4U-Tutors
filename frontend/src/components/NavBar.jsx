@@ -144,13 +144,17 @@ class NavBar extends Component {
         return(<div>
 
             <AppBar position="static">
-                <ToolBar>
+                <ToolBar disableGutters>
                     <Grid
                         justify="space-between"
                         container
+                        direction="row"
                     >
+                        <Grid item xs={1}>
+
+                        
                         { this.props.auth.isAuthenticated && 
-                            <Grid item>
+                            <div>
                             <IconButton edge="start" color="inherit" aria-label="menu" onClick={this.handleMenu}>
                                 <MenuIcon />
 
@@ -185,13 +189,17 @@ class NavBar extends Component {
                                 ))}
                             </Menu>
 
-                            
+                            </div>
                                 
-                        </Grid> }
+                         }
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Typography align="left" variant="h4">4U Academics</Typography>
+                        </Grid>
                         
-
+                        <Grid item xs={1}>
                         { this.props.auth.isAuthenticated && 
-                        <Grid item>
+                        <div>
                             <IconButton edge="end" color="inherit" aria-label="Account" onClick={this.handleAccountMenu}>
                                 <AccountCircle />
                             </IconButton>
@@ -218,9 +226,10 @@ class NavBar extends Component {
                                
 
                             </Menu>
-                        </Grid> }
+                            </div>
+                         }
                             
-                    
+                         </Grid>
 
                     </Grid>
                     
