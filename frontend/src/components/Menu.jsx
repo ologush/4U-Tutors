@@ -5,29 +5,29 @@ import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
-
-import {Create, Home, List, ListAlt} from "@material-ui/icons"
+import { withRouter } from "react-router-dom"
+import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon} from "@material-ui/icons"
 
 const options = [
     {
         name: "Home",
         path: "./HomePage",
-        icon: <Home />
+        icon: <HomeIcon />
     },
     {
         name: "Make Posting",
         path: "./makePosting",
-        icon: <Create />
+        icon: <CreateIcon />
     },
     {
         name: "My Lessons",
         path: "./displayLessons",
-        icon: <List />
+        icon: <ListIcon />
     },
     {
         name: "My Postings",
         path: "./myPostings",
-        icon: <AltList />
+        icon: <ListAltIcon />
     }
 ];
 
@@ -36,19 +36,26 @@ class Menu extends Component {
     constructor(props) {
         super(props);
 
+        this.onClick = this.onClick.bind(this);
+    }
 
+    onClick(path) {
+        
+        this.props.history.push(path);
+        this.props.menuState();
+      
     }
 
 
     render() {
         return(
-            <Drawer>
+            <Drawer anchor="left" open={this.props.open}>
                 <List>
                     {
                         options.map((option, index) => {
                             const { name, path, icon} = option;
                             return (
-                                <ListItem button onClick={this.props.history.push(path)} key={name}>
+                                <ListItem button onClick={() => this.onClick(path)} key={path}>
                                     <ListItemIcon>{icon}</ListItemIcon>
                                     <ListItemText primary={name} />
                                 </ListItem>
@@ -62,7 +69,9 @@ class Menu extends Component {
 }
 
 Menu.propTypes = {
-    isEnabled: PropTypes.bool,
-    options: PropTypes.array,
+    open: PropTypes.bool.isRequired,
+    menuState: PropTypes.func.isRequired
 
 }
+
+export default withRouter(Menu);
