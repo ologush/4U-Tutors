@@ -21,6 +21,11 @@ import DisplayLessons from "./components/DisplayLessons"
 import MakePosting from "./components/MakePosting"
 import VideoChat from "./components/VideoChat"
 import MyPostings from "./components/MyPostings"
+import Payment from "./components/Payment"
+
+import Grid from "@material-ui/core/Grid"
+
+import Paper from "@material-ui/core/Paper"
 
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
@@ -48,7 +53,12 @@ function App() {
     <Provider store={store}>
       <Router>
         <div className="App">
+          <Grid container spacing={4} direction="column">
+          <Grid item>
           <NavBar />
+          </Grid>
+          <Grid item>
+            <Paper>
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
@@ -58,7 +68,11 @@ function App() {
             <PrivateRoute exact path="/makePosting" component={MakePosting} />
             <PrivateRoute exact path="/videoChat" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
+            <PrivateRoute exact path="/payment" component={Payment} />
           </Switch>
+          </Paper>
+          </Grid>
+          </Grid>
         </div>
       </Router>
     </Provider>
