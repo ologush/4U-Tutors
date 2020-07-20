@@ -27,19 +27,28 @@ class BookingPage extends Component {
 
         const submissionData = {
             tutorID: this.props.auth.user.id,
-            dateAndTime: e.target.id,
+            date: e.target.id,
             postingID: this.props.posting._id,
             tutorName: this.props.auth.user.name,
             nextDates: "a", //have to figure out how this is determined
-            otherStudentIDs: this.props.posting.otherStudentIDs
+            otherStudentIDs: this.props.posting.otherStudentIDs,
+            tutorDescription: this.props.auth.user.description,
+            tutorRating: this.props.auth.tutor.rating
         };
 
         console.log(submissionData);
 
+        // axios
+        //     .post("/match/setMatch", submissionData)
+        //     .then(res => {
+        //         window.location.href = "/myLessons"
+        //     })
+        //     .catch(err => console.log(err))
+
         axios
-            .post("/match/setMatch", submissionData)
+            .post("/match/addBid", submissionData)
             .then(res => {
-                window.location.href = "/myLessons"
+                window.location.href = "/myBids"
             })
             .catch(err => console.log(err))
 

@@ -5,6 +5,7 @@ const Posting = require('../models/Posting');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 const axios = require('axios');
+const LessonBid = require('../models/LessonBid');
 
 
 //Add a validation layer
@@ -138,5 +139,58 @@ router.post('/setMatch', (req, res) => {
         })
         .catch(err => console.log(err))
 });
+
+router.post('/addBid', (req, res) => {
+    let newBid = new LessonBid({
+        postingID: req.body.postingID,
+        tutorID: req.body.tutorID,
+        tutorRating: req.body.tutorRating,
+        tutorDescription: req.body.tutorDescription,
+        date: req.body.date
+    });
+
+    newBid
+        .save()
+        .then(doc => res.json(doc))
+        .catch(err => console.log(err))
+})
+
+router.post('/selectBid', (req, res) => {
+    Posting.findOneAndDelete({ _id: req.body.postingID })
+        .then(posting => {
+            let newLessonProto = {
+                studentID: posting.studentID,
+                tutorID: req.body.tutorID,
+                dateAndTime: req.body.dateAndTime,
+                subject: posting.subject,
+                tutorName: req.body.tutorName,
+                studentName: posting.studentName,
+                type: posting.type,
+                dateCreated: Date.now(),
+            };
+
+            //Add conditions based on lesson type for now just single single
+
+            const newLesson = new Lesson(newLessonProto);
+            newLesson.save()
+                .then(lesson => {
+                    res.json(lesson)
+                })
+                .catch(err => console.log(err))
+
+
+        })
+        .catch(err => console.log(err))
+});
+
+router.post('/getBids', (req, res) => {
+    LessonBid.find( { postingID: req.body.postingID } )
+        .then(docs => {
+            res.json(docs);
+        })
+        .catch(err => console.log(err))
+});
+
+
 
 module.exports = router;

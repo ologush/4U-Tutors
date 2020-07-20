@@ -13,6 +13,15 @@ const TutorSchema = new Schema({
      password: {
          type: String,
          required: true
+     },
+     description: {
+         type: String,
+         required: true
+     },
+     rating: {
+         type: Number,
+         required: true,
+         default: null
      }
 
 });
