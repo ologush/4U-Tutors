@@ -67,6 +67,11 @@ class MyPostings extends Component {
                         }}>
                             <button id={index} name="edit">Edit</button>
                         </Link>
+                        <Link to={{
+                            pathname: "/selectBid/" + this.state.postings[index]._id
+                        }}>
+                            <button id={index} name="bids">Select Bid</button>
+                        </Link>
                         
                     </div>
                 ))}

@@ -146,6 +146,7 @@ router.post('/addBid', (req, res) => {
         tutorID: req.body.tutorID,
         tutorRating: req.body.tutorRating,
         tutorDescription: req.body.tutorDescription,
+        tutorName: req.body.tutorName,
         date: req.body.date
     });
 

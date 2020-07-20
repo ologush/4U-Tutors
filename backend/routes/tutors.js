@@ -24,7 +24,8 @@ router.post('/register', (req, res) => {
                 const newTutor = new Tutor({
                     name: req.body.name,
                     email: req.body.email,
-                    password: req.body.password
+                    password: req.body.password,
+                    description: req.body.description
                 });
 
                 bcrypt.genSalt(10, (err, salt) => {
@@ -65,7 +66,9 @@ router.post('/login', (req, res) => {
                             const payload = {
                                 id: tutor.id,
                                 name: tutor.name,
-                                email: tutor.email
+                                email: tutor.email,
+                                rating: tutor.rating,
+                                description: tutor.description
                             };
     
                             jwt.sign(

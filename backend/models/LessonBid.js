@@ -21,6 +21,10 @@ const lessonBidSchema = new Schema({
     date: {
         type: String,
         required: true
+    },
+    tutorName: {
+        type: String,
+        required: true
     }
 });
 

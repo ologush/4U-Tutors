@@ -33,7 +33,7 @@ class BookingPage extends Component {
             nextDates: "a", //have to figure out how this is determined
             otherStudentIDs: this.props.posting.otherStudentIDs,
             tutorDescription: this.props.auth.user.description,
-            tutorRating: this.props.auth.tutor.rating
+            tutorRating: this.props.auth.user.rating
         };
 
         console.log(submissionData);

@@ -41,6 +41,7 @@ class Menu extends Component {
 
     onClick(path) {
         
+        //will switch to window.location.href after done
         this.props.history.push(path);
         this.props.menuState();
       

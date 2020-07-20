@@ -21,7 +21,7 @@ const TutorSchema = new Schema({
      rating: {
          type: Number,
          required: true,
-         default: null
+         default: 5
      }
 
 });
