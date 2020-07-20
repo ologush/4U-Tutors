@@ -17,13 +17,19 @@ import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank"
 import CheckBoxIcon from "@material-ui/icons/CheckBox"
 import Select from "@material-ui/core/Select"
 import MenuItem from "@material-ui/core/MenuItem"
+import FormLabel from "@material-ui/core/FormLabel"
+import spacing from "@material-ui/system/spacing"
 
 import MultipleDateTimePicker from "./MultipleDateTimePicker"
 
 import isEmpty from "is-empty";
 
+import Paper from "@material-ui/core/Paper"
+
 import { Link, withRouter } from "react-router-dom"
 
+import TagOptions from "./TagOptions"
+import Grid from "@material-ui/core/Grid"
 import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
@@ -186,6 +192,7 @@ class MakePosting extends Component {
         this.deleteStudent = this.deleteStudent.bind(this);
         this.addDate = this.addDate.bind(this);
         this.removeDate = this.removeDate.bind(this);
+        this.currentLayout = this.currentLayout.bind(this);
     }
 
     onSubmit() {
@@ -329,12 +336,129 @@ class MakePosting extends Component {
         }));
         console.log(this.state.availableDates);
     }
-   
 
-    render() {
+    newLayout = () => (
+        <Grid container spacing={4} direction="column">
+        <Grid container spacing={4}>
+        <Grid container item xs={4} direction="column">
+            <Paper>
+            <Grid item>
+                
+                <TextField label="Course" />
+            
+            
+            </Grid>
+            <Grid item>
+                <TextField label="Description" multiline rows={6} />
+            </Grid>
+            </Paper>
+            
+        </Grid>
+        <Grid container spacing={2} item xs={4} direction="column">
+            
+            <Paper>
+            <Grid container item>
+                <TagOptions />
+            </Grid>
+            </Paper>
+            <Grid item>
+                <Paper>
+                    <FormLabel component="legend">Select Available Times</FormLabel>
+                    <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
+                </Paper>
+            </Grid>
+            
+        </Grid>
+        <Grid container item xs={4} spacing={2} direction="column">
+            <Grid item>
+                <Paper>
+                <FormLabel component="legend">Select a Lesson Type</FormLabel>
+                <Select 
+                    onChange={this.handleSelect}
+                    value={this.state.type}
+                    name="LESSON_TYPE"
+                >
+                    {
+                        lessonTypes.map(lesson => (
+                            <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
+                        ))
+                    }
+                </Select>
+                </Paper>
+            </Grid>
+                {
+                    (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
+                        ?
+                        (
+                            
+                            <Grid item>
+                            <Paper>
+                            
+                            <FormLabel component="legend">Select Number of Participants</FormLabel>
+                            <Select
+                                onChange={this.handleSelect}
+                                value={this.state.numberOfParticipants}
+                                name="GROUP_SIZE"
+                            >
+                                {
+                                    groupOptions.map(option => (
+                                    <MenuItem value={option.amount}>Participants: {option.amount}, Cost Per Participant: {option.costPerParticipant}</MenuItem>
+                                ))
+                                }
 
-        return(
-            <div>
+                            </Select>
+                            
+                            
+                            <FormLabel component="legend">Enter the Other Participants Emails</FormLabel>
+                            <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
+                            
+                            </Paper>
+                            </Grid>
+
+                        ) : null
+                    )
+                }
+
+                {
+                    (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
+                    ? 
+                    (
+                        
+                        <Grid item>
+                        <Paper>
+                        <FormLabel component="legend">Select the number of recurring lessons</FormLabel>
+                        <Select 
+                            onChange={this.handleSelect}
+                            value={this.state.numberOfRecurringLessons}
+                            name="RECURRING_NUMBER"
+                        >
+                            {
+                                recurringOptions.map(option => (
+                                    <MenuItem value={option}>{option}</MenuItem>
+                                ))
+                            }
+
+                        </Select>
+                        </Paper>
+                        </Grid>
+                        
+                    ) : null
+                    
+                }
+            
+        </Grid>
+    </Grid>
+        <Grid item>
+        <Button variant="contained" color="primary">Submit</Button>
+        </Grid>
+    </Grid>
+    
+    );
+
+    
+
+    currentLayout = () => (
+        <div>
                 <Typography variant="h1">Make a Posting for a Tutor</Typography>
                 <form onSubmit={this.onSubmit}>
                     <TextField error={this.props.errors.name} value={this.state.course} onChange={this.handleChange} required id="course" label="Course" className={classnames("", {
@@ -343,14 +467,16 @@ class MakePosting extends Component {
 
                   
 
-                    {
+                    {/* {
                         tagOptions.map(option => (
                             <FormControlLabel 
                                 control={<Checkbox name={option.name} id={option.key} checked={this.state.infoTags.get(option.key)} onChange={this.handleCheckbox} />}
                                 label={option.name}
                             />
                         ))
-                    }
+                    } */}
+
+                    <TagOptions />
 
                     <Typography variant="h4">Select Leson Type: </Typography>
                     <Select 
@@ -447,7 +573,131 @@ class MakePosting extends Component {
                 </form>
 
             </div>
-        );
+    );
+   
+
+    render() {
+
+        return(
+            <div>
+            <Typography variant="h1">Make a Posting for a Tutor</Typography>
+            <form onSubmit={this.onSubmit}>
+                <TextField error={this.props.errors.name} value={this.state.course} onChange={this.handleChange} required id="course" label="Course" className={classnames("", {
+                    invalid: this.props.errors.name
+                })} />
+
+              
+
+                {
+                    tagOptions.map(option => (
+                        <FormControlLabel 
+                            control={<Checkbox name={option.name} id={option.key} checked={this.state.infoTags.get(option.key)} onChange={this.handleCheckbox} />}
+                            label={option.name}
+                        />
+                    ))
+                }
+
+                
+
+                <Typography variant="h4">Select Leson Type: </Typography>
+                <Select 
+                    onChange={this.handleSelect}
+                    value={this.state.type}
+                    name="LESSON_TYPE"
+                >
+                    {
+                        lessonTypes.map(lesson => (
+                            <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
+                        ))
+                    }
+
+
+
+                </Select>
+
+
+                {
+                    (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
+                        ?
+                        (
+                            <div>
+
+                            <Typography variant="h4">Select Number of Participants: </Typography>
+                            <Select
+                                onChange={this.handleSelect}
+                                value={this.state.numberOfParticipants}
+                                name="GROUP_SIZE"
+                            >
+                                {
+                                    groupOptions.map(option => (
+                                    <MenuItem value={option.amount}>Participants: {option.amount}, Cost Per Participant: {option.costPerParticipant}</MenuItem>
+                                ))
+                                }
+
+                            </Select>
+                            <Typography variant="h4">Enter the participants emails associated with their account</Typography>
+                            <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
+                            </div>
+
+                        ) : null
+                    )
+                }
+
+                {
+                    (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
+                    ? 
+                    (
+                        <div>
+
+                        <Typography variant="h4">Select the number of recurring lessons</Typography>
+                        <Select 
+                            onChange={this.handleSelect}
+                            value={this.state.numberOfRecurringLessons}
+                            name="RECURRING_NUMBER"
+                        >
+                            {
+                                recurringOptions.map(option => (
+                                    <MenuItem value={option}>{option}</MenuItem>
+                                ))
+                            }
+
+                        </Select>
+
+                        </div>
+                    ) : null
+                    
+                }
+
+                <Typography variant="h4">Select the times that you are available:</Typography>
+                
+                <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
+
+
+                
+
+                <TextField error={this.props.errors.name} value={this.state.description} onChange={this.handleChange} required id='description' label="Description" fullWidth style={{ margin: 8}} />
+
+                <TextField error={this.props.errors.name} value={this.state.year} onChange={this.handleChange} required id='year' label="Year" />
+
+                {
+                    (!isEmpty(this.props.location.posting) ? <Button variant="contained" color="primary" onClick={this.onSubmit}>Edit Posting</Button>
+                    
+                    : 
+                    
+                    <Button variant='contained' color='primary' onClick={this.onSubmit}>Submit Posting</Button> )
+                }
+
+               
+
+
+
+            </form>
+
+        </div>
+        
+        )
+            
+        
     }
 }
 

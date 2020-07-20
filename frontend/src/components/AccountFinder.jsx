@@ -22,19 +22,13 @@ class AccountFinder extends Component {
             addedUsers: users
         };
 
-        console.log(this.props.addedEmails);
-
-        console.log(this.state.addedUsers);
-
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.deleteStudent = this.deleteStudent.bind(this);
-
     }
 
     handleChange(e) {
         this.setState({currentEmailEntry: e.target.value});
-        console.log(e.target);
     }
 
     handleSubmit(e) {
@@ -45,7 +39,6 @@ class AccountFinder extends Component {
         axios
             .post("/users/findUserByEmail", searchData)
             .then(res => {
-                console.log(res);
                 const newUser = {
                     email: res.data.email,
                     _id: res.data._id
@@ -56,21 +49,21 @@ class AccountFinder extends Component {
                     currentEmailEntry: ""
                 }));
 
-                this.props.addStudent(newUser);
-                
+                this.props.addStudent(newUser); 
 
             })
             .catch(err => {
-                console.log(err);
+                if(err.response.data.userNotFound) {
+                    alert(err.response.data.userNotFound)
+                } else {
+                    alert("The server encountered an unknown error, try refreshing the page")
+                }         
             })
     }
 
     deleteStudent(e) {
         e.preventDefault();
-        console.log(e.target);
-        console.log(e.target.id);
         const idToDelete = e.target.id;
-        
         
         this.setState(prevState => ({
             addedUsers: prevState.addedUsers.filter((value, index) => {
@@ -78,7 +71,6 @@ class AccountFinder extends Component {
             })
         }));
         this.props.deleteStudent(idToDelete);
-
     }  
 
     

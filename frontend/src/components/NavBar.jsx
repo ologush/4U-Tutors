@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Grid from '@material-ui/core/Grid'
-import Menu from '@material-ui/core/Menu'
+
 import MenuItem from '@material-ui/core/MenuItem'
 import FormGroup from '@material-ui/core/FormGroup'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -15,6 +15,8 @@ import PropTypes from "prop-types"
 import { logoutUser } from "../actions/authActions"
 import HomePage from './HomePage'
 import { Link, withRouter } from 'react-router-dom'
+import Menu from "./Menu"
+import { Menu as AccountMenu } from "@material-ui/core" 
 
 const accountOptions = [
     "Account Settings",
@@ -117,10 +119,14 @@ class NavBar extends Component {
     }
 
     handleMenu(e) {
-        this.setState({
-            anchorEl: e.currentTarget,
-            openMenu: true
-        });
+        // this.setState({
+        //     anchorEl: e.currentTarget,
+        //     openMenu: true
+        // });
+
+        this.setState(prevState => ({
+            openMenu: !prevState.openMenu
+        }));
     }
 
     handleClose(e) {
@@ -144,58 +150,38 @@ class NavBar extends Component {
         return(<div>
 
             <AppBar position="static">
-                <ToolBar>
+                <ToolBar disableGutters>
                     <Grid
                         justify="space-between"
                         container
+                        direction="row"
                     >
+                        <Grid item xs={1}>
+
+                        
                         { this.props.auth.isAuthenticated && 
-                            <Grid item>
+                            <div>
                             <IconButton edge="start" color="inherit" aria-label="menu" onClick={this.handleMenu}>
                                 <MenuIcon />
 
                             </IconButton>
-                            <Menu
-                                id='menu-bar'
-                                anchorEl={this.state.anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                open={this.state.openMenu}
-                                onClose={this.handleClose}
-                            >
-                                
+                            <Menu open={this.state.openMenu} menuState={this.handleMenu} />
 
-                                {studentRoutes.map((option) => (
-                                                                    
-                                    <MenuItem key={option.name} id={option.path} selected={option === 'Pyxis'} onClick={this.handleClose}>
-                                        {option.name}
-                                    </MenuItem> 
+                            </div>
                                 
-                                    
-                                
-                                    
-                                    
-                                ))}
-                            </Menu>
-
-                            
-                                
-                        </Grid> }
+                         }
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Typography align="left" variant="h4">4U Academics</Typography>
+                        </Grid>
                         
-
+                        <Grid item xs={1}>
                         { this.props.auth.isAuthenticated && 
-                        <Grid item>
+                        <div>
                             <IconButton edge="end" color="inherit" aria-label="Account" onClick={this.handleAccountMenu}>
                                 <AccountCircle />
                             </IconButton>
-                            <Menu 
+                            <AccountMenu
                                 id="account-menu"
                                 anchorEl={this.state.anchorEl}
                                 anchorOrigin={{
@@ -217,10 +203,11 @@ class NavBar extends Component {
                                 ))}
                                
 
-                            </Menu>
-                        </Grid> }
+                            </AccountMenu>
+                            </div>
+                         }
                             
-                    
+                         </Grid>
 
                     </Grid>
                     

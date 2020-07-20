@@ -12,6 +12,7 @@ import { registerUser } from "../actions/authActions";
 import classnames from "classnames";
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns'
+import Checkbox from '@material-ui/core/Checkbox'
 
 import {
     MuiPickersUtilsProvider,
@@ -29,12 +30,20 @@ class Register extends Component {
             dateOfBirth: Date.now(),
             password: "",
             password2: "",
-            errors: {}
+            errors: {},
+            agreedToTAC: false
         };
 
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onDateChange = this.onDateChange.bind(this);
+        this.handleCheckbox = this.handleCheckbox.bind(this);
+    }
+
+    handleCheckbox(e) {
+        this.setState({
+            agreedToTAC: e.target.checked
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -62,15 +71,20 @@ class Register extends Component {
     onSubmit(e) {
         e.preventDefault();
 
-        const newUser = {
-            name: this.state.name,
-            email: this.state.email,
-            dateOfBirth: this.state.dateOfBirth,
-            password: this.state.password,
-            password2: this.state.password2
-        };
+        if(this.state.agreedToTAC) {
+            const newUser = {
+                name: this.state.name,
+                email: this.state.email,
+                dateOfBirth: this.state.dateOfBirth,
+                password: this.state.password,
+                password2: this.state.password2
+            };
+            this.props.registerUser(newUser, this.props.history);
+        } else {
+            alert("You must agree to the terms and conditions to register")
+        }
 
-        this.props.registerUser(newUser, this.props.history);
+        
     };
 
     render() {
@@ -81,7 +95,7 @@ class Register extends Component {
                     <Typography variant='h3'>Register</Typography>
                 </CardContent>
                 <CardContent>
-                    <Typography>Register for engsoc dash using a valid Queen's University email</Typography>
+                    <Typography>Register for 4UAcademics</Typography>
                 </CardContent>
                 <form onSubmit={this.onSubmit}>
 
@@ -124,13 +138,13 @@ class Register extends Component {
                 </CardActions>
 
                 <CardActions>
-                    <TextField error={errors.password} onChange={this.onChange} required id="password" label="Password" className={classnames("", {
+                    <TextField type="password" error={errors.password} onChange={this.onChange} required id="password" label="Password" className={classnames("", {
                         invalid: errors.password
                     })}/>
                     <span className="red-text">{errors.password}</span>
                 </CardActions>
                 <CardActions>
-                    <TextField error={errors.password2} onChange={this.onChange} required id="password2" label="Confirm Password"  className={classnames("", {
+                    <TextField type="password" error={errors.password2} onChange={this.onChange} required id="password2" label="Confirm Password"  className={classnames("", {
                         invalid: errors.password2
                     })}/>
                     <span className="red-text">{errors.password2}</span>
@@ -138,6 +152,11 @@ class Register extends Component {
                 </CardActions>
                 <CardActions>
                     <Button type="Submit">Register</Button>
+                </CardActions>
+                <Typography variant="h6">Please agree to the terms and conditions below:</Typography>
+                <Typography variant="body1">These are the example terms and conditions, will need to update later</Typography>
+                <CardActions>
+                    <Checkbox checked={this.state.agreedToTAC} onChange={this.handleCheckbox} color="primary" />
                 </CardActions>
                 </form>
             </Card>
