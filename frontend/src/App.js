@@ -71,6 +71,7 @@ function App() {
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
             <PrivateRoute exact path="/payment" component={Payment} />
             <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
+            <PrivateRoute exact path="/editPosting/:postingID" component={MakePosting} />
           </Switch>
           </Paper>
           </Grid>

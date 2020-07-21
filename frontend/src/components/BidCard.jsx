@@ -26,7 +26,7 @@ class BidCard extends Component {
                     <Typography variant="h6">Time: {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
                 </CardContent>
                 <CardActions>
-                    <Button variant="contained" color="primary" onClick={() => this.props.submit(this.props.index)}>Book!</Button>
+                    <Button variant="contained" color="primary" onClick={this.props.submit}>Book!</Button>
                 </CardActions>
             </Card>
         );

@@ -163,12 +163,14 @@ router.post('/selectBid', (req, res) => {
                 studentID: posting.studentID,
                 tutorID: req.body.tutorID,
                 dateAndTime: req.body.dateAndTime,
-                subject: posting.subject,
+                subject: posting.course,
                 tutorName: req.body.tutorName,
                 studentName: posting.studentName,
                 type: posting.type,
                 dateCreated: Date.now(),
             };
+
+            console.log(newLessonProto)
 
             //Add conditions based on lesson type for now just single single
 
