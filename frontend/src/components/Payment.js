@@ -6,14 +6,16 @@ import CardContent from "@material-ui/core/CardContent"
 import CardActions from "@material-ui/core/CardActions"
 import PropTypes from "prop-types"
 import { makeStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
+
 
 const useStyles = makeStyles({
     root: {
-        display: "none"
+        display: "block"
     }
-})
+});
 
-function Payment() {
+function Payment(props) {
 
     const classes = useStyles();
 
@@ -40,9 +42,11 @@ function Payment() {
         minute: "numeric"
     }
 
+    console.log(props)
+
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = "https://www.paypal.com/sdk/js?client-id=Adw-x4TG1epsSGJyMy4pDLK6LWDiuOXIsj1KGg68JyRYxG5l9pwGiemo6t0qQz0zfgOr6cFp7fxondyq&currency=CAD";
+        script.src = "https://www.paypal.com/sdk/js?client-id=Adw-x4TG1epsSGJyMy4pDLK6LWDiuOXIsj1KGg68JyRYxG5l9pwGiemo6t0qQz0zfgOr6cFp7fxondyq&currency=CAD&debug=true";
         script.addEventListener("load", () => setLoaded(true));
 
         document.body.appendChild(script);
@@ -66,8 +70,9 @@ function Payment() {
                         },
                         onApprove: async (data, actions) => {
                             const order = await actions.order.capture();
+                            console.log(order)
                             setPaidFor(true)
-                            console.log(order);
+                            //props.onPay()
                         }
                     })
                     .render(paypalRef)
@@ -97,10 +102,11 @@ function Payment() {
                                     <Typography variant="body" gutterBottom> {lesson.date.toLocaleTimeString('en-US', timeDisplayOptions)} </Typography>
                                     <br />
                                     <br />
-                                    <Typography variant="body" gutterBottom> ${lesson.price} </Typography>
+                                    <Typography variant="body" gutterBottom> ${lesson.amount} </Typography>
                                 </CardContent>
-                                <CardActions>
+                                <CardActions classes={{root: classes.root}}>
                                     <div ref={v => (paypalRef = v)} />
+                                    <Button variant="contained" color="red" onClick={props.cancel}>Cancel</Button>
                                 </CardActions>
                             </Card>
                         </Grid>
@@ -110,5 +116,13 @@ function Payment() {
         </div>
     )
 } 
+
+Payment.propTypes = {
+    amount: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+    date: PropTypes.object.isRequired,
+    onPay: PropTypes.func.isRequired,
+    cancel: PropTypes.func.isRequired
+}
 
 export default Payment;

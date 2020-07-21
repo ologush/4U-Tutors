@@ -11,22 +11,22 @@ import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as Lis
 const options = [
     {
         name: "Home",
-        path: "./HomePage",
+        path: "/HomePage",
         icon: <HomeIcon />
     },
     {
         name: "Make Posting",
-        path: "./makePosting",
+        path: "/makePosting",
         icon: <CreateIcon />
     },
     {
         name: "My Lessons",
-        path: "./displayLessons",
+        path: "/displayLessons",
         icon: <ListIcon />
     },
     {
         name: "My Postings",
-        path: "./myPostings",
+        path: "/myPostings",
         icon: <ListAltIcon />
     }
 ];
@@ -41,8 +41,11 @@ class Menu extends Component {
 
     onClick(path) {
         
-        this.props.history.push(path);
+        //will switch to window.location.href after done
         this.props.menuState();
+        window.location.href = path;
+        //this.props.history.push(path);
+        
       
     }
 

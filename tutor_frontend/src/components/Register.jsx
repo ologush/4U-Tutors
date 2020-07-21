@@ -28,6 +28,7 @@ class Register extends Component {
             email: "",
             password: "",
             password2: "",
+            description: "",
             errors: {}
         };
 
@@ -65,7 +66,8 @@ class Register extends Component {
             name: this.state.name,
             email: this.state.email,
             password: this.state.password,
-            password2: this.state.password2
+            password2: this.state.password2,
+            description: this.state.description
         };
 
         this.props.registerUser(newUser, this.props.history);
@@ -114,6 +116,9 @@ class Register extends Component {
                     })}/>
                     <span className="red-text">{errors.password2}</span>
 
+                </CardActions>
+                <CardActions>
+                    <TextField onChange={this.onChange} id="description" label="Description" />
                 </CardActions>
                 <CardActions>
                     <Button type="Submit">Register</Button>

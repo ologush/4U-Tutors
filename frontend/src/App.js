@@ -22,6 +22,7 @@ import MakePosting from "./components/MakePosting"
 import VideoChat from "./components/VideoChat"
 import MyPostings from "./components/MyPostings"
 import Payment from "./components/Payment"
+import SelectBid from "./components/SelectBid"
 
 import Grid from "@material-ui/core/Grid"
 
@@ -69,6 +70,8 @@ function App() {
             <PrivateRoute exact path="/videoChat" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
             <PrivateRoute exact path="/payment" component={Payment} />
+            <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
+            <PrivateRoute exact path="/editPosting/:postingID" component={MakePosting} />
           </Switch>
           </Paper>
           </Grid>
