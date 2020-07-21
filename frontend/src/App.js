@@ -67,7 +67,7 @@ function App() {
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/displayLessons" component={DisplayLessons} />
             <PrivateRoute exact path="/makePosting" component={MakePosting} />
-            <PrivateRoute exact path="/videoChat" component={VideoChat} />
+            <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
             <PrivateRoute exact path="/payment" component={Payment} />
             <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
