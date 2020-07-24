@@ -4,16 +4,23 @@ import axios from 'axios';
 import Room from './Room';
 import { useSelector, useDispatch } from 'react-redux'
 import { endLesson } from '../actions/lessonActions'
+import Timer from "./Timer"
 
 
+ const VideoChat = (props) => {
+    
+    const { lessonID } = props.match.params;
 
- const VideoChat = ({}) => {
      const [username, setUsername] = useState('');
      
-     const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
+     //const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
+     const [roomName, setRoomName] = useState(lessonID);
      const [token, setToken] = useState(null);
 
      const user = useSelector(state => state.auth.user);
+     const startTime = localStorage.getItem("startTime");
+    console.log(startTime)
+     console.log(user)
      const lesson = useSelector(state => state.lesson.lesson);
      const dispatch = useDispatch();
      const handleUsernameChange = useCallback(event => {
@@ -32,7 +39,7 @@ import { endLesson } from '../actions/lessonActions'
             .get("/videoChat/token", {
                 params: {
                     identity: user.name,
-                    room: lesson._id
+                    roomName: lessonID
                 }
             })
             .then(res => {
@@ -43,8 +50,15 @@ import { endLesson } from '../actions/lessonActions'
 
      const handleLogout = useCallback(event => {
          setToken(null);
-         dispatch(endLesson());
+         window.location.href = "/postLesson/" + lessonID;
+
+         //dispatch(endLesson());
+
      }, []);
+
+     const handleTimeout = () => {
+         handleLogout()
+     }
 
      let render;
 
@@ -52,6 +66,10 @@ import { endLesson } from '../actions/lessonActions'
          render = (
              <div>
                 <Room roomName={roomName} token={token} handleLogout={handleLogout} />
+                <Timer
+                    onTimeOut={handleTimeout}
+                    startTime={new Date(startTime)}
+                />
              </div>
          );
      } else {

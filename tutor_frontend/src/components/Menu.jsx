@@ -15,18 +15,13 @@ const options = [
         icon: <HomeIcon />
     },
     {
-        name: "Make Posting",
-        path: "/makePosting",
-        icon: <CreateIcon />
-    },
-    {
         name: "My Lessons",
-        path: "/displayLessons",
+        path: "/myLessons",
         icon: <ListIcon />
     },
     {
-        name: "My Postings",
-        path: "/myPostings",
+        name: "Find Postings",
+        path: "/findPostings",
         icon: <ListAltIcon />
     },
     {
@@ -35,8 +30,8 @@ const options = [
         icon: <ArchiveIcon />
     },
     {
-        name: "Request a Lesson",
-        path: "/requestLesson",
+        name: "Lesson Requests",
+        path: "/requests",
         icon: <PostAddIcon />
     }
 ];

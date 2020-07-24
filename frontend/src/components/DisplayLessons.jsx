@@ -39,17 +39,19 @@ class DisplayLessons extends Component {
             .catch(err => console.log(err));
     }
 
-    enterLesson(id) {
+    enterLesson(lessonID, index) {
         
 
-        console.log(id);
+        console.log(lessonID);
 
-        //this.props.setCurrentLesson(this.state.lessons[e.target.id]);
+        this.props.setCurrentLesson(this.state.lessons[index]);
+        localStorage.setItem("startTime", this.state.lessons[index].dateAndTime)
+        //localStorage.setItem();
 
         //this.props.history.push('/videoChat');
 
-        this.props.history.push('/videoChat/' + id);
-        
+        this.props.history.push('/videoChat/' + lessonID);
+
     }
 
     render() {
@@ -81,7 +83,7 @@ class DisplayLessons extends Component {
                                 date={new Date(lesson.dateAndTime)}
                                 subject={lesson.subject}
                                 tutorName={lesson.tutorName}
-                                onClick={() => this.enterLesson(lesson._id)}
+                                onClick={() => this.enterLesson(lesson._id, index)}
                             />
                         </Grid>
                     ))

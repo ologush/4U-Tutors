@@ -23,8 +23,13 @@ import VideoChat from "./components/VideoChat"
 import MyPostings from "./components/MyPostings"
 import Payment from "./components/Payment"
 import SelectBid from "./components/SelectBid"
-
+import Timer from "./components/Timer"
+import ReBook from "./components/ReBook"
+import PostLesson from "./components/PostLesson"
+import PastLessons from "./components/PastLessons"
 import Grid from "@material-ui/core/Grid"
+import TutorFinder from "./components/TutorFinder"
+import LessonRequest from "./components/LessonRequest"
 
 import Paper from "@material-ui/core/Paper"
 
@@ -63,15 +68,18 @@ function App() {
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/test" component={TutorFinder} />
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/displayLessons" component={DisplayLessons} />
             <PrivateRoute exact path="/makePosting" component={MakePosting} />
             <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
-            <PrivateRoute exact path="/payment" component={Payment} />
             <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
             <PrivateRoute exact path="/editPosting/:postingID" component={MakePosting} />
+            <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
+            <PrivateRoute exact path="/pastLessons" component={PastLessons} />
+            <PrivateRoute exact path="/requestLesson" component={LessonRequest} />
           </Switch>
           </Paper>
           </Grid>

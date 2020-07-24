@@ -25,6 +25,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "square-connect": "^4.20200625.0",
+    "stripe": "^8.78.0",
     "twilio": "^3.46.0",
     "twilio-video": "^2.5.1",
     "validator": "^13.0.0"
