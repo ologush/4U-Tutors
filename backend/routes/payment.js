@@ -1,33 +1,91 @@
 var express = require('express');
 var router = express.Router();
 const axios = require("axios");
-const CLIENT_ID = AQGhRTy5LENUVfn-PHd_7cVGr2yePsvw81VgVuHMelyaYrxjkWQcbOhLrc7QD4dLfOxVScgzPfxUaOfL;
+const stripe = require('stripe')('sk_test_51H7oaAFvYqAjSG5imIW7Qg7F7Bb1yGe1uzadP4YECJfhJzZwfQ09NUUo3odus744L9hvZTmeR0nKOV6TbhTFfUOF002jruSSFo')
+
+const Tutor = require('../models/Tutor')
+
+const uuid = require('uuid')
+
+router.get("/connect/oauth", (req, res) => {
+    //const { code, state } = req.query;
+    const code = req.query.code;
+    //add the state checking feature potentially
+
+    stripe.oauth.token({
+        grant_type: 'authorization_code',
+        code
+    })
+    .then(response => {
+        var connected_account_id = response.stripe_user_id;
+        saveAccountId(connected_account_id);
+    })
+    .catch(err => {
+        if (err.type === 'StripeInvalidGrantError') {
+            return res.status(400).json({error: 'Invalid autorization code: ' + code});
+        } else {
+            return res.status(500).json({error: 'An unknown error occured.'})
+        }
+    })
+});
+
+const saveAccountId = (id) => {
+    //save the tutors account id to their accound
+    console.log(id);
+}
+
+router.post("/pay", (req, res) => {
+    const { product, token } = req.body;
+    console.log("PRODUCT", product);
+    console.log("PRICE", product.price)
+    const idempontencyKey = uuid();
+
+    return stripe.customers.create({
+        email: token.email,
+        source: token.id
+    })
+    .then(customer => {
+        stripe.charges.create({
+            amount: product.price * 100,
+            currency: "CAD",
+            customer: customer.id,
+            receipt_email: token.email,
+            description: product.name
+        }, {idempontencyKey})
+    })
+    .then(result => res.status(200).json(result))
+    .catch(err => console.log(err))
+});
+
+router.post("/payOut", async (req, res) => {
+
+    Tutor.findOne({ _id: req.body.tutorID })
+    .then( async tutor => {
+        console.log(tutor.stripeID)
+        const transfer = await stripe.transfers.create({
+            amount: 20 * 100,
+            currency: 'cad',
+            destination: "acct_1H9axUIm10TqtFjV"
+        });
+
+        res.json(transfer);
+    })
+    .catch(err => console.log(err));
 
 
-router.post("/payTutor", (req, res) => {
+});
 
-    const sender_batch_header = {
-        sender_batch_id: req.body.lessonID,
-        email_subject: "Lesson Payout",
-        email_message: "You have recieved a payout for your lesson with: " + req.body.studentName
-    }
+router.get("/secret", async (req, res) => {
 
-    const item = {
-        recipient_type: "EMAIL",
-        amount: {
-            value: 20.00,
-            currency: "CAD"
-        },
-        note: "Thank you for your time!",
-        sender_item_id: req.body.tutorID,
-        reciever: req.body.tutorEmail,
-        notification_language: "en-CA"
-    }
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: 25 * 100,
+        currency: 'cad',
 
-    const response = await axios.post("https://api.sandbox.paypal.com/v1/oath2/token")
+        metadata: {integration_check: 'accept_a_payment'}
+    });
 
-})
+    res.json({ client_secret: paymentIntent.client_secret });
 
-
+});
 
 module.exports = router;

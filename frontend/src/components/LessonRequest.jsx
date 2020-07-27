@@ -54,8 +54,6 @@ function LessonRequest(props) {
             console.log(res)
         })
         .catch(err => console.log(err))
-
-
     }
 
     return(
