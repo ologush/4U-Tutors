@@ -4,9 +4,12 @@ import axios from 'axios';
 import Room from './Room';
 import { useSelector, useDispatch } from 'react-redux'
 import { endLesson } from '../actions/lessonActions'
+import Timer from "./Timer"
 
+ const VideoChat = (props) => {
 
- const VideoChat = ({}) => {
+    const { lessonID } = props.match.params;
+
      const [username, setUsername] = useState('');
      const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
      const [token, setToken] = useState(null);
@@ -30,7 +33,7 @@ import { endLesson } from '../actions/lessonActions'
             .get("/videoChat/token", {
                 params: {
                     identity: user.name,
-                    room: lesson._id
+                    roomName: lessonID
                 }
             })
             .then(res => {

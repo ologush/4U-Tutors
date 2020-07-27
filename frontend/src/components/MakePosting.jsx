@@ -204,14 +204,6 @@ class MakePosting extends Component {
             if(value) chosenTags.push(key);
         });
 
-        console.log(this.props.auth.id);
-
-        
-
-        
-
-        
-
         if(!isEmpty(this.props.location.posting)) {
             const submissionData = {
                 studentID: this.props.auth.user.id,
@@ -230,7 +222,6 @@ class MakePosting extends Component {
             }
             console.log(this.props.location.posting)
             
-
             axios
                 .post("/match/editPosting", submissionData)
                 .then(res => {
@@ -259,12 +250,7 @@ class MakePosting extends Component {
                     this.props.history.push('/myPostings');
                 })
                 .catch(err => console.log(err));
-
-        }
-
-        
-        
-        
+        }   
     }
 
     handleChange(e) {
@@ -284,7 +270,6 @@ class MakePosting extends Component {
 
     handleSelect(e) {
 
-        console.log(e.target);
         const selector = e.target.name;
 
         switch(selector) {
@@ -325,7 +310,7 @@ class MakePosting extends Component {
             availableDates: [...prevState.availableDates, dateToAdd]
         }));
 
-        console.log(this.state.availableDates);
+
     }
 
     removeDate(dateToRemove) {
@@ -334,7 +319,6 @@ class MakePosting extends Component {
                 return date != dateToRemove;
             })
         }));
-        console.log(this.state.availableDates);
     }
 
     newLayout = () => (

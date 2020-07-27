@@ -18,6 +18,8 @@ import Dashboard from "./components/TutorDashboard"
 import DisplayLessons from "./components/DisplayLessons"
 import VideoChat from "./components/VideoChat"
 import FindPostings from "./components/FindPostings"
+import Request from "./components/Request"
+import Requests from "./components/Requests"
 
 import NavBar from "./components/NavBar"
 
@@ -50,9 +52,11 @@ function App() {
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/myLessons" component={DisplayLessons} />
-            <PrivateRoute exact path="/videoChat" component={VideoChat} />
+            <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/findPostings" component={FindPostings} />
             <PrivateRoute exact path="/booking" component={BookingPage} />
+            <PrivateRoute exact path="/request/:requestID" component={Request} />
+            <PrivateRoute exact path="/requests" component={Requests} />
           </Switch>
         </div>
       </Router>

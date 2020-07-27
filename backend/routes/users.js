@@ -10,6 +10,9 @@ const validateLoginInput = require('../validation/login');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 const Posting = require('../models/Posting');
+const PastLesson = require("../models/PastLesson");
+const LessonRequest = require("../models/LessonRequest");
+
 
 router.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -91,6 +94,7 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/getLessons', (req, res) => {
+  console.log(req);
   Lesson.find({ studentID: req.body.studentID })
     .then(docs => {
       if(docs) {
@@ -137,6 +141,32 @@ router.post('/findUserByEmail', (req, res) => {
     .catch(err => {
       console.log(err);
     })
+})
+
+router.get("/getPastLessons", (req, res) => {
+  PastLesson.find({ studentID: req.query.studentID })
+    .then(docs => {
+      if(docs) {
+        return res.json(docs)
+      } else {
+        return res.status(400).json({ noPastLessons: "You have no past lessons"})
+      }
+    })
+    .catch(err => console.log(err))
+});
+
+router.get("/getRequests", (req, res) => {
+  
+  LessonRequest.find({ studentID: req.query.studentID })
+    .then(docs => {
+      if(docs.length > 0) {
+        res.json(docs);
+      } else {
+        res.status(404).json({ noRequestsFound: "No Lesson Requests found"})
+      }
+    })
+    .catch(err => console.log(err))
+
 })
 
 module.exports = router;

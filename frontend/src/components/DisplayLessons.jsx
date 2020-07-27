@@ -8,8 +8,12 @@ import { Link, withRouter } from "react-router-dom"
 
 import PropTypes from "prop-types"
 
+import LessonDisplay from "./LessonDisplay"
+
 
 import axios from "axios";
+
+import Grid from "@material-ui/core/Grid"
 
 class DisplayLessons extends Component {
     constructor() {
@@ -35,18 +39,24 @@ class DisplayLessons extends Component {
             .catch(err => console.log(err));
     }
 
-    enterLesson(e) {
-        e.preventDefault();
+    enterLesson(lessonID, index) {
+        
 
-        console.log(e.target.id);
+        console.log(lessonID);
 
-        this.props.setCurrentLesson(this.state.lessons[e.target.id]);
+        this.props.setCurrentLesson(this.state.lessons[index]);
+        localStorage.setItem("startTime", this.state.lessons[index].dateAndTime)
+        //localStorage.setItem();
 
-        this.props.history.push('/videoChat');
+        //this.props.history.push('/videoChat');
+
+        this.props.history.push('/videoChat/' + lessonID);
+
     }
 
     render() {
-        return(
+
+        const oldReturn = (
             <div>
                 <Typography variant="h1">These are your lessons</Typography>
                 
@@ -62,6 +72,23 @@ class DisplayLessons extends Component {
                     </div>
                 ))}
             </div>
+        );
+
+        return (
+            <Grid container spacing={4}>
+                {
+                    this.state.lessons.map((lesson, index) => (
+                        <Grid item xs={6}>
+                            <LessonDisplay 
+                                date={new Date(lesson.dateAndTime)}
+                                subject={lesson.subject}
+                                tutorName={lesson.tutorName}
+                                onClick={() => this.enterLesson(lesson._id, index)}
+                            />
+                        </Grid>
+                    ))
+                }
+            </Grid>
         );
     }
 }

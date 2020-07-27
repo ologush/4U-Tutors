@@ -8,6 +8,8 @@ import { Link, withRouter } from "react-router-dom"
 
 import PropTypes from "prop-types"
 
+import LessonDisplay from "./LessonDisplay"
+import Grid from "@material-ui/core/Grid"
 
 import axios from "axios";
 
@@ -35,33 +37,28 @@ class DisplayLessons extends Component {
             .catch(err => console.log(err));
     }
 
-    enterLesson(e) {
-        e.preventDefault();
-
-        console.log(e.target.id);
-
-        this.props.setCurrentLesson(this.state.lessons[e.target.id]);
-
-        this.props.history.push('/videoChat');
+    enterLesson(lessonID, index) {
+        
+        this.props.setCurrentLesson(this.state.lessons[index])
+        this.props.history.push('/videoChat/' + lessonID);
     }
 
     render() {
         return(
-            <div>
-                <Typography variant="h1">These are your lessons</Typography>
-                
-                {this.state.lessons.map((lesson, index) => (
-                    <div>
-
-                    <Typography variant="h4">{lesson.dateAndTime}</Typography>
-                    <Typography variant="h4">{lesson.subject}</Typography>
-                    <Typography variant="h4">{lesson.studentName}</Typography>
-                    <Typography variant="h4">{lesson.tutorName}</Typography>
-                    
-                    <button id={index} onClick={this.enterLesson}>Enter Lesson</button>
-                    </div>
-                ))}
-            </div>
+            <Grid container spacing={4}>
+                {
+                    this.state.lessons.map((lesson, index) => (
+                        <Grid item xs={6}>
+                            <LessonDisplay
+                                date={new Date(lesson.dateAndTime)}
+                                subject={lesson.subject}
+                                studentName={lesson.tutorName}
+                                onClick={() => this.enterLesson(lesson._id, index)}
+                            />
+                        </Grid>
+                    ))
+                }
+            </Grid>
         );
     }
 }

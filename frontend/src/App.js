@@ -23,10 +23,22 @@ import VideoChat from "./components/VideoChat"
 import MyPostings from "./components/MyPostings"
 import Payment from "./components/Payment"
 import SelectBid from "./components/SelectBid"
-
+import Timer from "./components/Timer"
+import ReBook from "./components/ReBook"
+import PostLesson from "./components/PostLesson"
+import PastLessons from "./components/PastLessons"
 import Grid from "@material-ui/core/Grid"
+import TutorFinder from "./components/TutorFinder"
+import LessonRequest from "./components/LessonRequest"
+import RequestPayment from "./components/RequestPayment"
+import {loadStripe} from '@stripe/stripe-js'
+import { Elements } from "@stripe/react-stripe-js"
+import Payout from "./components/Payout"
+
 
 import Paper from "@material-ui/core/Paper"
+
+const stripePromise = loadStripe('pk_test_51H7oaAFvYqAjSG5i5XoVmFeBNE7rPgvwrXbA9GNOFuFc6RkCevXgfVMLFTVBmMGRKMH7zwOSqOZiO3KvKxBUztBV00j6fEfFKo');
 
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
@@ -63,15 +75,20 @@ function App() {
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Elements stripe={stripePromise}>
+          <Route exact path="/test" component={Payout} />
+          </Elements>
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/displayLessons" component={DisplayLessons} />
             <PrivateRoute exact path="/makePosting" component={MakePosting} />
-            <PrivateRoute exact path="/videoChat" component={VideoChat} />
+            <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
-            <PrivateRoute exact path="/payment" component={Payment} />
             <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
             <PrivateRoute exact path="/editPosting/:postingID" component={MakePosting} />
+            <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
+            <PrivateRoute exact path="/pastLessons" component={PastLessons} />
+            <PrivateRoute exact path="/requestLesson" component={LessonRequest} />
           </Switch>
           </Paper>
           </Grid>

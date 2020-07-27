@@ -13,6 +13,8 @@ var usersRouter = require('./routes/users');
 var matchingRouter = require('./routes/matchUsers');
 var tutorRouter = require('./routes/tutors');
 var videoChatRouter = require('./routes/videochat');
+var lessonRouter = require('./routes/lesson');
+var paymentRouter = require('./routes/payment');
 
 var app = express();
 
@@ -50,6 +52,8 @@ app.use('/users', usersRouter);
 app.use('/match', matchingRouter);
 app.use('/tutors', tutorRouter);
 app.use('/videoChat', videoChatRouter);
+app.use('/lesson', lessonRouter);
+app.use('/payments', paymentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

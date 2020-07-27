@@ -10,6 +10,12 @@ const Tutor = require('../models/Tutor');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 const Posting = require('../models/Posting');
+const TutorFeedback = require('../models/TutorFeedback');
+const LessonRequest = require('../models/LessonRequest');
+const LessonConfirm = require('../models/LessonConfirm');
+
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey('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');
 
 //Add input validation
 
@@ -110,6 +116,143 @@ router.post('/getLessons', (req, res) => {
             }
         })
         .catch(err => console.log(err));
+});
+
+router.post('/giveFeedback', (req, res) => {
+    
+
+    if(req.body.feedback) {
+        feedbackProto.feedback = req.body.feedback
+    };
+    //Still gotta update the tutors overall rating
+    Lesson.findOne({ _id: req.body.lessonID })
+        .then(lesson => {
+            if(lesson) {
+                console.log(lesson)
+                const feedbackProto = {
+                    tutorID: lesson.tutorID,
+                    rating: req.body.rating,
+                }
+
+                if(req.body.feedback) {
+                    feedbackProto.feedback = req.body.feedback;
+                };
+
+                console.log(feedbackProto)
+
+                tutorFeedback = new TutorFeedback(feedbackProto);
+
+                tutorFeedback.save()
+                .then(feedback => res.json(feedback))
+                .catch(err => console.log(err))
+
+            }
+        })
+        .catch(err => console.log(err))
+});
+
+router.get("/findByEmail", (req, res) => {
+    console.log(req.query)
+    Tutor.findOne({ email: req.query.email})
+        .then(doc => {
+            if(doc) {
+                res.json(doc);
+            } else {
+                res.status(404).json({noAccountFound: "No Tutor Found"})
+            }
+        })
+        .catch(err => console.log(err))
+});
+
+router.get("/getRequests", (req, res) => {
+    
+    LessonRequest.find({ tutorID: req.query.tutorID })
+        .then(docs => {
+            if(docs.length > 0) {
+                res.json(docs);
+            } else {
+                res.status(404).json({ noRequestsFound: "No Lesson Requests Found" })
+            }
+        })
+        .catch(err => console.log(err))
+
+});
+
+router.post("/acceptRequest", (req, res) => {
+    console.log(req.body);
+    let submissionData = {
+        studentID: req.body.studentID,
+        tutorID: req.body.tutorID,
+        dateAndTime: req.body.dateAndTime,
+        subject: req.body.subject,
+        tutorName: req.body.tutorName,
+        studentName: req.body.studentName,
+        type: req.body.type,
+        tutorEmail: req.body.tutorEmail
+    };
+
+    console.log(submissionData);
+
+    let message = {
+        to: req.body.studentEmail,
+        from: 'bookings@4uacademics.com',
+        subject: "Lesson Request Accepted",
+        text: "Your request for a lesson has been accepted for: " + req.body.dateAndTime
+    }
+
+    const newLessonConfirm = new LessonConfirm(submissionData);
+
+    newLessonConfirm
+    .save()
+    .then(doc => {
+        console.log(doc)
+        message.html = "<a href='https://www.4uacademics.com/payment/" + doc._id + "'>Pay Here to Confirm the Lesson</a>"
+        sgMail.send(message)
+        .catch(err => console.log(err));
+
+        LessonRequest.findOneAndDelete({ _id: req.body.requestID })
+        .then(del => console.log(del))
+        .catch(err => console.log(err));
+
+        res.json(doc);
+    })
+    .catch(err => console.log(err))
+});
+
+router.post("/denyRequest", (req, res) => {
+
+    console.log(req.body.requestID);
+    
+    // LessonRequest.fineOneAndDelete({ _id: req.body.requestID })
+    // .then(doc => {
+    //     console.log("a");
+    //     let message = {
+    //         to: doc.studentEmail,
+    //         from: 'bookings@4uacademics.com',
+    //         subject: 'Lesson Request Declined',
+    //         text: 'Your lesson request has been declined'
+    //     }
+
+    //     //sgMail.send(message)
+    //     //.catch(err => console.log(err));
+    //     res.json(doc);
+    // })
+    // .catch(err => console.log(err))
+    const requestID = req.body.requestID;
+    // LessonRequest.findOne({ _id: req.body.requestID })
+    // .then(doc => {
+    //     console.log(doc);
+    //     res.json(doc)
+    // })
+    // .catch(err => console.log(err))
+
+    LessonRequest.findByIdAndDelete(requestID)
+    .then(doc => {
+        res.json(doc);
+
+    })
+    .catch(err => console.log(err));
+
 });
 
 
