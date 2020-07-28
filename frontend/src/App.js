@@ -34,6 +34,7 @@ import RequestPayment from "./components/RequestPayment"
 import {loadStripe} from '@stripe/stripe-js'
 import { Elements } from "@stripe/react-stripe-js"
 import Payout from "./components/Payout"
+import AccountSettings from "./components/AccountSettings"
 
 
 import Paper from "@material-ui/core/Paper"
@@ -89,6 +90,7 @@ function App() {
             <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
             <PrivateRoute exact path="/pastLessons" component={PastLessons} />
             <PrivateRoute exact path="/requestLesson" component={LessonRequest} />
+            <PrivateRoute exact path="/accountsettings" component={AccountSettings} />
           </Switch>
           </Paper>
           </Grid>

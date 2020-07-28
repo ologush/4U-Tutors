@@ -11,6 +11,8 @@ import { DateTimePicker } from "@material-ui/pickers"
 import PropTypes from "prop-types"
 import addDate from "date-fns/add"
 
+const dateOptions = { weekday: "long", month: "long", day: "numeric" };
+const timeOptions = { hour: 'numeric', minute: 'numeric' };
 
 class MultipleDateTimePicker extends Component {
     constructor(props) {
@@ -78,7 +80,7 @@ class MultipleDateTimePicker extends Component {
                         <div>
                             {console.log(typeof date)}
 
-                            <Typography variant="h5">{date.toDateString()} at {date.toTimeString()}</Typography>
+                            <Typography variant="h5">{date.toLocaleDateString("en-US", dateOptions)} at {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
                             <button id={date} onClick={this.removeDate}>X</button>
                         </div>
                     ))

@@ -140,6 +140,8 @@ class NavBar extends Component {
 
         if(e.target.id == "Logout") {
             this.onLogoutClick(e);
+        } else if(e.target.id == "Account Settings") {
+            this.props.history.push("/accountsettings")
         } else {
             this.props.history.push(e.target.id);
         }

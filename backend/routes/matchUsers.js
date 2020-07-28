@@ -194,6 +194,20 @@ router.post('/getBids', (req, res) => {
         .catch(err => console.log(err))
 });
 
+router.get('/postingByID', (req, res) => {
+    const { postingID } = req.query;
+
+    Posting.findOne({ _id: postingID })
+    .then(doc => {
+        if(doc) {
+            res.json(doc);
+        } else {
+            res.status(404).json({error: "No posting found with that ID"})
+        }
+    })
+    .catch(err => console.log(err))
+})
+
 
 
 module.exports = router;

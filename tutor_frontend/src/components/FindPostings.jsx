@@ -4,6 +4,8 @@ import axios from "axios";
 import { connect } from 'react-redux'
 import Typography from "@material-ui/core/Typography"
 
+import Button from "@material-ui/core/Button"
+
 import PropTypes from "prop-types";
 
 import { enterBooking } from "../actions/lessonActions";
@@ -22,15 +24,15 @@ class FindPostings extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleSubmit(e) {
+    handleSubmit(postingID) {
 
-        e.preventDefault();
+        //e.preventDefault();
 
-        console.log(this.state.postings[e.target.id]);
+        
 
-        this.props.enterBooking(this.state.postings[e.target.id]);
+        //this.props.enterBooking(this.state.postings[e.target.id]);
 
-        this.props.history.push('/booking');
+        this.props.history.push('/booking/' + postingID);
 
 
 
@@ -63,7 +65,8 @@ class FindPostings extends Component {
                         <Typography variant="h3">Course: {posting.course}</Typography>
                         <Typography variant="h3">Grade: {posting.year}</Typography>
                         <Typography variant="h4">Description: {posting.description}</Typography>
-                        <button id={index} onClick={this.handleSubmit}>Schedule a Time</button>
+                        
+                        <Button variant="contained" color="primary" onClick={() => this.handleSubmit(posting._id)}>Schedule a Time</Button>
                     </div>
                 ))}
             </div>
