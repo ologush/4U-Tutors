@@ -19,6 +19,8 @@ import {
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 
+const URI = "https://connect.stripe.com/express/oauth/authorize?client_id=ca_Hhx4MECM4ayyLP7qKPVrRuZw9ompwsUj&suggested_capabilities[]=transfers&stripe_user[business_type]=individual"
+
 class Register extends Component {
     constructor() {
         super();
@@ -119,6 +121,9 @@ class Register extends Component {
                 </CardActions>
                 <CardActions>
                     <TextField onChange={this.onChange} id="description" label="Description" />
+                </CardActions>
+                <CardActions>
+                    <Button href={URI}>Connect with Stripe</Button>
                 </CardActions>
                 <CardActions>
                     <Button type="Submit">Register</Button>

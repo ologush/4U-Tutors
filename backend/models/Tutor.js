@@ -22,6 +22,11 @@ const TutorSchema = new Schema({
          type: Number,
          required: true,
          default: 5
+     },
+     stripeID: {
+         type: String,
+         required: true,
+         default: null
      }
 
 });

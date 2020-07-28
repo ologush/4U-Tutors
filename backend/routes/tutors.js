@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
 
+const axios = require("axios")
 
 const Tutor = require('../models/Tutor');
 const User = require('../models/User');
@@ -20,6 +21,7 @@ sgMail.setApiKey('SG.XywI63hbQdqJ28CA_s0-JQ.HwHZ4tuB9ZXqwhuAwfQYyUEvFFdF1VsQioMp
 //Add input validation
 
 const validateLoginInput = require("../validation/login");
+const stripe = require('stripe')('sk_test_51H7oaAFvYqAjSG5imIW7Qg7F7Bb1yGe1uzadP4YECJfhJzZwfQ09NUUo3odus744L9hvZTmeR0nKOV6TbhTFfUOF002jruSSFo');
 
 router.post('/register', (req, res) => {
     Tutor.findOne({ email: req.body.email })
@@ -255,6 +257,25 @@ router.post("/denyRequest", (req, res) => {
 
 });
 
+router.post("/addStripe", async (req, res) => {
+    console.log(req.body);
+    const { code, tutorID } = req.body;
+    console.log(code)
+
+    const response = await stripe.oauth.token({
+        grant_type: 'authorization_code',
+        code: code
+    });
+
+    console.log(response);
+
+    Tutor.findOneAndUpdate({ _id: tutorID }, { stripeID: response.stripe_user_id })
+    .then(doc => {
+        res.json(doc);
+    })
+    .catch(err => console.log(err))
+
+});
 
 
 module.exports = router;
