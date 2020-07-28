@@ -179,7 +179,11 @@ router.post('/selectBid', (req, res) => {
                 .then(lesson => {
                     res.json(lesson)
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    console.log(err);
+
+                    //maybe put posting back in the db if there is an error
+                })
 
 
         })

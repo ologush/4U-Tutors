@@ -60,6 +60,7 @@ function App() {
             <PrivateRoute exact path="/requests" component={Requests} />
             <PrivateRoute exact path="/accountSettings" component={AccountSettings} />
             <PrivateRoute path="/savestripe" component={SaveStripe} />
+            <PrivateRoute exact path="/myBids" component={MyBids} />
           </Switch>
         </div>
       </Router>

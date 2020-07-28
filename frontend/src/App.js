@@ -77,7 +77,7 @@ function App() {
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Elements stripe={stripePromise}>
-          <Route exact path="/test" component={Payout} />
+            <Route exact path="/test" component={Payout} />
           </Elements>
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
@@ -85,7 +85,9 @@ function App() {
             <PrivateRoute exact path="/makePosting" component={MakePosting} />
             <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
-            <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
+            <Elements stripe={stripePromise}>
+              <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
+            </Elements>
             <PrivateRoute exact path="/editPosting/:postingID" component={MakePosting} />
             <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
             <PrivateRoute exact path="/pastLessons" component={PastLessons} />
