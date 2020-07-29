@@ -6,6 +6,7 @@ sgMail.setApiKey('SG.XywI63hbQdqJ28CA_s0-JQ.HwHZ4tuB9ZXqwhuAwfQYyUEvFFdF1VsQioMp
 
 const PastLesson = require("../models/PastLesson");
 const LessonRequest = require("../models/LessonRequest");
+const Lesson = require('../models/Lesson');
 
 router.post("/addRequest", (req, res) => {
 
@@ -51,7 +52,25 @@ router.get("/getRequest", (req, res) => {
         res.json(doc)
     })
     .catch(err => console.log(err))
-})
+});
+
+router.get("/lessonByID", (req, res) => {
+    const { lessonID } = req.query;
+
+    Lesson.findOne({ _id: lessonID })
+    .then(doc => {
+        res.json(doc);
+    })
+    .catch(err => console.log(err))
+});
+
+router.post("/deleteLesson", (req, res) => {
+    Lesson.findOneAndDelete({ _id: req.body.lessonID })
+    .then(del => {
+        res.json(del);
+    })
+    .catch(err => console.log(err));
+});
 
 
 

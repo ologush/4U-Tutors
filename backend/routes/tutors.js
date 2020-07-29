@@ -15,6 +15,7 @@ const TutorFeedback = require('../models/TutorFeedback');
 const LessonRequest = require('../models/LessonRequest');
 const LessonConfirm = require('../models/LessonConfirm');
 const LessonBid = require('../models/LessonBid');
+const PastLesson = require('../models/PastLesson');
 
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey('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');
@@ -296,6 +297,19 @@ router.post("/deleteBid", (req, res) => {
         res.json(doc);
     })
     .catch(err => console.log(err));
+});
+
+router.post("/lessonOver", (req, res) => {
+    PastLesson.findOne({ lessonID: req.body.lessonID })
+    .then(doc => {
+        doc.tutorExitTime = Date.now();
+        doc.save()
+        .then(save => {
+            res.json(save);
+        })
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
 })
 
 module.exports = router;

@@ -167,6 +167,19 @@ router.get("/getRequests", (req, res) => {
     })
     .catch(err => console.log(err))
 
-})
+});
+
+router.post("/lessonOver", (req, res) => {
+  PastLesson.findOne({ lessonID: req.body.lessonID })
+  .then(doc => {
+    doc.studentExitTime = Date.now();
+    doc.save()
+    .then(save => {
+      res.json(save);
+    })
+    .catch(err => console.log(err));
+  })
+  .catch(err => console.log(err))
+});
 
 module.exports = router;

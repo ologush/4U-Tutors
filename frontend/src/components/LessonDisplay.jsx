@@ -30,6 +30,7 @@ function LessonDisplay(props) {
             </CardContent>
             <CardActions>
                 <Button onClick={props.onClick} disabled={props.date.getTime() - currentDate.getTime() > 300000}>Enter Lesson</Button>
+                {props.date.getTime() - currentDate.getTime() > 3000 ? (<Typography variant="body1">Lesson will be available witin 5 minutes of the start time</Typography>) : (null)}
             </CardActions>
         </Card>
     );

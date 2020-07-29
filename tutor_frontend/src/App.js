@@ -23,6 +23,7 @@ import Requests from "./components/Requests"
 import AccountSettings from "./components/AccountSettings"
 import NavBar from "./components/NavBar"
 import SaveStripe from "./components/SaveStripe"
+import MyBids from "./components/MyBids"
 
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
