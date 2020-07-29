@@ -72,6 +72,23 @@ router.post("/deleteLesson", (req, res) => {
     .catch(err => console.log(err));
 });
 
+router.post("/cancel", (req, res) => {
 
+    let message = {
+        from: "bookings@4uacademics.com",
+        subject: "Lesson Cancelled"
+    }
+
+    
+
+    Lesson.findOneAndDelete({ _id: req.body.lessonID })
+    .then(del => {
+        message.to = [del.studentEmail, del.tutorEmail];
+        lesson.message = "The lesson on " + del.dateAndTime + " has been cancelled";
+
+        sgMail.send(message);
+    })
+    .catch(err => console.log(err))
+})
 
 module.exports = router;
