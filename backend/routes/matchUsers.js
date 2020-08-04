@@ -74,8 +74,8 @@ router.post('/getPostingsByTags', (req, res) => {
     
 
     Posting.find({ infoTags: { $in: tags}})
-        .skip(req.body.amountPerSet * req.body.setNumber)
-        .limit(req.body.amountPerSet)
+        //.skip(req.body.amountPerSet * req.body.setNumber)
+        //.limit(req.body.amountPerSet)
         .then(docs => {
             return res.json(docs);
         })

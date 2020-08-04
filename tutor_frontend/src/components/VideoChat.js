@@ -5,6 +5,7 @@ import Room from './Room';
 import { useSelector, useDispatch } from 'react-redux'
 import { endLesson } from '../actions/lessonActions'
 import Timer from "./Timer"
+import Typography from "@material-ui/core/Typography"
 
  const VideoChat = (props) => {
 
@@ -35,7 +36,7 @@ import Timer from "./Timer"
             lessonID: lessonID,
             tutorID: user.id,
             tutorName: user.name,
-            tutorEmail: tutor.email,
+            tutorEmail: user.email,
             startTime: lesson.dateAndTime,
             subject: lesson.subject
         };

@@ -24,6 +24,7 @@ class DisplayLessons extends Component {
         };
 
         this.enterLesson = this.enterLesson.bind(this);
+        this.cancelLesson = this.cancelLesson.bind(this);
 
     }
 
@@ -51,6 +52,17 @@ class DisplayLessons extends Component {
         //this.props.history.push('/videoChat');
 
         this.props.history.push('/videoChat/' + lessonID);
+
+    }
+
+    cancelLesson(lessonID) {
+        axios
+        .post("/lesson/student/cancel", { lessonID: lessonID })
+        .then(res => {
+            console.log(res);
+            //location.reload();
+        })
+        .catch(err => console.log(err))
 
     }
 
@@ -84,6 +96,7 @@ class DisplayLessons extends Component {
                                 subject={lesson.subject}
                                 tutorName={lesson.tutorName}
                                 onClick={() => this.enterLesson(lesson._id, index)}
+                                cancelLesson={() => this.cancelLesson(lesson._id)}
                             />
                         </Grid>
                     ))
