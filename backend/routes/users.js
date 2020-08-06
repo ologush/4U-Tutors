@@ -3,7 +3,7 @@ var router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
-
+const passport = require("passport")
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 
@@ -107,7 +107,8 @@ router.post('/getLessons', (req, res) => {
 });
 
 //Will probably have to change to a get method along with other routes
-router.post('/getPostings', (req, res) => {
+router.post('/getPostings', passport.authenticate('user', { session: false }), (req, res) => {
+  //console.log("a")
   Posting.find({ studentID: req.body.studentID })
     .then(docs => {
       if(docs) {
@@ -119,7 +120,7 @@ router.post('/getPostings', (req, res) => {
     .catch(err => console.log(err))
 });
 
-router.post('/deletePosting', (req, res) => {
+router.post('/deletePosting', passport.authenticate('user', { session: false }), (req, res) => {
   Posting.findOneAndDelete({ _id: req.body.postingID })
     .then(del => {
       res.json(del);
@@ -127,7 +128,7 @@ router.post('/deletePosting', (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.post('/findUserByEmail', (req, res) => {
+router.post('/findUserByEmail', passport.authenticate('user', { session: false}), (req, res) => {
   User.findOne({ email: req.body.email })
     .then(doc => {
       if(doc) {
@@ -143,7 +144,7 @@ router.post('/findUserByEmail', (req, res) => {
     })
 })
 
-router.get("/getPastLessons", (req, res) => {
+router.get("/getPastLessons", passport.authenticate('user', { session: false }), (req, res) => {
   PastLesson.find({ studentID: req.query.studentID })
     .then(docs => {
       if(docs) {
