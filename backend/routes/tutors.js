@@ -149,7 +149,10 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                 tutorFeedback = new TutorFeedback(feedbackProto);
 
                 tutorFeedback.save()
-                .then(feedback => res.json(feedback))
+                .then(feedback => {
+                    updateRating(lesson.tutorID);
+                    res.json(feedback);
+                })
                 .catch(err => console.log(err))
 
             }
@@ -166,11 +169,10 @@ function updateRating(tutorID) {
         });
         rating = rating / docs.length;
 
-
         Tutor.findOne({ _id: tutorID })
         .then(tutor => {
             tutor.rating = rating;
-            if (rating < 3.5) {
+            if (rating < 3.5 && docs.length > 9) {
                 let message = {
                     to: tutor.email,
                     from: "info@4uacademics.com",
