@@ -157,6 +157,36 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
         .catch(err => console.log(err))
 });
 
+function updateRating(tutorID) {
+    let rating = 0;
+    TutorFeedback.find({ tutorID: tutorID })
+    .then(docs => {
+        docs.forEach(feedback => {
+            rating += feedback.rating;
+        });
+        rating = rating / docs.length;
+
+
+        Tutor.findOne({ _id: tutorID })
+        .then(tutor => {
+            tutor.rating = rating;
+            if (rating < 3.5) {
+                let message = {
+                    to: tutor.email,
+                    from: "info@4uacademics.com",
+                    text: "Warning, your rating has fallen below 3.5. Your account will be disabled for a week"
+                }
+
+                sgMail.send(message);
+            }
+
+            tutor.save()
+        })
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+}
+
 
 router.get("/findByEmail", passport.authenticate('user', { session: false }), (req, res) => {
     console.log(req.query)
