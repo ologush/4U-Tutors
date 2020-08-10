@@ -3,12 +3,13 @@ var router = express.Router();
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey('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');
 
+const passport = require('passport')
 
 const PastLesson = require("../models/PastLesson");
 const LessonRequest = require("../models/LessonRequest");
 const Lesson = require('../models/Lesson');
 
-router.post("/addRequest", (req, res) => {
+router.post("/addRequest", passport.authenticate('user', { session: false }), (req, res) => {
 
     let message = {
         to: req.body.tutorEmail,
@@ -43,7 +44,8 @@ router.post("/addRequest", (req, res) => {
 
 });
 
-router.get("/getRequest", (req, res) => {
+//Authenticate for tutor, may need a seperate student one
+router.get("/getRequest", passport.authenticate('tutor', { session: false }), (req, res) => {
 
     const id = req.query.requestID;
 
@@ -54,6 +56,7 @@ router.get("/getRequest", (req, res) => {
     .catch(err => console.log(err))
 });
 
+//May need to make for tutor and student
 router.get("/lessonByID", (req, res) => {
     const { lessonID } = req.query;
 
@@ -64,6 +67,29 @@ router.get("/lessonByID", (req, res) => {
     .catch(err => console.log(err))
 });
 
+router.get("/user/lessonByID", passport.authenticate('user', { session: false }), (req, res) => {
+    
+    const { lessonID } = req.query;
+
+    Lesson.findOne({ _id: lessonID })
+    .then(doc => {
+        res.json(doc)
+    })
+    .catch(err => console.log(err));
+})
+
+router.get("/tutor/lessonByID", passport.authenticate('tutor', { session: false }), (req, res) => {
+    
+    const { lessonID } = req.query;
+
+    Lesson.findOne({ _id: lessonID })
+    .then(doc => {
+        res.json(doc)
+    })
+    .catch(err => console.log(err))
+})
+
+//May need to add auth/ may delete if unused
 router.post("/deleteLesson", (req, res) => {
     Lesson.findOneAndDelete({ _id: req.body.lessonID })
     .then(del => {
@@ -72,6 +98,7 @@ router.post("/deleteLesson", (req, res) => {
     .catch(err => console.log(err));
 });
 
+//this is no longer useful
 router.post("/cancel", (req, res) => {
 
     let message = {
@@ -91,7 +118,7 @@ router.post("/cancel", (req, res) => {
     .catch(err => console.log(err))
 });
 
-router.post("/student/cancel", (req, res) => {
+router.post("/student/cancel", passport.authenticate('user', { session: false }), (req, res) => {
     
     let studentMessage = {
         from: "bookings@4uacademics.com",
@@ -121,7 +148,7 @@ router.post("/student/cancel", (req, res) => {
     })
 })
 
-router.post("/tutor/cancel", (req, res) => {
+router.post("/tutor/cancel", passport.authenticate('tutor', { session: false }), (req, res) => {
     
     let studentMessage = {
         from: "bookings@4uacademics.com",

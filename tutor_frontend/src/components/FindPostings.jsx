@@ -230,7 +230,7 @@ function FindPostings(props) {
                                         <Typography variant="h3">Grade: {posting.year}</Typography>
                                         <Typography variant="h4">Description: {posting.description}</Typography>
                         
-                                        <Button variant="contained" color="primary" onClick={() => this.handleSubmit(posting._id)}>Schedule a Time</Button>
+                                        <Button variant="contained" color="primary" onClick={() => handleSubmit(posting._id)}>Schedule a Time</Button>
                                     </div>
                                 ))
                             }

@@ -7,7 +7,11 @@ const Tutor = require('../models/Tutor')
 
 const uuid = require('uuid')
 
-router.get("/connect/oauth", (req, res) => {
+const passport = require('passport')
+
+
+//This is probably for the student, check if the tutor uses it
+router.get("/connect/oauth", passport.authenticate('user', { session: false }), (req, res) => {
     //const { code, state } = req.query;
     const code = req.query.code;
     //add the state checking feature potentially
@@ -34,7 +38,8 @@ const saveAccountId = (id) => {
     console.log(id);
 }
 
-router.post("/pay", (req, res) => {
+
+router.post("/pay", passport.authenticate('user', { session: false }), (req, res) => {
     const { product, token } = req.body;
     console.log("PRODUCT", product);
     console.log("PRICE", product.price)
@@ -57,7 +62,8 @@ router.post("/pay", (req, res) => {
     .catch(err => console.log(err))
 });
 
-router.post("/payOut", async (req, res) => {
+//Should be a student action that manages the payout
+router.post("/payOut", passport.authenticate('user', { session: false }), async (req, res) => {
 
     Tutor.findOne({ _id: req.body.tutorID })
     .then( async tutor => {
@@ -75,7 +81,8 @@ router.post("/payOut", async (req, res) => {
 
 });
 
-router.get("/secret", async (req, res) => {
+//may or may not need
+router.get("/secret", passport.authenticate('user', { session: false }), async (req, res) => {
 
     const paymentIntent = await stripe.paymentIntents.create({
         amount: 25 * 100,

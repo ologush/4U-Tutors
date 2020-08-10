@@ -28,7 +28,7 @@ import Timer from "./Timer"
 
     useEffect(() => {
         axios
-        .get("/lesson/getLessonByID", { params: { lessonID: lessonID }})
+        .get("/lesson/user/getLessonByID", { params: { lessonID: lessonID }})
         .then(res => {
             setLesson(res.data);
             setLoading(false);
@@ -61,7 +61,7 @@ import Timer from "./Timer"
         };
 
          axios
-            .post("/videoChat/token", submissionData)
+            .post("/videoChat/user/token", submissionData)
             .then(res => {
                 setToken(res.data)
             })

@@ -151,7 +151,7 @@ class NavBar extends Component {
 
         return(<div>
 
-            <AppBar position="fixed">
+            <AppBar position="static">
                 <ToolBar disableGutters>
                     <Grid
                         justify="space-between"
