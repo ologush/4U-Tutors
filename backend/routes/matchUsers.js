@@ -215,7 +215,20 @@ router.get('/postingByID', (req, res) => {
         }
     })
     .catch(err => console.log(err))
-})
+});
+
+router.get('/user/postingByID', passport.authenticate('user', { session: false }), (req, res) => {
+    const { postingID } = req.query;
+
+    Posting.findOne({ _id: postingID })
+    .then(doc => {
+        if(doc) {
+            res.json(doc);
+        } else {
+            res.status(404).json({error: "No posting found with that ID"})
+        }
+    })
+});
 
 
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import PropTypes from "prop-types"
 import TextField from "@material-ui/core/TextField"
@@ -35,10 +35,12 @@ import {
     KeyboardTimePicker,
     KeyboardDatePicker
 } from '@material-ui/pickers'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import errorReducers from '../reducers/errorReducers'
 
 import axios from "axios"
+
+
 
 const recurringOptions = [
     2,
@@ -120,496 +122,831 @@ const tags = {
     
 
 
-class MakePosting extends Component {
-    constructor(props) {
-        super(props);
+// class MakePosting extends Component {
+//     constructor(props) {
+//         super(props);
 
 
 
-        this.state = {
-            studentID: "",
-            course: "",
-            infoTags: new Map(),
-            description: "",
-            year: "",
-            studentName: "",
-            otherStudentEmails: [],
-            otherStudentIDs: [],
-            type: "",
-            numberOfParticipants: 0,
-            numberOfRecurringLessons: 0,
-            availableDates: []
-        }
-
-        
+//         this.state = {
+//             studentID: "",
+//             course: "",
+//             infoTags: new Map(),
+//             description: "",
+//             year: "",
+//             studentName: "",
+//             otherStudentEmails: [],
+//             otherStudentIDs: [],
+//             type: "",
+//             numberOfParticipants: 0,
+//             numberOfRecurringLessons: 0,
+//             availableDates: []
+//         }
 
         
 
-        if(!isEmpty(this.props.location.posting)) {
+        
+
+//         if(!isEmpty(this.props.location.posting)) {
             
-            let infoTags = new Map();
+//             let infoTags = new Map();
 
-            const tagKeys = Object.keys(tags);
+//             const tagKeys = Object.keys(tags);
 
-            tagKeys.forEach((key) => {
-                if(this.props.location.posting.infoTags.includes(key)) {
-                    infoTags.set(key, true);
-                }
-            });
+//             tagKeys.forEach((key) => {
+//                 if(this.props.location.posting.infoTags.includes(key)) {
+//                     infoTags.set(key, true);
+//                 }
+//             });
 
             
-            this.state = {
-                studentID: this.props.location.posting.studentID,
-                course: this.props.location.posting.course,
-                infoTags: infoTags,
-                description: this.props.location.posting.description,
-                year: this.props.location.posting.year,
-                studentName: this.props.location.posting.studentName,
-                type: this.props.location.posting.type,
-                availableDates: this.props.location.posting.availableTimes,
-                otherStudentIDs: this.props.location.posting.otherStudentIDs,
-                numberOfParticipants: this.props.location.posting.numberOfParticipants,
-                numberOfRecurringLessons: this.props.location.posting.numberOfRecurringLessons,
-                otherStudentEmails: this.props.location.posting.otherStudentEmails
-            }
+//             this.state = {
+//                 studentID: this.props.location.posting.studentID,
+//                 course: this.props.location.posting.course,
+//                 infoTags: infoTags,
+//                 description: this.props.location.posting.description,
+//                 year: this.props.location.posting.year,
+//                 studentName: this.props.location.posting.studentName,
+//                 type: this.props.location.posting.type,
+//                 availableDates: this.props.location.posting.availableTimes,
+//                 otherStudentIDs: this.props.location.posting.otherStudentIDs,
+//                 numberOfParticipants: this.props.location.posting.numberOfParticipants,
+//                 numberOfRecurringLessons: this.props.location.posting.numberOfRecurringLessons,
+//                 otherStudentEmails: this.props.location.posting.otherStudentEmails
+//             }
 
-            console.log();
-
-        
-        }
-
+//             console.log();
 
         
-        console.log(this.state);
+//         }
+
+
+        
+//         console.log(this.state);
     
         
 
-        this.onSubmit = this.onSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleCheckbox = this.handleCheckbox.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.addStudent = this.addStudent.bind(this);
-        this.deleteStudent = this.deleteStudent.bind(this);
-        this.addDate = this.addDate.bind(this);
-        this.removeDate = this.removeDate.bind(this);
-        this.currentLayout = this.currentLayout.bind(this);
-    }
+//         this.onSubmit = this.onSubmit.bind(this);
+//         this.handleChange = this.handleChange.bind(this);
+//         this.handleCheckbox = this.handleCheckbox.bind(this);
+//         this.handleSelect = this.handleSelect.bind(this);
+//         this.addStudent = this.addStudent.bind(this);
+//         this.deleteStudent = this.deleteStudent.bind(this);
+//         this.addDate = this.addDate.bind(this);
+//         this.removeDate = this.removeDate.bind(this);
+//         this.currentLayout = this.currentLayout.bind(this);
+//     }
 
-    onSubmit() {
+//     onSubmit() {
 
-        const chosenTags = [];
+//         const chosenTags = [];
 
-        this.state.infoTags.forEach((value, key) => {
+//         this.state.infoTags.forEach((value, key) => {
             
-            if(value) chosenTags.push(key);
-        });
+//             if(value) chosenTags.push(key);
+//         });
 
-        if(!isEmpty(this.props.location.posting)) {
-            const submissionData = {
-                studentID: this.props.auth.user.id,
-                course: this.state.course,
-                description: this.state.description,
-                year: this.state.year,
-                studentName: this.props.auth.user.name,
-                infoTags: chosenTags,
-                postingID: this.props.location.posting._id,
-                type: this.state.type,
-                availableTimes: this.state.availableDates,
-                otherStudentIDs: this.state.otherStudentIDs,
-                numberOfParticipants: this.state.numberOfParticipants,
-                numberOfRecurringLessons: this.state.numberOfRecurringLessons,
-                otherStudentEmails: this.state.otherStudentEmails
-            }
-            console.log(this.props.location.posting)
+//         if(!isEmpty(this.props.location.posting)) {
+//             const submissionData = {
+//                 studentID: this.props.auth.user.id,
+//                 course: this.state.course,
+//                 description: this.state.description,
+//                 year: this.state.year,
+//                 studentName: this.props.auth.user.name,
+//                 infoTags: chosenTags,
+//                 postingID: this.props.location.posting._id,
+//                 type: this.state.type,
+//                 availableTimes: this.state.availableDates,
+//                 otherStudentIDs: this.state.otherStudentIDs,
+//                 numberOfParticipants: this.state.numberOfParticipants,
+//                 numberOfRecurringLessons: this.state.numberOfRecurringLessons,
+//                 otherStudentEmails: this.state.otherStudentEmails
+//             }
+//             console.log(this.props.location.posting)
             
-            axios
-                .post("/match/editPosting", submissionData)
-                .then(res => {
-                    this.props.history.push('myPostings');
-                })
-                .catch(err => console.log(err));
+//             axios
+//                 .post("/match/editPosting", submissionData)
+//                 .then(res => {
+//                     this.props.history.push('myPostings');
+//                 })
+//                 .catch(err => console.log(err));
 
-        } else {
-            const submissionData = {
-                studentID: this.props.auth.user.id,
-                course: this.state.course,
-                description: this.state.description,
-                year: this.state.year,
-                studentName: this.props.auth.user.name,
-                infoTags: chosenTags,
-                type: this.state.type,
-                availableTimes: this.state.availableDates,
-                otherStudentIDs: this.state.otherStudentIDs,
-                numberOfParticipants: this.state.numberOfParticipants,
-                numberOfRecurringLesons: this.state.numberOfRecurringLessons,
-                otherStudentEmails: this.state.otherStudentEmails
-            };
-            axios
-                .post("/match/addPosting", submissionData)
-                .then(res => {
-                    this.props.history.push('/myPostings');
-                })
-                .catch(err => console.log(err));
-        }   
-    }
+//         } else {
+//             const submissionData = {
+//                 studentID: this.props.auth.user.id,
+//                 course: this.state.course,
+//                 description: this.state.description,
+//                 year: this.state.year,
+//                 studentName: this.props.auth.user.name,
+//                 infoTags: chosenTags,
+//                 type: this.state.type,
+//                 availableTimes: this.state.availableDates,
+//                 otherStudentIDs: this.state.otherStudentIDs,
+//                 numberOfParticipants: this.state.numberOfParticipants,
+//                 numberOfRecurringLesons: this.state.numberOfRecurringLessons,
+//                 otherStudentEmails: this.state.otherStudentEmails
+//             };
+//             axios
+//                 .post("/match/addPosting", submissionData)
+//                 .then(res => {
+//                     this.props.history.push('/myPostings');
+//                 })
+//                 .catch(err => console.log(err));
+//         }   
+//     }
 
-    handleChange(e) {
-        this.setState({[e.target.id]: e.target.value});
-        console.log(this.state);
-    }
+//     handleChange(e) {
+//         this.setState({[e.target.id]: e.target.value});
+//         console.log(this.state);
+//     }
 
-    handleCheckbox(e) {
+//     handleCheckbox(e) {
        
-        const id = e.target.id;
-        const checked = e.target.checked;
+//         const id = e.target.id;
+//         const checked = e.target.checked;
         
-        this.setState(prevState => ({ infoTags: prevState.infoTags.set(id, checked)}));
-        console.log(this.state);
+//         this.setState(prevState => ({ infoTags: prevState.infoTags.set(id, checked)}));
+//         console.log(this.state);
 
-    }
+//     }
 
-    handleSelect(e) {
+//     handleSelect(e) {
 
-        const selector = e.target.name;
+//         const selector = e.target.name;
 
-        switch(selector) {
-            case "LESSON_TYPE":
-                this.setState({type: e.target.value});
-                break;
-            case "GROUP_SIZE":
-                console.log("hmmm")
-                this.setState({numberOfParticipants: e.target.value});
-                break;
-            case "RECURRING_NUMBER":
-                this.setState({numberOfRecurringLessons: e.target.value});
-                break;
-            default:
-                break;
-        }
+//         switch(selector) {
+//             case "LESSON_TYPE":
+//                 this.setState({type: e.target.value});
+//                 break;
+//             case "GROUP_SIZE":
+//                 console.log("hmmm")
+//                 this.setState({numberOfParticipants: e.target.value});
+//                 break;
+//             case "RECURRING_NUMBER":
+//                 this.setState({numberOfRecurringLessons: e.target.value});
+//                 break;
+//             default:
+//                 break;
+//         }
         
-    }
+//     }
 
-    addStudent(student) {
-        this.setState(prevState => ({
-            otherStudentEmails: [...prevState.otherStudentEmails, student.email],
-            otherStudentIDs: [...prevState.otherStudentIDs, student._id]
-        }));
-    }
+//     addStudent(student) {
+//         this.setState(prevState => ({
+//             otherStudentEmails: [...prevState.otherStudentEmails, student.email],
+//             otherStudentIDs: [...prevState.otherStudentIDs, student._id]
+//         }));
+//     }
 
-    deleteStudent(studentID) {
-        this.setState(prevState => ({
-            otherStudentIDs: prevState.otherStudentIDs.filter((id, index) => {
-                return id != studentID
-            })
-        }));
-    }
+//     deleteStudent(studentID) {
+//         this.setState(prevState => ({
+//             otherStudentIDs: prevState.otherStudentIDs.filter((id, index) => {
+//                 return id != studentID
+//             })
+//         }));
+//     }
 
-    addDate(dateToAdd) {
+//     addDate(dateToAdd) {
         
-        this.setState(prevState => ({
-            availableDates: [...prevState.availableDates, dateToAdd]
-        }));
+//         this.setState(prevState => ({
+//             availableDates: [...prevState.availableDates, dateToAdd]
+//         }));
 
 
-    }
+//     }
 
-    removeDate(dateToRemove) {
-        this.setState(prevState => ({
-            availableDates: prevState.availableDates.filter(date => {
-                return date != dateToRemove;
-            })
-        }));
-    }
+//     removeDate(dateToRemove) {
+//         this.setState(prevState => ({
+//             availableDates: prevState.availableDates.filter(date => {
+//                 return date != dateToRemove;
+//             })
+//         }));
+//     }
 
-    newLayout = () => (
-        <Grid container spacing={4} direction="column">
-        <Grid container spacing={4}>
-        <Grid container item xs={4} direction="column">
-            <Paper>
-            <Grid item>
+//     newLayout = () => (
+//         <Grid container spacing={4} direction="column">
+//         <Grid container spacing={4}>
+//         <Grid container item xs={4} direction="column">
+//             <Paper>
+//             <Grid item>
                 
-                <TextField label="Course" />
+//                 <TextField label="Course" />
             
             
-            </Grid>
-            <Grid item>
-                <TextField label="Description" multiline rows={6} />
-            </Grid>
-            </Paper>
+//             </Grid>
+//             <Grid item>
+//                 <TextField label="Description" multiline rows={6} />
+//             </Grid>
+//             </Paper>
             
-        </Grid>
-        <Grid container spacing={2} item xs={4} direction="column">
+//         </Grid>
+//         <Grid container spacing={2} item xs={4} direction="column">
             
-            <Paper>
-            <Grid container item>
-                <TagOptions />
-            </Grid>
-            </Paper>
-            <Grid item>
-                <Paper>
-                    <FormLabel component="legend">Select Available Times</FormLabel>
-                    <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
-                </Paper>
-            </Grid>
+//             <Paper>
+//             <Grid container item>
+//                 <TagOptions />
+//             </Grid>
+//             </Paper>
+//             <Grid item>
+//                 <Paper>
+//                     <FormLabel component="legend">Select Available Times</FormLabel>
+//                     <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
+//                 </Paper>
+//             </Grid>
             
-        </Grid>
-        <Grid container item xs={4} spacing={2} direction="column">
-            <Grid item>
-                <Paper>
-                <FormLabel component="legend">Select a Lesson Type</FormLabel>
-                <Select 
-                    onChange={this.handleSelect}
-                    value={this.state.type}
-                    name="LESSON_TYPE"
-                >
-                    {
-                        lessonTypes.map(lesson => (
-                            <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
-                        ))
-                    }
-                </Select>
-                </Paper>
-            </Grid>
-                {
-                    (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
-                        ?
-                        (
+//         </Grid>
+//         <Grid container item xs={4} spacing={2} direction="column">
+//             <Grid item>
+//                 <Paper>
+//                 <FormLabel component="legend">Select a Lesson Type</FormLabel>
+//                 <Select 
+//                     onChange={this.handleSelect}
+//                     value={this.state.type}
+//                     name="LESSON_TYPE"
+//                 >
+//                     {
+//                         lessonTypes.map(lesson => (
+//                             <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
+//                         ))
+//                     }
+//                 </Select>
+//                 </Paper>
+//             </Grid>
+//                 {
+//                     (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
+//                         ?
+//                         (
                             
-                            <Grid item>
-                            <Paper>
+//                             <Grid item>
+//                             <Paper>
                             
-                            <FormLabel component="legend">Select Number of Participants</FormLabel>
-                            <Select
-                                onChange={this.handleSelect}
-                                value={this.state.numberOfParticipants}
-                                name="GROUP_SIZE"
-                            >
-                                {
-                                    groupOptions.map(option => (
-                                    <MenuItem value={option.amount}>Participants: {option.amount}, Cost Per Participant: {option.costPerParticipant}</MenuItem>
-                                ))
-                                }
+//                             <FormLabel component="legend">Select Number of Participants</FormLabel>
+//                             <Select
+//                                 onChange={this.handleSelect}
+//                                 value={this.state.numberOfParticipants}
+//                                 name="GROUP_SIZE"
+//                             >
+//                                 {
+//                                     groupOptions.map(option => (
+//                                     <MenuItem value={option.amount}>Participants: {option.amount}, Cost Per Participant: {option.costPerParticipant}</MenuItem>
+//                                 ))
+//                                 }
 
-                            </Select>
+//                             </Select>
                             
                             
-                            <FormLabel component="legend">Enter the Other Participants Emails</FormLabel>
-                            <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
+//                             <FormLabel component="legend">Enter the Other Participants Emails</FormLabel>
+//                             <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
                             
-                            </Paper>
-                            </Grid>
+//                             </Paper>
+//                             </Grid>
 
-                        ) : null
-                    )
-                }
+//                         ) : null
+//                     )
+//                 }
 
-                {
-                    (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
-                    ? 
-                    (
+//                 {
+//                     (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
+//                     ? 
+//                     (
                         
-                        <Grid item>
-                        <Paper>
-                        <FormLabel component="legend">Select the number of recurring lessons</FormLabel>
-                        <Select 
-                            onChange={this.handleSelect}
-                            value={this.state.numberOfRecurringLessons}
-                            name="RECURRING_NUMBER"
-                        >
-                            {
-                                recurringOptions.map(option => (
-                                    <MenuItem value={option}>{option}</MenuItem>
-                                ))
-                            }
+//                         <Grid item>
+//                         <Paper>
+//                         <FormLabel component="legend">Select the number of recurring lessons</FormLabel>
+//                         <Select 
+//                             onChange={this.handleSelect}
+//                             value={this.state.numberOfRecurringLessons}
+//                             name="RECURRING_NUMBER"
+//                         >
+//                             {
+//                                 recurringOptions.map(option => (
+//                                     <MenuItem value={option}>{option}</MenuItem>
+//                                 ))
+//                             }
 
-                        </Select>
-                        </Paper>
-                        </Grid>
+//                         </Select>
+//                         </Paper>
+//                         </Grid>
                         
-                    ) : null
+//                     ) : null
                     
-                }
+//                 }
             
-        </Grid>
-    </Grid>
-        <Grid item>
-        <Button variant="contained" color="primary">Submit</Button>
-        </Grid>
-    </Grid>
+//         </Grid>
+//     </Grid>
+//         <Grid item>
+//         <Button variant="contained" color="primary">Submit</Button>
+//         </Grid>
+//     </Grid>
     
-    );
+//     );
 
     
 
-    currentLayout = () => (
-        <div>
-                <Typography variant="h1">Make a Posting for a Tutor</Typography>
-                <form onSubmit={this.onSubmit}>
-                    <TextField error={this.props.errors.name} value={this.state.course} onChange={this.handleChange} required id="course" label="Course" className={classnames("", {
-                        invalid: this.props.errors.name
-                    })} />
+//     currentLayout = () => (
+//         <div>
+//                 <Typography variant="h1">Make a Posting for a Tutor</Typography>
+//                 <form onSubmit={this.onSubmit}>
+//                     <TextField error={this.props.errors.name} value={this.state.course} onChange={this.handleChange} required id="course" label="Course" className={classnames("", {
+//                         invalid: this.props.errors.name
+//                     })} />
 
                   
 
-                    {/* {
-                        tagOptions.map(option => (
-                            <FormControlLabel 
-                                control={<Checkbox name={option.name} id={option.key} checked={this.state.infoTags.get(option.key)} onChange={this.handleCheckbox} />}
-                                label={option.name}
-                            />
-                        ))
-                    } */}
+//                     {/* {
+//                         tagOptions.map(option => (
+//                             <FormControlLabel 
+//                                 control={<Checkbox name={option.name} id={option.key} checked={this.state.infoTags.get(option.key)} onChange={this.handleCheckbox} />}
+//                                 label={option.name}
+//                             />
+//                         ))
+//                     } */}
 
-                    <TagOptions />
+//                     <TagOptions />
 
-                    <Typography variant="h4">Select Leson Type: </Typography>
-                    <Select 
-                        onChange={this.handleSelect}
-                        value={this.state.type}
-                        name="LESSON_TYPE"
-                    >
-                        {
-                            lessonTypes.map(lesson => (
-                                <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
-                            ))
-                        }
-
-
-
-                    </Select>
+//                     <Typography variant="h4">Select Leson Type: </Typography>
+//                     <Select 
+//                         onChange={this.handleSelect}
+//                         value={this.state.type}
+//                         name="LESSON_TYPE"
+//                     >
+//                         {
+//                             lessonTypes.map(lesson => (
+//                                 <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
+//                             ))
+//                         }
 
 
-                    {
-                        (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
-                            ?
-                            (
-                                <div>
 
-                                <Typography variant="h4">Select Number of Participants: </Typography>
-                                <Select
-                                    onChange={this.handleSelect}
-                                    value={this.state.numberOfParticipants}
-                                    name="GROUP_SIZE"
-                                >
-                                    {
-                                        groupOptions.map(option => (
-                                        <MenuItem value={option.amount}>Participants: {option.amount}, Cost Per Participant: {option.costPerParticipant}</MenuItem>
-                                    ))
-                                    }
+//                     </Select>
 
-                                </Select>
-                                <Typography variant="h4">Enter the participants emails associated with their account</Typography>
-                                <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
-                                </div>
 
-                            ) : null
-                        )
-                    }
+//                     {
+//                         (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
+//                             ?
+//                             (
+//                                 <div>
 
-                    {
-                        (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
-                        ? 
-                        (
-                            <div>
+//                                 <Typography variant="h4">Select Number of Participants: </Typography>
+//                                 <Select
+//                                     onChange={this.handleSelect}
+//                                     value={this.state.numberOfParticipants}
+//                                     name="GROUP_SIZE"
+//                                 >
+//                                     {
+//                                         groupOptions.map(option => (
+//                                         <MenuItem value={option.amount}>Participants: {option.amount}, Cost Per Participant: {option.costPerParticipant}</MenuItem>
+//                                     ))
+//                                     }
 
-                            <Typography variant="h4">Select the number of recurring lessons</Typography>
-                            <Select 
-                                onChange={this.handleSelect}
-                                value={this.state.numberOfRecurringLessons}
-                                name="RECURRING_NUMBER"
-                            >
-                                {
-                                    recurringOptions.map(option => (
-                                        <MenuItem value={option}>{option}</MenuItem>
-                                    ))
-                                }
+//                                 </Select>
+//                                 <Typography variant="h4">Enter the participants emails associated with their account</Typography>
+//                                 <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
+//                                 </div>
 
-                            </Select>
+//                             ) : null
+//                         )
+//                     }
 
-                            </div>
-                        ) : null
+//                     {
+//                         (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
+//                         ? 
+//                         (
+//                             <div>
+
+//                             <Typography variant="h4">Select the number of recurring lessons</Typography>
+//                             <Select 
+//                                 onChange={this.handleSelect}
+//                                 value={this.state.numberOfRecurringLessons}
+//                                 name="RECURRING_NUMBER"
+//                             >
+//                                 {
+//                                     recurringOptions.map(option => (
+//                                         <MenuItem value={option}>{option}</MenuItem>
+//                                     ))
+//                                 }
+
+//                             </Select>
+
+//                             </div>
+//                         ) : null
                         
-                    }
+//                     }
 
-                    <Typography variant="h4">Select the times that you are available:</Typography>
+//                     <Typography variant="h4">Select the times that you are available:</Typography>
                     
-                    <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
+//                     <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
 
 
                     
 
-                    <TextField error={this.props.errors.name} value={this.state.description} onChange={this.handleChange} required id='description' label="Description" fullWidth style={{ margin: 8}} />
+//                     <TextField error={this.props.errors.name} value={this.state.description} onChange={this.handleChange} required id='description' label="Description" fullWidth style={{ margin: 8}} />
 
-                    <TextField error={this.props.errors.name} value={this.state.year} onChange={this.handleChange} required id='year' label="Year" />
+//                     <TextField error={this.props.errors.name} value={this.state.year} onChange={this.handleChange} required id='year' label="Year" />
 
-                    {
-                        (!isEmpty(this.props.location.posting) ? <Button variant="contained" color="primary" onClick={this.onSubmit}>Edit Posting</Button>
+//                     {
+//                         (!isEmpty(this.props.location.posting) ? <Button variant="contained" color="primary" onClick={this.onSubmit}>Edit Posting</Button>
                         
-                        : 
+//                         : 
                         
-                        <Button variant='contained' color='primary' onClick={this.onSubmit}>Submit Posting</Button> )
-                    }
+//                         <Button variant='contained' color='primary' onClick={this.onSubmit}>Submit Posting</Button> )
+//                     }
 
                    
 
 
 
-                </form>
+//                 </form>
 
-            </div>
-    );
+//             </div>
+//     );
    
 
-    render() {
+//     render() {
 
-        return(
-            <div>
-            <Typography variant="h1">Make a Posting for a Tutor</Typography>
-            <form onSubmit={this.onSubmit}>
-                <TextField error={this.props.errors.name} value={this.state.course} onChange={this.handleChange} required id="course" label="Course" className={classnames("", {
-                    invalid: this.props.errors.name
-                })} />
+//         return(
+//             <div>
+//             <Typography variant="h1">Make a Posting for a Tutor</Typography>
+//             <form onSubmit={this.onSubmit}>
+//                 <TextField error={this.props.errors.name} value={this.state.course} onChange={this.handleChange} required id="course" label="Course" className={classnames("", {
+//                     invalid: this.props.errors.name
+//                 })} />
 
               
 
+//                 {
+//                     tagOptions.map(option => (
+//                         <FormControlLabel 
+//                             control={<Checkbox name={option.name} id={option.key} checked={this.state.infoTags.get(option.key)} onChange={this.handleCheckbox} />}
+//                             label={option.name}
+//                         />
+//                     ))
+//                 }
+
+                
+
+//                 <Typography variant="h4">Select Leson Type: </Typography>
+//                 <Select 
+//                     onChange={this.handleSelect}
+//                     value={this.state.type}
+//                     name="LESSON_TYPE"
+//                 >
+//                     {
+//                         lessonTypes.map(lesson => (
+//                             <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
+//                         ))
+//                     }
+
+
+
+//                 </Select>
+
+
+//                 {
+//                     (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
+//                         ?
+//                         (
+//                             <div>
+
+//                             <Typography variant="h4">Select Number of Participants: </Typography>
+//                             <Select
+//                                 onChange={this.handleSelect}
+//                                 value={this.state.numberOfParticipants}
+//                                 name="GROUP_SIZE"
+//                             >
+//                                 {
+//                                     groupOptions.map(option => (
+//                                     <MenuItem value={option.amount}>Participants: {option.amount}, Cost Per Participant: {option.costPerParticipant}</MenuItem>
+//                                 ))
+//                                 }
+
+//                             </Select>
+//                             <Typography variant="h4">Enter the participants emails associated with their account</Typography>
+//                             <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
+//                             </div>
+
+//                         ) : null
+//                     )
+//                 }
+
+//                 {
+//                     (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
+//                     ? 
+//                     (
+//                         <div>
+
+//                         <Typography variant="h4">Select the number of recurring lessons</Typography>
+//                         <Select 
+//                             onChange={this.handleSelect}
+//                             value={this.state.numberOfRecurringLessons}
+//                             name="RECURRING_NUMBER"
+//                         >
+//                             {
+//                                 recurringOptions.map(option => (
+//                                     <MenuItem value={option}>{option}</MenuItem>
+//                                 ))
+//                             }
+
+//                         </Select>
+
+//                         </div>
+//                     ) : null
+                    
+//                 }
+
+//                 <Typography variant="h4">Select the times that you are available:</Typography>
+                
+//                 <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
+
+
+                
+
+//                 <TextField error={this.props.errors.name} value={this.state.description} onChange={this.handleChange} required id='description' label="Description" fullWidth style={{ margin: 8}} />
+
+//                 <TextField error={this.props.errors.name} value={this.state.year} onChange={this.handleChange} required id='year' label="Year" />
+
+//                 {
+//                     (!isEmpty(this.props.location.posting) ? <Button variant="contained" color="primary" onClick={this.onSubmit}>Edit Posting</Button>
+                    
+//                     : 
+                    
+//                     <Button variant='contained' color='primary' onClick={this.onSubmit}>Submit Posting</Button> )
+//                 }
+
+               
+
+
+
+//             </form>
+
+//         </div>
+        
+//         )
+            
+        
+//     }
+// }
+
+function MakePosting(props) {
+
+    console.log("edit")
+
+    const [studentID, setStudentID] = useState(useSelector(state => state.auth.user.id)); //meh
+    const [course, setCourse] = useState("");
+    const [infoTags, setInfoTags] = useState(new Map()); //meh
+    const [description, setDescription] = useState("");
+    const [year, setYear] = useState("");
+    const [studentName, setStudentName] = useState(useSelector(state => state.auth.user.name)); //meh
+    const [otherStudentEmails, setOtherStudentEmails] = useState([]);
+    const [otherStudentIDs, setOtherStudentIDs] = useState([]);
+    const [type, setType] = useState("");
+    const [numberOfParticipants, setNumberOfParticipants] = useState(0);
+    const [availableDates, setAvailableDates] = useState([]);
+    const [numberOfRecurringLessons, setNumberOfRecurringLessons] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [isEdit, setIsEdit] = useState(false);
+
+
+    useEffect(() => {
+        
+        console.log("edit");
+        if(props.match.params.postingID) {
+            const { postingID } = props.match.params;
+
+            axios
+            .get("/match/user/postingByID", { params: { postingID: postingID } })
+            .then(res => {
+                const { data } = res;
+                
+                setCourse(data.course);
+                //setInfoTags(data.infoTags);
+                setDescription(data.description);
+                setYear(data.year);
+                setOtherStudentEmails(data.otherStudentEmails);
+                setOtherStudentIDs(data.otherStudentIDs);
+                setType(data.type);
+                setNumberOfParticipants(data.numberOfParticipants);
+                setAvailableDates(data.availableTimes);
+
+                
+
+                // setInfoTags({
+                //     data.infoTags.forEach(tag => {
+                //         prevTags.set(tag, true);
+                //     })
+                // });
+
+                const tagKeys = Object.keys(tags);
+                let newTags = new Map();
+                tagKeys.forEach((key) => {
+                    if(data.infoTags.includes(key)) {
+                        setInfoTags(infoTags.set(key, true))
+                    }
+                });
+
+                setInfoTags(new Map(infoTags))
+                setIsEdit(true);
+                // data.infoTags.forEach(tag => {
+                //     newTags.set(tag, true);
+                // })
+                console.log(newTags);
+                //setInfoTags(new Map(newTags));
+                //setInfoTags(newTags);
+                console.log(infoTags);
+                setLoading(false);
+            }) 
+            .catch(err => console.log(err));
+        } else {
+            setLoading(false);
+        }
+    }, [])
+
+    const submitNew = () => {
+        const chosenTags = [];
+
+        infoTags.forEach((value, key) => {
+            if(value) chosenTags.push(key);
+        });
+
+        const submissionData = {
+            studentID: studentID,
+            course: course,
+            description: description,
+            year: year,
+            studentName: studentName,
+            infoTags: chosenTags,
+            type: type,
+            availableTimes: availableDates,
+            otherStudentIDs: otherStudentIDs,
+            numberOfParticipants: numberOfParticipants,
+            numberOfRecurringLessons: numberOfRecurringLessons,
+            otherStudentEmails: otherStudentEmails
+        };
+
+        axios
+        .post("/match/addPosting", submissionData)
+        .then(res => {
+            props.history.push('/myPostings');
+        })
+        .catch(err => console.log(err));
+    }
+
+    const submitEdit = () => {
+        const chosenTags = [];
+
+        infoTags.forEach((value, key) => {
+            if(value) chosenTags.push(key);
+        });
+
+        const submissionData = {
+            studentID: studentID,
+            course: course,
+            description: description,
+            year: year,
+            studentName: studentName,
+            infoTags: chosenTags,
+            postingID: props.match.params.postingID,
+            type: type,
+            availableTimes: availableDates,
+            otherStudentIDs: otherStudentIDs,
+            numberOfParticipants: numberOfParticipants,
+            numberOfRecurringLessons: numberOfRecurringLessons,
+            otherStudentEmails: otherStudentEmails
+        };
+
+        axios
+        .post("/match/editPosting", submissionData)
+        .then(res => {
+            props.history.push('/myPostings');
+        })
+        .catch(err => console.log(err))
+    }
+
+    const handleCourse = (e) => {
+        setCourse(e.target.value);
+        console.log(infoTags)
+    }
+
+    const handleDescription = (e) => {
+        setDescription(e.target.value);
+    }
+
+    const handleYear = (e) => {
+        setYear(e.target.value);
+    }
+    
+    //need to fix
+    const handleCheckbox = (e) => {
+        console.log(e.target)
+        const { id, checked } = e.target;
+
+        //setInfoTags(prevTags => { prevTags.set(id, checked)})
+        console.log(infoTags.get(id))
+        console.log(checked)
+        //setInfoTags(infoTags.set(id, checked));
+        setInfoTags(new Map(infoTags.set(id, checked)))
+
+        console.log(infoTags);
+
+    }
+
+    const handleSelect = (e) => {
+        const selector = e.target.name;
+        const { value } = e.target;
+
+        switch(selector) {
+            case "LESSON_TYPE":
+                setType(value);
+                break;
+            case "GROUP_SIZE":
+                setNumberOfParticipants(value);
+                break;
+            case "RECURRING_NUMBER":
+                setNumberOfRecurringLessons(value)
+                break;
+            default:
+                break;
+        }
+    }
+
+    const addStudent = (student) => {
+        setOtherStudentEmails(prevState => [...prevState, student.email]);
+        setOtherStudentIDs(prevState => [...prevState.otherStudentIDs, student._id]);
+    };
+
+    //Need to fix
+    const deleteStudent = (student) => {
+        setOtherStudentEmails(prevState => {
+            prevState.filter((email, index) => {
+                return email != student.email;
+            });
+        });
+
+        setOtherStudentIDs(prevState => {
+            prevState.filter((id, index) => {
+                return id != student._id;
+            });
+        });
+        
+    }
+
+    const addDate = (dateToAdd) => {
+        setAvailableDates(prevDates => [...prevDates, dateToAdd]);
+    };
+
+    const removeDate = (dateToRemove) => {
+        setAvailableDates(prevDates => {
+            prevDates.filter(date => {
+                return date != dateToRemove;
+            })
+        })
+    }
+
+    return (
+        <div>
+        {
+            loading ? (
+                <Typography variant="h5">Loading...</Typography>
+            ) : (
+                <div>
+            <Typography variant="h3">Make a Posting for a Tutor</Typography>
+            <form onSubmit={isEdit ? submitEdit : submitNew}>
+                <TextField value={course} onChange={handleCourse} required id="course" label="Course" />
+
                 {
+                    
                     tagOptions.map(option => (
-                        <FormControlLabel 
-                            control={<Checkbox name={option.name} id={option.key} checked={this.state.infoTags.get(option.key)} onChange={this.handleCheckbox} />}
+                        
+                        <FormControlLabel
+                            control={<Checkbox name={option.name} id={option.key} checked={infoTags.get(option.key)} onChange={handleCheckbox} />}
                             label={option.name}
                         />
                     ))
                 }
 
-                
-
-                <Typography variant="h4">Select Leson Type: </Typography>
-                <Select 
-                    onChange={this.handleSelect}
-                    value={this.state.type}
+                <Typography variant="h4">Select Lesson Type:</Typography>
+                <Select
+                    onChange={handleSelect}
+                    value={type}
                     name="LESSON_TYPE"
                 >
                     {
                         lessonTypes.map(lesson => (
-                            <MenuItem value={lesson}>Lesson Type: {lesson}</MenuItem>
+                            <MenuItem value={lesson}>LessonType: {lesson}</MenuItem>
                         ))
                     }
-
-
-
                 </Select>
 
-
                 {
-                    (this.state.type === "GROUP_SINGLE" || this.state.type === "GROUP_RECURRING" 
+                    (type === "GROUP_SINGLE" || type === "GROUP_RECURRING" 
                         ?
                         (
                             <div>
 
                             <Typography variant="h4">Select Number of Participants: </Typography>
                             <Select
-                                onChange={this.handleSelect}
-                                value={this.state.numberOfParticipants}
+                                onChange={handleSelect}
+                                value={numberOfParticipants}
                                 name="GROUP_SIZE"
                             >
                                 {
@@ -620,7 +957,7 @@ class MakePosting extends Component {
 
                             </Select>
                             <Typography variant="h4">Enter the participants emails associated with their account</Typography>
-                            <AccountFinder addStudent={this.addStudent} deleteStudent={this.deleteStudent} maxEmails={this.state.numberOfParticipants - 1} addedEmails={this.state.otherStudentEmails} addedStudentIDs={this.state.otherStudentIDs} />
+                            <AccountFinder addStudent={addStudent} deleteStudent={deleteStudent} maxEmails={numberOfParticipants - 1} addedEmails={otherStudentEmails} addedStudentIDs={otherStudentIDs} />
                             </div>
 
                         ) : null
@@ -628,15 +965,15 @@ class MakePosting extends Component {
                 }
 
                 {
-                    (this.state.type === "SINGLE_RECURRING" || this.state.type === "GROUP_RECURRING" ) 
+                    (type === "SINGLE_RECURRING" || type === "GROUP_RECURRING" ) 
                     ? 
                     (
                         <div>
 
                         <Typography variant="h4">Select the number of recurring lessons</Typography>
                         <Select 
-                            onChange={this.handleSelect}
-                            value={this.state.numberOfRecurringLessons}
+                            onChange={handleSelect}
+                            value={numberOfRecurringLessons}
                             name="RECURRING_NUMBER"
                         >
                             {
@@ -652,57 +989,49 @@ class MakePosting extends Component {
                     
                 }
 
-                <Typography variant="h4">Select the times that you are available:</Typography>
-                
-                <MultipleDateTimePicker addDate={this.addDate} removeDate={this.removeDate} alreadySelectedDates={this.state.availableDates} />
+                <Typography variant="h4">Select the times you are available:</Typography>
 
+                <MultipleDateTimePicker addDate={addDate} removeDate={removeDate} alreadySelectedDates={availableDates} />
 
-                
+                <TextField value={description} onChange={handleDescription} required id="description" label="Description" fullWidth style={{ margin: 8 }} />
 
-                <TextField error={this.props.errors.name} value={this.state.description} onChange={this.handleChange} required id='description' label="Description" fullWidth style={{ margin: 8}} />
-
-                <TextField error={this.props.errors.name} value={this.state.year} onChange={this.handleChange} required id='year' label="Year" />
+                <TextField value={year} onChange={handleYear} required id="year" label="Year" />
 
                 {
-                    (!isEmpty(this.props.location.posting) ? <Button variant="contained" color="primary" onClick={this.onSubmit}>Edit Posting</Button>
-                    
-                    : 
-                    
-                    <Button variant='contained' color='primary' onClick={this.onSubmit}>Submit Posting</Button> )
+                    isEdit ? (
+                        <Button variant="contained" color="primary" onClick={submitEdit}>Edit Posting</Button>
+                    ) : (
+                        <Button variant="contained" color="primary" onClick={submitNew}>Submit Posting</Button>
+                    )
                 }
-
-               
-
-
-
             </form>
-
+        </div>
+            )
+        }
         </div>
         
-        )
-            
-        
-    }
+    )
 }
 
-MakePosting.propTypes = {
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired,
-    posting: PropTypes.object,
-    isEdit: PropTypes.bool,
-    test: PropTypes.number
-};
+// MakePosting.propTypes = {
+//     auth: PropTypes.object.isRequired,
+//     errors: PropTypes.object.isRequired,
+//     posting: PropTypes.object,
+//     isEdit: PropTypes.bool,
+//     test: PropTypes.number
+// };
 
-MakePosting.defaultProps = {
-    posting: null,
+// MakePosting.defaultProps = {
+//     posting: null,
 
-};
+// };
 
-const mapStateToProps = state => ({
-    auth: state.auth,
-    errors: state.errors
-});
+// const mapStateToProps = state => ({
+//     auth: state.auth,
+//     errors: state.errors
+// });
 
-export default connect(
-    mapStateToProps
-)(withRouter(MakePosting));
+// export default connect(
+//     mapStateToProps
+// )(withRouter(MakePosting));
+export default MakePosting;
