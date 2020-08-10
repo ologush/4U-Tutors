@@ -7,6 +7,8 @@ const keys = require('../config/keys');
 
 const axios = require("axios")
 
+const passport = require('passport')
+
 const Tutor = require('../models/Tutor');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
@@ -107,7 +109,7 @@ router.post('/login', (req, res) => {
         });
 });
 
-router.post('/getLessons', (req, res) => {
+router.post('/getLessons', passport.authenticate('tutor', { session: false }), (req, res) => {
 
     
     Lesson.find({ tutorID: req.body.tutorID})
@@ -122,7 +124,7 @@ router.post('/getLessons', (req, res) => {
         .catch(err => console.log(err));
 });
 
-router.post('/giveFeedback', (req, res) => {
+router.post('/giveFeedback', passport.authenticate('user', { session: false }), (req, res) => {
     
 
     if(req.body.feedback) {
@@ -155,7 +157,8 @@ router.post('/giveFeedback', (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.get("/findByEmail", (req, res) => {
+
+router.get("/findByEmail", passport.authenticate('user', { session: false }), (req, res) => {
     console.log(req.query)
     Tutor.findOne({ email: req.query.email})
         .then(doc => {
@@ -168,7 +171,7 @@ router.get("/findByEmail", (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.get("/getRequests", (req, res) => {
+router.get("/getRequests", passport.authenticate('tutor', { session: false }), (req, res) => {
     
     LessonRequest.find({ tutorID: req.query.tutorID })
         .then(docs => {
@@ -182,7 +185,7 @@ router.get("/getRequests", (req, res) => {
 
 });
 
-router.post("/acceptRequest", (req, res) => {
+router.post("/acceptRequest", passport.authenticate('tutor', { session: false }), (req, res) => {
     console.log(req.body);
     let submissionData = {
         studentID: req.body.studentID,
@@ -223,7 +226,7 @@ router.post("/acceptRequest", (req, res) => {
     .catch(err => console.log(err))
 });
 
-router.post("/denyRequest", (req, res) => {
+router.post("/denyRequest", passport.authenticate('tutor', { session: false }), (req, res) => {
 
     console.log(req.body.requestID);
     
@@ -250,16 +253,26 @@ router.post("/denyRequest", (req, res) => {
     // })
     // .catch(err => console.log(err))
 
+    let message = {
+        from: "bookings@4uacademics.com",
+        subject: "Lesson Request Declined",
+        text: "Your lesson request has been declined"
+    }
+
     LessonRequest.findByIdAndDelete(requestID)
     .then(doc => {
+        message.to = doc.studentEmail;
+        sgMail.send(message)
+        .catch(err => console.log(err))
         res.json(doc);
+
 
     })
     .catch(err => console.log(err));
 
 });
 
-router.post("/addStripe", async (req, res) => {
+router.post("/addStripe", passport.authenticate('tutor', { session: false }), async (req, res) => {
     console.log(req.body);
     const { code, tutorID } = req.body;
     console.log(code)
@@ -279,7 +292,7 @@ router.post("/addStripe", async (req, res) => {
 
 });
 
-router.get("/getBids", (req, res) => {
+router.get("/getBids", passport.authenticate('tutor', { session: false }), (req, res) => {
     const { tutorID } = req.query;
 
     LessonBid.find({ tutorID: tutorID })
@@ -289,7 +302,7 @@ router.get("/getBids", (req, res) => {
     .catch(err => console.log(err))
 });
 
-router.post("/deleteBid", (req, res) => {
+router.post("/deleteBid", passport.authenticate('tutor', { session: false }), (req, res) => {
     const { bidID } = req.body;
 
     LessonBid.findOneAndDelete({ _id: bidID})
@@ -299,7 +312,7 @@ router.post("/deleteBid", (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.post("/lessonOver", (req, res) => {
+router.post("/lessonOver", passport.authenticate('tutor', { session: false }), (req, res) => {
     PastLesson.findOne({ lessonID: req.body.lessonID })
     .then(doc => {
         doc.tutorExitTime = Date.now();

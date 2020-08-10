@@ -43,7 +43,7 @@ import Typography from "@material-ui/core/Typography"
 
          console.log(lesson);
          axios
-            .post("/videoChat/token", submissionData)
+            .post("/videoChat/tutor/token", submissionData)
             .then(res => {
                 setToken(res.data)
             })
@@ -70,7 +70,7 @@ import Typography from "@material-ui/core/Typography"
 
      useEffect(() => {
         axios
-        .get("/lesson/lessonByID", { params: { lessonID: lessonID } })
+        .get("/lesson/tutor/lessonByID", { params: { lessonID: lessonID } })
         .then(res => {
             setLesson(res.data);
             setLoading(false);

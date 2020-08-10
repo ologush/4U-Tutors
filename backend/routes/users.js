@@ -93,7 +93,7 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.post('/getLessons', (req, res) => {
+router.post('/getLessons', passport.authenticate('user', { session: false }), (req, res) => {
   console.log(req);
   Lesson.find({ studentID: req.body.studentID })
     .then(docs => {
@@ -156,7 +156,7 @@ router.get("/getPastLessons", passport.authenticate('user', { session: false }),
     .catch(err => console.log(err))
 });
 
-router.get("/getRequests", (req, res) => {
+router.get("/getRequests", passport.authenticate('user', { session: false }), (req, res) => {
   
   LessonRequest.find({ studentID: req.query.studentID })
     .then(docs => {
@@ -170,7 +170,7 @@ router.get("/getRequests", (req, res) => {
 
 });
 
-router.post("/lessonOver", (req, res) => {
+router.post("/lessonOver", passport.authenticate('user', { session: false }), (req, res) => {
   PastLesson.findOne({ lessonID: req.body.lessonID })
   .then(doc => {
     doc.studentExitTime = Date.now();

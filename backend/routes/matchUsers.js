@@ -6,11 +6,11 @@ const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 const axios = require('axios');
 const LessonBid = require('../models/LessonBid');
-
+const passport = require('passport')
 
 //Add a validation layer
 
-router.post('/addPosting', (req, res) => {
+router.post('/addPosting', passport.authenticate('user', { session: false }),  (req, res) => {
     //add the validation here see other routes
     console.log(req.body);
     User.findOne({ _id: req.body.studentID })
@@ -45,7 +45,7 @@ router.post('/addPosting', (req, res) => {
 
 });
 
-router.post("/editPosting", (req, res) => {
+router.post("/editPosting", passport.authenticate('user', { session: false }), (req, res) => {
 
     const update = {
         studentID: req.body.studentID,
@@ -68,7 +68,7 @@ router.post("/editPosting", (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.post('/getPostingsByTags', (req, res) => {
+router.post('/getPostingsByTags', passport.authenticate('tutor', { session: false }), (req, res) => {
     const tags = req.body.tags;
     console.log(tags);
     
@@ -82,7 +82,7 @@ router.post('/getPostingsByTags', (req, res) => {
         .catch(err => console.log(err));
 });
 
-router.get('/getPostings', (req, res) => {
+router.get('/getPostings', passport.authenticate('tutor', { session: false }), (req, res) => {
     Posting.find()
         .then(docs => {
             return res.json(docs);
@@ -90,6 +90,7 @@ router.get('/getPostings', (req, res) => {
         .catch(err => console.log(err));
 });
 
+//May need to secure, not sure yet
 router.post('/setMatch', (req, res) => {
     
    
@@ -140,7 +141,7 @@ router.post('/setMatch', (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.post('/addBid', (req, res) => {
+router.post('/addBid', passport.authenticate('tutor', { session: false }), (req, res) => {
     let newBid = new LessonBid({
         postingID: req.body.postingID,
         tutorID: req.body.tutorID,
@@ -156,7 +157,8 @@ router.post('/addBid', (req, res) => {
         .catch(err => console.log(err))
 })
 
-router.post('/selectBid', (req, res) => {
+
+router.post('/selectBid', passport.authenticate('user', { session: false }), (req, res) => {
     Posting.findOneAndDelete({ _id: req.body.postingID })
         .then(posting => {
             let newLessonProto = {
@@ -190,7 +192,7 @@ router.post('/selectBid', (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.post('/getBids', (req, res) => {
+router.post('/getBids', passport.authenticate('user', { session: false}), (req, res) => {
     LessonBid.find( { postingID: req.body.postingID } )
         .then(docs => {
             res.json(docs);
@@ -198,6 +200,7 @@ router.post('/getBids', (req, res) => {
         .catch(err => console.log(err))
 });
 
+//May need to secure, not sure yet
 router.get('/postingByID', (req, res) => {
     const { postingID } = req.query;
 
