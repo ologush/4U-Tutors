@@ -11,9 +11,9 @@ import Typography from "@material-ui/core/Typography"
 
     const { lessonID } = props.match.params;
 
-     const [username, setUsername] = useState('');
-     const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
-     const [token, setToken] = useState(null);
+    const [username, setUsername] = useState('');
+    const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
+    const [token, setToken] = useState(null);
     const [lesson, setLesson] = useState([]);
     const [loading, setLoading] = useState(true);
 

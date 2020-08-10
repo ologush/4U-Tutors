@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Video from 'twilio-video';
 import Participant from './Participant'
-
-
+import Grid from "@material-ui/core/Grid"
+import Typography from "@material-ui/core/Typography"
+import Paper from "@material-ui/core/Paper"
+import Button from "@material-ui/core/Button"
 
 const Room = ({ roomName, token, handleLogout}) => {
     const [room, setRoom] = useState(null);
@@ -48,23 +50,62 @@ const Room = ({ roomName, token, handleLogout}) => {
         <Participant key={participant.sid} participant={participant} />
     ));
 
+    // return (
+    //     <div className="room">
+    //         <h2>Room: {roomName}</h2>
+    //         <button onClick={handleLogout}>Log out</button>
+    //         <div className="local-participant">
+    //             {room ? (
+    //                 <Participant key={room.localParticipant.sid}
+    //                             participant={room.localParticipant}
+    //                 />
+    //             ) : (
+    //                 ''
+    //             )}
+    //         </div>
+    //         <h3>Remote Participants</h3>
+    //         <div className="remote-participants">{remoteParticipants}</div>
+    //     </div>
+    // );
+
     return (
-        <div className="room">
-            <h2>Room: {roomName}</h2>
-            <button onClick={handleLogout}>Log out</button>
-            <div className="local-participant">
-                {room ? (
-                    <Participant key={room.localParticipant.sid}
-                                participant={room.localParticipant}
-                    />
-                ) : (
-                    ''
-                )}
-            </div>
-            <h3>Remote Participants</h3>
-            <div className="remote-participants">{remoteParticipants}</div>
-        </div>
-    );
+        <Grid container>
+            <Grid item container xs={8}>
+                {
+                    remoteParticipants.length > 3 ? (
+                        remoteParticipants.map(participant => (
+                            <Grid item xs={4}>
+                                {participant}
+                            </Grid>
+                        ))
+                     ) : (
+                        remoteParticipants.map(participant => (
+                            <Grid item xs={12/remoteParticipants.length}>
+                                {participant}
+                            </Grid>
+                        ))
+                     )
+                }
+            </Grid>
+            <Grid item container xs={4} direction="column">
+                <Grid item>
+                    <Typography variant="h5">Room: {roomName}</Typography>
+                </Grid>
+                <Grid item>
+                    {room ? (
+                        <Participant key={room.localParticipant.sid}
+                                    participant={room.localParticipant}
+                        />
+                    ) : (
+                        ""
+                    )}
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" onClick={handleLogout}>Exit Lesson</Button>
+                </Grid>
+            </Grid>
+        </Grid>
+    )
 };
 
 export default Room;
