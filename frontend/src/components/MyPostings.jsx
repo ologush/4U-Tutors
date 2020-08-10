@@ -3,6 +3,7 @@ import axios from "axios";
 
 import Typography from "@material-ui/core/Typography";
 
+import Button from "@material-ui/core/Button"
 
 import PropTypes from "prop-types";
 import { connect } from 'react-redux';
@@ -46,6 +47,10 @@ class MyPostings extends Component {
             .catch(err => console.log(err));
     }
 
+    handleEdit(postingID) {
+        window.location.href = "/editPosting/" + postingID;
+    }
+
     
 
 
@@ -67,6 +72,7 @@ class MyPostings extends Component {
                         }}>
                             <button id={index} name="edit">Edit</button>
                         </Link>
+                        <Button onClick={() => this.props.history.push("/editPosting/" + posting._id)}>Edit</Button>
                         <Link to={{
                             pathname: "/selectBid/" + this.state.postings[index]._id
                         }}>

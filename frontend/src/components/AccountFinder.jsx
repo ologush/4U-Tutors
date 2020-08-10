@@ -61,16 +61,16 @@ class AccountFinder extends Component {
             })
     }
 
-    deleteStudent(e) {
-        e.preventDefault();
-        const idToDelete = e.target.id;
+    deleteStudent(user) {
+        //e.preventDefault();
+        const idToDelete = user._id;
         
         this.setState(prevState => ({
             addedUsers: prevState.addedUsers.filter((value, index) => {
                 return value._id != idToDelete;
             })
         }));
-        this.props.deleteStudent(idToDelete);
+        this.props.deleteStudent(user);
     }  
 
     
@@ -87,6 +87,10 @@ class AccountFinder extends Component {
                             <button id={user._id} onClick={this.deleteStudent}>
                                 X
                             </button>
+                            <IconButton aria-label="delete" onClick={() => this.deleteStudent(user)}>
+                                <DeleteIcon />
+                            </IconButton>
+                            
                         </div>
                         
                     ))
