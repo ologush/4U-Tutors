@@ -8,6 +8,8 @@ var mongoose = require('mongoose');
 const db = require("./config/keys").mongoURI;
 var passport = require("passport");
 
+const cron = require('node-cron');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var matchingRouter = require('./routes/matchUsers');
