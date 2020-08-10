@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Lobby from './Lobby';
 import axios from 'axios';
 import Room from './Room';
@@ -16,13 +16,27 @@ import Timer from "./Timer"
      //const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
      const [roomName, setRoomName] = useState(lessonID);
      const [token, setToken] = useState(null);
+     const [lesson, setLesson] = useState({});
+    const [loading, setLoading] = useState(true);
 
      const user = useSelector(state => state.auth.user);
      const startTime = localStorage.getItem("startTime");
-    console.log(startTime)
+     console.log(startTime)
      console.log(user)
-     const lesson = useSelector(state => state.lesson.lesson);
+     //const lesson = useSelector(state => state.lesson.lesson);
      const dispatch = useDispatch();
+
+    useEffect(() => {
+        axios
+        .get("/lesson/getLessonByID", { params: { lessonID: lessonID }})
+        .then(res => {
+            setLesson(res.data);
+            setLoading(false);
+        })
+        .catch(err => console.log(err));
+    }, [])
+
+
      const handleUsernameChange = useCallback(event => {
          setUsername(event.target.value);
      }, []);
@@ -35,13 +49,19 @@ import Timer from "./Timer"
          event.preventDefault();
 
          console.log(lesson);
+
+        const submissionData = {
+            identity: user.email,
+            lessonID: lessonID,
+            studentID: user.id,
+            studentName: user.name,
+            studentEmail: user.email,
+            startTime: startTime,
+            subject: lesson.subject
+        };
+
          axios
-            .get("/videoChat/token", {
-                params: {
-                    identity: user.name,
-                    roomName: lessonID
-                }
-            })
+            .post("/videoChat/token", submissionData)
             .then(res => {
                 setToken(res.data)
             })
@@ -50,7 +70,18 @@ import Timer from "./Timer"
 
      const handleLogout = useCallback(event => {
          setToken(null);
-         window.location.href = "/postLesson/" + lessonID;
+
+        const submissionData = { lessonID: lessonID}
+
+         axios
+            .post("/users/lessonOver", submissionData)
+            .then(res => {
+                console.log(res);
+                dispatch(endLesson());
+                window.location.href = "/postLesson/" + lessonID;
+            })
+            .catch(err => console.log(err));
+         
 
          //dispatch(endLesson());
 

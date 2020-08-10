@@ -6,7 +6,7 @@ import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import { withRouter } from "react-router-dom"
-import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon} from "@material-ui/icons"
+import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon, ContactMail as ContactMailIcon} from "@material-ui/icons"
 
 const options = [
     {
@@ -33,6 +33,11 @@ const options = [
         name: "Lesson Requests",
         path: "/requests",
         icon: <PostAddIcon />
+    },
+    {
+        name: "My Bids",
+        path: "/myBids",
+        icon: <ContactMailIcon />
     }
 ];
 

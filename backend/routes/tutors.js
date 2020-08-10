@@ -14,6 +14,8 @@ const Posting = require('../models/Posting');
 const TutorFeedback = require('../models/TutorFeedback');
 const LessonRequest = require('../models/LessonRequest');
 const LessonConfirm = require('../models/LessonConfirm');
+const LessonBid = require('../models/LessonBid');
+const PastLesson = require('../models/PastLesson');
 
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey('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');
@@ -277,5 +279,37 @@ router.post("/addStripe", async (req, res) => {
 
 });
 
+router.get("/getBids", (req, res) => {
+    const { tutorID } = req.query;
+
+    LessonBid.find({ tutorID: tutorID })
+    .then(docs => {
+        res.json(docs)
+    })
+    .catch(err => console.log(err))
+});
+
+router.post("/deleteBid", (req, res) => {
+    const { bidID } = req.body;
+
+    LessonBid.findOneAndDelete({ _id: bidID})
+    .then(doc => {
+        res.json(doc);
+    })
+    .catch(err => console.log(err));
+});
+
+router.post("/lessonOver", (req, res) => {
+    PastLesson.findOne({ lessonID: req.body.lessonID })
+    .then(doc => {
+        doc.tutorExitTime = Date.now();
+        doc.save()
+        .then(save => {
+            res.json(save);
+        })
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+})
 
 module.exports = router;

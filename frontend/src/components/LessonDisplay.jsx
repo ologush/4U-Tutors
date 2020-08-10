@@ -29,7 +29,9 @@ function LessonDisplay(props) {
                 <Typography variant="body1">Time: {props.date.toLocaleTimeString("en-US", timeOptions)}</Typography>
             </CardContent>
             <CardActions>
+                <Button variant="contained" color="secondary" onClick={props.cancelLesson} disabled={props.date.getTime() - currentDate.getTime() < 86400000}>Cancel Lesson</Button>
                 <Button onClick={props.onClick} disabled={props.date.getTime() - currentDate.getTime() > 300000}>Enter Lesson</Button>
+                {props.date.getTime() - currentDate.getTime() > 3000 ? (<Typography variant="body1">Lesson will be available witin 5 minutes of the start time</Typography>) : (null)}
             </CardActions>
         </Card>
     );
@@ -40,7 +42,8 @@ LessonDisplay.propTypes = {
     date: PropTypes.object.isRequired,
     subject: PropTypes.string.isRequired,
     tutorName: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    cancelLesson: PropTypes.func.isRequired
 }
 
 export default LessonDisplay;

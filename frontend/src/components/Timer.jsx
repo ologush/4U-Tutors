@@ -8,7 +8,8 @@ function Timer(props) {
         
         let year = new Date().getFullYear();
 
-        let finishTime = props.startTime.getTime() + 10000;
+        //Adds 1 hour to the start time in milliseconds
+        let finishTime = props.startTime.getTime() + 3600000;
         console.log(props.startTime)
         
 

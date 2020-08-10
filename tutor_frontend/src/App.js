@@ -23,6 +23,7 @@ import Requests from "./components/Requests"
 import AccountSettings from "./components/AccountSettings"
 import NavBar from "./components/NavBar"
 import SaveStripe from "./components/SaveStripe"
+import MyBids from "./components/MyBids"
 
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
@@ -55,11 +56,12 @@ function App() {
             <PrivateRoute exact path="/myLessons" component={DisplayLessons} />
             <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/findPostings" component={FindPostings} />
-            <PrivateRoute exact path="/booking" component={BookingPage} />
+            <PrivateRoute exact path="/booking/:postingID" component={BookingPage} />
             <PrivateRoute exact path="/request/:requestID" component={Request} />
             <PrivateRoute exact path="/requests" component={Requests} />
             <PrivateRoute exact path="/accountSettings" component={AccountSettings} />
             <PrivateRoute path="/savestripe" component={SaveStripe} />
+            <PrivateRoute exact path="/myBids" component={MyBids} />
           </Switch>
         </div>
       </Router>

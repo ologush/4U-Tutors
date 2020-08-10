@@ -34,6 +34,7 @@ import RequestPayment from "./components/RequestPayment"
 import {loadStripe} from '@stripe/stripe-js'
 import { Elements } from "@stripe/react-stripe-js"
 import Payout from "./components/Payout"
+import AccountSettings from "./components/AccountSettings"
 
 
 import Paper from "@material-ui/core/Paper"
@@ -76,7 +77,7 @@ function App() {
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Elements stripe={stripePromise}>
-          <Route exact path="/test" component={Payout} />
+            <Route exact path="/test" component={Payout} />
           </Elements>
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
@@ -84,11 +85,14 @@ function App() {
             <PrivateRoute exact path="/makePosting" component={MakePosting} />
             <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
-            <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
+            <Elements stripe={stripePromise}>
+              <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
+            </Elements>
             <PrivateRoute exact path="/editPosting/:postingID" component={MakePosting} />
             <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
             <PrivateRoute exact path="/pastLessons" component={PastLessons} />
             <PrivateRoute exact path="/requestLesson" component={LessonRequest} />
+            <PrivateRoute exact path="/accountsettings" component={AccountSettings} />
           </Switch>
           </Paper>
           </Grid>

@@ -42,6 +42,12 @@ const lessonSchema = new Schema({
     otherStudentIDs: {
         type: Array,
         required: false
+    },
+    studentEmail: {
+        type: String
+    },
+    tutorEmail: {
+        type: String
     }
 });
 

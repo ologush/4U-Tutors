@@ -6,6 +6,7 @@ sgMail.setApiKey('SG.XywI63hbQdqJ28CA_s0-JQ.HwHZ4tuB9ZXqwhuAwfQYyUEvFFdF1VsQioMp
 
 const PastLesson = require("../models/PastLesson");
 const LessonRequest = require("../models/LessonRequest");
+const Lesson = require('../models/Lesson');
 
 router.post("/addRequest", (req, res) => {
 
@@ -51,8 +52,99 @@ router.get("/getRequest", (req, res) => {
         res.json(doc)
     })
     .catch(err => console.log(err))
+});
+
+router.get("/lessonByID", (req, res) => {
+    const { lessonID } = req.query;
+
+    Lesson.findOne({ _id: lessonID })
+    .then(doc => {
+        res.json(doc);
+    })
+    .catch(err => console.log(err))
+});
+
+router.post("/deleteLesson", (req, res) => {
+    Lesson.findOneAndDelete({ _id: req.body.lessonID })
+    .then(del => {
+        res.json(del);
+    })
+    .catch(err => console.log(err));
+});
+
+router.post("/cancel", (req, res) => {
+
+    let message = {
+        from: "bookings@4uacademics.com",
+        subject: "Lesson Cancelled"
+    }
+
+    
+
+    Lesson.findOneAndDelete({ _id: req.body.lessonID })
+    .then(del => {
+        message.to = [del.studentEmail, del.tutorEmail];
+        lesson.message = "The lesson on " + del.dateAndTime + " has been cancelled";
+
+        sgMail.send(message);
+    })
+    .catch(err => console.log(err))
+});
+
+router.post("/student/cancel", (req, res) => {
+    
+    let studentMessage = {
+        from: "bookings@4uacademics.com",
+        subject: "Lesson Cancelled"
+    }
+
+    let tutorMessage = {
+        from: "bookings@4uacademics.com",
+        subject: "Lesson Cancelled"
+    }
+
+    Lesson.findOneAndDelete({ _id: req.body.studentID })
+    .then(del => {
+        studentMessage.to = del.studentEmail;
+        studentMessage.text = "You successfully cancelled your lesson with " + del.tutorName + ". Scheduled for " + del.dateAndTime;
+
+        tutorMessage.to = del.tutorEmail;
+        tutorMessage.text = del.studentName + " Has cancelled their lesson with you scheduled for " + del.dateAndTime;
+
+        sgMail.send(studentMessage)
+        .catch(err => console.log(err))
+
+        sgMail.send(tutorMessage)
+        .catch(err => console.log(err))
+
+        //Implement a refund aswell
+    })
 })
 
+router.post("/tutor/cancel", (req, res) => {
+    
+    let studentMessage = {
+        from: "bookings@4uacademics.com",
+        subject: "Lesson Cancelled"
+    }
 
+    let tutorMessage = {
+        from: "bookings@4uacademics.com",
+        subject: "Lesson Cancelled"
+    }
+
+    Lesson.findOneAndDelete({ _id: req.body.lessonID })
+    .then(del => {
+        studentMessage.to = del.studentEmail;
+        studentMessage.text = del.tutorName + " has cancelled your lesson on " + del.dateAndTime + ". You will recieve a refund.";
+
+        tutorMessage.to = del.tutorEmail,
+        tutorMessage.text = "Your lesson with " + del.studentName + " has been cancelled.";
+
+        sgMail.send(studentMessage);
+        sgMail.send(tutorMessage);
+    })
+    .catch(err => console.log(err))
+})
 
 module.exports = router;

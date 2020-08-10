@@ -18,9 +18,6 @@ function RequestPayment(props) {
 
     useEffect(() => {
 
-        //axios
-        
-
         axios
         .get("/payments/secret")
         .then(res => {

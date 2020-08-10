@@ -74,8 +74,8 @@ router.post('/getPostingsByTags', (req, res) => {
     
 
     Posting.find({ infoTags: { $in: tags}})
-        .skip(req.body.amountPerSet * req.body.setNumber)
-        .limit(req.body.amountPerSet)
+        //.skip(req.body.amountPerSet * req.body.setNumber)
+        //.limit(req.body.amountPerSet)
         .then(docs => {
             return res.json(docs);
         })
@@ -179,7 +179,11 @@ router.post('/selectBid', (req, res) => {
                 .then(lesson => {
                     res.json(lesson)
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    console.log(err);
+
+                    //maybe put posting back in the db if there is an error
+                })
 
 
         })
@@ -193,6 +197,20 @@ router.post('/getBids', (req, res) => {
         })
         .catch(err => console.log(err))
 });
+
+router.get('/postingByID', (req, res) => {
+    const { postingID } = req.query;
+
+    Posting.findOne({ _id: postingID })
+    .then(doc => {
+        if(doc) {
+            res.json(doc);
+        } else {
+            res.status(404).json({error: "No posting found with that ID"})
+        }
+    })
+    .catch(err => console.log(err))
+})
 
 
 
