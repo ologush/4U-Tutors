@@ -149,13 +149,70 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                 tutorFeedback = new TutorFeedback(feedbackProto);
 
                 tutorFeedback.save()
-                .then(feedback => res.json(feedback))
+                .then(feedback => {
+                    updateRating(lesson.tutorID);
+                    res.json(feedback);
+                })
                 .catch(err => console.log(err))
 
             }
         })
         .catch(err => console.log(err))
 });
+
+function updateRating(tutorID) {
+    let rating = 0;
+    TutorFeedback.find({ tutorID: tutorID })
+    .then(docs => {
+        docs.forEach(feedback => {
+            rating += feedback.rating;
+        });
+        rating = rating / docs.length;
+
+        Tutor.findOne({ _id: tutorID })
+        .then(tutor => {
+            tutor.rating = rating;
+            if (rating < 3.5 && docs.length > 9) {
+                let message = {
+                    to: tutor.email,
+                    from: "info@4uacademics.com",
+                    text: "Warning, your rating has fallen below 3.5. Your account will be disabled for a week"
+                }
+
+                sgMail.send(message);
+            }
+
+            tutor.save()
+        })
+        .catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
+}
+
+router.get("/unavailableTimes", passport.authenticate('tutor', { session: false }), async (req, res) => {
+    const tutorID = req.query.tutorID;
+    let times = [];
+    await Lesson.find({ tutorID: tutorID })
+    .then(docs => {
+        
+
+        docs.forEach(lesson => {
+            times.push(lesson.dateAndTime);
+        });
+
+        res.json(times);
+    })
+    .catch(err => console.log(err))
+
+    await LessonBid.find({ tutorID: tutorID })
+    .then(docs => {
+        docs.forEach(bid => {
+            times.push(lessonBid.date)
+        });
+    });
+
+    res.json(times);
+})
 
 
 router.get("/findByEmail", passport.authenticate('user', { session: false }), (req, res) => {
