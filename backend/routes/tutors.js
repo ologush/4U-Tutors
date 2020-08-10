@@ -189,6 +189,31 @@ function updateRating(tutorID) {
     .catch(err => console.log(err))
 }
 
+router.get("/unavailableTimes", passport.authenticate('tutor', { session: false }), async (req, res) => {
+    const tutorID = req.query.tutorID;
+    let times = [];
+    await Lesson.find({ tutorID: tutorID })
+    .then(docs => {
+        
+
+        docs.forEach(lesson => {
+            times.push(lesson.dateAndTime);
+        });
+
+        res.json(times);
+    })
+    .catch(err => console.log(err))
+
+    await LessonBid.find({ tutorID: tutorID })
+    .then(docs => {
+        docs.forEach(bid => {
+            times.push(lessonBid.date)
+        });
+    });
+
+    res.json(times);
+})
+
 
 router.get("/findByEmail", passport.authenticate('user', { session: false }), (req, res) => {
     console.log(req.query)
