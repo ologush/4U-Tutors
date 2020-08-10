@@ -83,6 +83,8 @@ router.post('/getPostingsByTags', passport.authenticate('tutor', { session: fals
 });
 
 router.get('/getPostings', passport.authenticate('tutor', { session: false }), (req, res) => {
+    
+    console.log("a")
     Posting.find()
         .then(docs => {
             return res.json(docs);
