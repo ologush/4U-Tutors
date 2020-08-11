@@ -214,7 +214,17 @@ router.get("/unavailableTimes", passport.authenticate('tutor', { session: false 
     res.json(times);
 })
 
-
+router.get("/tutor/findByEmail", passport.authenticate('tutor', { session: false }), (req, res) => {
+    Tutor.findOne({ email: req.query.email })
+    .then(doc => {
+        if(doc) {
+            res.json(doc);
+        } else {
+            res.status(404).json({noAccountFound: "No Tutor Found"})
+        }
+    })
+    .catch(err => console.log(err))
+})
 router.get("/findByEmail", passport.authenticate('user', { session: false }), (req, res) => {
     console.log(req.query)
     Tutor.findOne({ email: req.query.email})

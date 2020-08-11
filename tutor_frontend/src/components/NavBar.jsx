@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { Menu as AccountMenu } from '@material-ui/core/'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -10,12 +10,14 @@ import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import Typography from '@material-ui/core/Typography'
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import PropTypes from "prop-types"
 import { logoutUser } from "../actions/authActions"
 import HomePage from './HomePage'
 import { Link, withRouter } from 'react-router-dom'
 import Menu from "./Menu"
+import { FormatColorTextSharp } from '@material-ui/icons'
+import clsx from 'clsx'
 
 const accountOptions = [
     "Account Settings",
@@ -38,154 +40,137 @@ const tutorRoutes = [
     }
 ];
 
-
-class NavBar extends Component {
-    constructor() {
-        super();
-
-        this.state = {
-            anchorEl: null,
-            openMenu: false,
-            openAccountMenu: false
-        };
+const drawerWidth = 240;
 
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleMenu = this.handleMenu.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.handleAccountMenu = this.handleAccountMenu.bind(this);
-
-
-
+const useStyles = makeStyles((theme) => ({
+    appBar: {
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLEft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     }
+}))
 
-
-    //const classes = useStyles();
+function NavBar(props) {
     
-    onLogoutClick(e) {
+    const classes = useStyles();
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [openMenu, setOpenMenu] = useState(false);
+    const [openAccountMenu, setOpenAccountMenu] = useState(false);
+
+    const [auth, setAuth] = useState(useSelector(state => state.auth));
+
+
+
+    const onLogoutClick = (e) => {
         e.preventDefault();
+        props.logoutUser();
+        window.location.href = "http://localhost:4000"
+    };
 
-        this.props.logoutUser();
-    }
+    const handleAccountMenu = (e) => {
+        setAnchorEl(e.currentTarget);
+        setOpenAccountMenu(true);
+    };
 
-    handleChange(e) {
-        
-        
-    }
+    const handleMenu = (e) => {
+        console.log(auth);
+        setOpenMenu(prev => !prev);
+        props.handleMenu();
+    };
 
-    handleAccountMenu(e) {
-        console.log(this.props.auth.user);
-        this.setState({
-            anchorEl: e.currentTarget,
-            openAccountMenu: true
-        });
-
-    }
-
-    handleMenu(e) {
-        // this.setState({
-        //     anchorEl: e.currentTarget,
-        //     openMenu: true
-        // });
-
-        this.setState(prevState => ({
-            openMenu: !prevState.openMenu
-        }));
-    }
-
-    handleClose(e) {
-        this.setState({
-            anchorEl: null,
-            openMenu: false,
-            openAccountMenu: false
-        });
-
-
+    const handleClose = (e) => {
+        setAnchorEl(null);
+        //setOpenMenu(false);
+        handleMenu();
+        setOpenAccountMenu(false);
 
         if(e.target.id == "Logout") {
-            this.onLogoutClick(e);
-        } else if(e.target.id == "Account Settings") {
-            this.props.history.push("/accountSettings")
+            onLogoutClick(e);
+        } else if (e.target.id == "Account Settings") {
+            props.history.push("/accountSettings")
         } else {
-            this.props.history.push(e.target.id);
+            props.history.push(e.target.id)
         }
-    }
+    };
 
-    render() {
-
-        return(<div>
-
-            <AppBar position="static">
-                <ToolBar>
-                    <Grid
-                        justify="space-between"
-                        container
-                    >
-                        <Grid item xs={1}>
-                        { this.props.auth.isAuthenticated && 
+    return (
+        <AppBar 
+            position="fixed"
+            className={clsx(classes.appBar, {
+                [classes.appBarShift]: openMenu
+            })}
+        >
+            <ToolBar>
+                <Grid 
+                    justify="space-between"
+                    container
+                >
+                    <Grid item xs={1}>
+                        {
+                            props.auth.isAuthenticated && 
                             <div>
-                            <IconButton edge="start" color="inherit" aria-label="menu" onClick={this.handleMenu}>
-                                <MenuIcon />
+                                <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleMenu}>
+                                    <MenuIcon />
+                                </IconButton>
 
-                            </IconButton>
-                            
-                                
-                            <Menu open={this.state.openMenu} menuState={this.handleMenu} />
-                               
-                            </div>      
-                        }
-                        </Grid>
-
-                        <Grid item xs={10}>
-                            <Typography align="left" variant="h4">4U Academics</Typography>
-                        </Grid>
-
-                        <Grid item xs={1}>
-
-                        { this.props.auth.isAuthenticated && 
-                            <div>
-                            <IconButton edge="end" color="inherit" aria-label="Account" onClick={this.handleAccountMenu}>
-                                <AccountCircle />
-                            </IconButton>
-                            <AccountMenu 
-                                id="account-menu"
-                                anchorEl={this.state.anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right'
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right'
-                                }}
-                                open={this.state.openAccountMenu}
-                                onClose={this.handleClose}
-                            >
-                                {accountOptions.map((option) => (
-                                    <MenuItem id={option} key={option} selected={option === "Pyxis"} onClick={this.handleClose}>
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                               
-
-                            </AccountMenu>
+                                <Menu open={openMenu} menuState={handleMenu} />
                             </div>
                         }
-                        </Grid>
-                            
-                    
-
                     </Grid>
-                    
-                    
-                  
-                </ToolBar>
-            </AppBar>
+                    <Grid item xs={10}>
+                        <Typography align="left" variant="h4">4U Academics</Typography>
+                    </Grid>
+                    <Grid item xs={1}>
+                        {
+                            props.auth.isAuthenticated &&
+                            <div>
+                                <IconButton edge="end" color="inherit" aria-label="Account" onClick={handleAccountMenu}>
+                                    <AccountCircle />
+                                </IconButton>
+                                <AccountMenu
+                                    id="account-menu"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right'
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right'
+                                    }}
+                                    open={openAccountMenu}
+                                    onClose={handleClose}
+                                >
+                                    {
+                                        accountOptions.map((option) => (
+                                            <MenuItem id={option} key={option} slected={option === "Pyxis"} onClick={handleClose}>
+                                                {option}
+                                            </MenuItem>
+                                        ))
+                                    }
 
-        </div>);
-        
-    }
+                                </AccountMenu>
+                            </div>
+                        }
+                    </Grid>
+                </Grid>
+            </ToolBar>
+        </AppBar>
+    )
+
+
 }
 
 NavBar.propTypes = {

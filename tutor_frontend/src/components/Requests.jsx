@@ -13,7 +13,7 @@ function Requests(props) {
 
     const [requests, setRequests] = useState([]);
     const [user, setUser] = useState(useSelector(state => state.auth.user));
-
+    const [noRequests, setNoRequests] = useState(true);
 
 
     useEffect(() => {
@@ -34,9 +34,14 @@ function Requests(props) {
         axios
         .post("/tutors/denyRequest", { requestID: requestID })
         .then(res => {
+            setNoRequests(false);
             console.log(res);
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log('a')
+            //setNoRequests(true);
+            console.log(err);
+        })
 
     }
 
@@ -44,23 +49,31 @@ function Requests(props) {
     return(
         <Grid container spacing={4}>
             {
-                requests.map((request, index) => (
-                    <Grid item xs={4}>
-                        <Paper>
-                            <Typography variant="h6">Name: {request.studentName}</Typography>
-                            <br />
-                            <Typography variant="h6">Course: {request.course} </Typography>
-                            <br />
-                            <Typography variant="body1">Description: {request.description} </Typography>
+                !noRequests ? (
+                    requests.map((request, index) => (
+                        <Grid item xs={4}>
+                            <Paper>
+                                <Typography variant="h6">Name: {request.studentName}</Typography>
+                                <br />
+                                <Typography variant="h6">Course: {request.course} </Typography>
+                                <br />
+                                <Typography variant="body1">Description: {request.description} </Typography>
+    
+                                <br />
+    
+                                <Button onClick={() => enterRequest(request._id)}>Enter Booking</Button>
+                                <Button onClick={() => declineRequest(request._id)}>Decline Request</Button>
+                                
+                            </Paper>
+                        </Grid>
+                    ))
 
-                            <br />
+                 ) : (
+                    <Typography variant="h4">You have no lesson requests</Typography>
+                 )
 
-                            <Button onClick={() => enterRequest(request._id)}>Enter Booking</Button>
-                            <Button onClick={() => declineRequest(request._id)}>Decline Request</Button>
-                            
-                        </Paper>
-                    </Grid>
-                ))
+                
+                
             }
         </Grid>
     )
