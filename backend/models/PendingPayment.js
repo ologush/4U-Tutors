@@ -13,6 +13,10 @@ const PendingPaymentSchema = new Schema({
     stripeID: {
         type: String,
         required: true
+    },
+    lessonID: {
+        type: String,
+        required: true
     }
 });
 

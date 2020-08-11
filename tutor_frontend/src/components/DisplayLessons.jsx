@@ -39,8 +39,25 @@ class DisplayLessons extends Component {
 
     enterLesson(lessonID, index) {
         
-        this.props.setCurrentLesson(this.state.lessons[index])
-        this.props.history.push('/videoChat/' + lessonID);
+        const submissionData = {
+            tutorID: this.props.auth.user.id,
+            tutorEmail: this.props.auth.user.email,
+            stripeID: this.props.auth.user.stripeID,
+            lessonID: lessonID
+        }
+
+        axios
+        .post("/payment/addPendingPayment", submissionData)
+        .then(res => {
+            this.props.setCurrentLesson(this.state.lessons[index])
+            this.props.history.push('/videoChat/' + lessonID);
+        })
+        .catch(err => {
+            console.log(err)
+            this.props.history.push('/videoChat/' + lessonID);
+        });
+
+        
     }
 
     render() {

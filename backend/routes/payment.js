@@ -9,6 +9,8 @@ const uuid = require('uuid')
 
 const passport = require('passport')
 
+const PendingPayment = require('../models/PendingPayment');
+const Lesson = require('../models/Lesson');
 
 //This is probably for the student, check if the tutor uses it
 router.get("/connect/oauth", passport.authenticate('user', { session: false }), (req, res) => {
@@ -93,6 +95,29 @@ router.post("/payOut", passport.authenticate('user', { session: false }), async 
     .catch(err => console.log(err));
 
 
+});
+
+router.post("/addPendingPayment", (req, res) => {
+    PendingPayment.findOne({ lessonID: req.body.lessonID })
+    .then(doc => {
+        if(!doc) {
+            const pendingProto = {
+                tutorID: req.body.tutorID,
+                tutorEmail: req.body.tutorEmail,
+                stripeID: req.body.stripeID,
+                lessonID: req.body.lessonID
+            }
+
+            const pending = new PendingPayment(pendingProto);
+            pending
+            .save()
+            .then(save => {
+                res.json(save)
+            })
+            .catch(err => console.log(err));
+        }
+    })
+    .catch(err => console.log(err));
 });
 
 //may or may not need
