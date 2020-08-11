@@ -41,7 +41,7 @@ module.exports = async function pay() {
                         sgMail.send(message)
                         .catch(err => console.log(err))
                     })
-                    .catch(err => console.log(err));
+                    .catch(err => console.log(err)); 
                 })
                 .catch(err => console.log(err));
 
