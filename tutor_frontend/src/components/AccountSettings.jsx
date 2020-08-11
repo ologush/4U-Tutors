@@ -21,7 +21,7 @@ function AccountSettings() {
 
     useEffect(() => {
         axios
-        .get("/tutors/findByEmail", { params: { email: user.email } })
+        .get("/tutors/tutor/findByEmail", { params: { email: user.email } })
         .then(res => {
             console.log(res);
             if(res.data.stripeID) {

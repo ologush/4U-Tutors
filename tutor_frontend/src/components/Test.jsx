@@ -123,7 +123,7 @@ export default function PersistentDrawerLeft() {
           paper: classes.drawerPaper,
         }}
       >
-        <div >
+        <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
