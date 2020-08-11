@@ -8,6 +8,8 @@ var mongoose = require('mongoose');
 const db = require("./config/keys").mongoURI;
 var passport = require("passport");
 
+const payout = require('./tasks/pay.js');
+
 const cron = require('node-cron');
 
 var indexRouter = require('./routes/index');
@@ -72,5 +74,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+cron.schedule("* * * * Thursday", payout());
 
 module.exports = app;

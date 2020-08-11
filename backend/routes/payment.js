@@ -9,6 +9,8 @@ const uuid = require('uuid')
 
 const passport = require('passport')
 
+const PendingPayment = require('../models/PendingPayment');
+const Lesson = require('../models/Lesson');
 
 //This is probably for the student, check if the tutor uses it
 router.get("/connect/oauth", passport.authenticate('user', { session: false }), (req, res) => {
@@ -68,17 +70,54 @@ router.post("/payOut", passport.authenticate('user', { session: false }), async 
     Tutor.findOne({ _id: req.body.tutorID })
     .then( async tutor => {
         console.log(tutor.stripeID)
-        const transfer = await stripe.transfers.create({
+        // const transfer = await stripe.transfers.create({
+        //     amount: 20 * 100,
+        //     currency: 'cad',
+        //     destination: "acct_1H9axUIm10TqtFjV"
+        // });
+
+        stripe.transfers.create({
             amount: 20 * 100,
             currency: 'cad',
             destination: "acct_1H9axUIm10TqtFjV"
-        });
+        })
+        .then(transfer => {
+            console.log(transfer);
+            res.json(transfer);
+        })
+        .catch(err => {
+            console.log("error")
+            console.log(err.raw)
+        })
 
-        res.json(transfer);
+        //res.json(transfer);
     })
     .catch(err => console.log(err));
 
 
+});
+
+router.post("/addPendingPayment", (req, res) => {
+    PendingPayment.findOne({ lessonID: req.body.lessonID })
+    .then(doc => {
+        if(!doc) {
+            const pendingProto = {
+                tutorID: req.body.tutorID,
+                tutorEmail: req.body.tutorEmail,
+                stripeID: req.body.stripeID,
+                lessonID: req.body.lessonID
+            }
+
+            const pending = new PendingPayment(pendingProto);
+            pending
+            .save()
+            .then(save => {
+                res.json(save)
+            })
+            .catch(err => console.log(err));
+        }
+    })
+    .catch(err => console.log(err));
 });
 
 //may or may not need
