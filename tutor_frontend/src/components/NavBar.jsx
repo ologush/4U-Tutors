@@ -16,6 +16,8 @@ import { logoutUser } from "../actions/authActions"
 import HomePage from './HomePage'
 import { Link, withRouter } from 'react-router-dom'
 import Menu from "./Menu"
+import { FormatColorTextSharp } from '@material-ui/icons'
+import clsx from 'clsx'
 
 const accountOptions = [
     "Account Settings",
@@ -38,157 +40,29 @@ const tutorRoutes = [
     }
 ];
 
-
-// class NavBar extends Component {
-//     constructor() {
-//         super();
-
-//         this.state = {
-//             anchorEl: null,
-//             openMenu: false,
-//             openAccountMenu: false
-//         };
+const drawerWidth = 240;
 
 
-//         this.handleChange = this.handleChange.bind(this);
-//         this.handleMenu = this.handleMenu.bind(this);
-//         this.handleClose = this.handleClose.bind(this);
-//         this.handleAccountMenu = this.handleAccountMenu.bind(this);
-
-
-
-//     }
-
-
-//     //const classes = useStyles();
-    
-//     onLogoutClick(e) {
-//         e.preventDefault();
-
-//         this.props.logoutUser();
-//     }
-
-//     handleChange(e) {
-        
-        
-//     }
-
-//     handleAccountMenu(e) {
-//         console.log(this.props.auth.user);
-//         this.setState({
-//             anchorEl: e.currentTarget,
-//             openAccountMenu: true
-//         });
-
-//     }
-
-//     handleMenu(e) {
-//         // this.setState({
-//         //     anchorEl: e.currentTarget,
-//         //     openMenu: true
-//         // });
-
-//         this.setState(prevState => ({
-//             openMenu: !prevState.openMenu
-//         }));
-//     }
-
-//     handleClose(e) {
-//         this.setState({
-//             anchorEl: null,
-//             openMenu: false,
-//             openAccountMenu: false
-//         });
-
-
-
-//         if(e.target.id == "Logout") {
-//             this.onLogoutClick(e);
-//         } else if(e.target.id == "Account Settings") {
-//             this.props.history.push("/accountSettings")
-//         } else {
-//             this.props.history.push(e.target.id);
-//         }
-//     }
-
-//     render() {
-
-//         return(<div>
-
-//             <AppBar position="static">
-//                 <ToolBar>
-//                     <Grid
-//                         justify="space-between"
-//                         container
-//                     >
-//                         <Grid item xs={1}>
-//                         { this.props.auth.isAuthenticated && 
-//                             <div>
-//                             <IconButton edge="start" color="inherit" aria-label="menu" onClick={this.handleMenu}>
-//                                 <MenuIcon />
-
-//                             </IconButton>
-                            
-                                
-//                             <Menu open={this.state.openMenu} menuState={this.handleMenu} />
-                               
-//                             </div>      
-//                         }
-//                         </Grid>
-
-//                         <Grid item xs={10}>
-//                             <Typography align="left" variant="h4">4U Academics</Typography>
-//                         </Grid>
-
-//                         <Grid item xs={1}>
-
-//                         { this.props.auth.isAuthenticated && 
-//                             <div>
-//                             <IconButton edge="end" color="inherit" aria-label="Account" onClick={this.handleAccountMenu}>
-//                                 <AccountCircle />
-//                             </IconButton>
-//                             <AccountMenu 
-//                                 id="account-menu"
-//                                 anchorEl={this.state.anchorEl}
-//                                 anchorOrigin={{
-//                                     vertical: 'top',
-//                                     horizontal: 'right'
-//                                 }}
-//                                 keepMounted
-//                                 transformOrigin={{
-//                                     vertical: 'top',
-//                                     horizontal: 'right'
-//                                 }}
-//                                 open={this.state.openAccountMenu}
-//                                 onClose={this.handleClose}
-//                             >
-//                                 {accountOptions.map((option) => (
-//                                     <MenuItem id={option} key={option} selected={option === "Pyxis"} onClick={this.handleClose}>
-//                                         {option}
-//                                     </MenuItem>
-//                                 ))}
-                               
-
-//                             </AccountMenu>
-//                             </div>
-//                         }
-//                         </Grid>
-                            
-                    
-
-//                     </Grid>
-                    
-                    
-                  
-//                 </ToolBar>
-//             </AppBar>
-
-//         </div>);
-        
-//     }
-// }
+const useStyles = makeStyles((theme) => ({
+    appBar: {
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLEft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    }
+}))
 
 function NavBar(props) {
+    
+    const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [openMenu, setOpenMenu] = useState(false);
@@ -212,11 +86,13 @@ function NavBar(props) {
     const handleMenu = (e) => {
         console.log(auth);
         setOpenMenu(prev => !prev);
+        props.handleMenu();
     };
 
     const handleClose = (e) => {
         setAnchorEl(null);
-        setOpenMenu(false);
+        //setOpenMenu(false);
+        handleMenu();
         setOpenAccountMenu(false);
 
         if(e.target.id == "Logout") {
@@ -229,7 +105,12 @@ function NavBar(props) {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar 
+            position="fixed"
+            className={clsx(classes.appBar, {
+                [classes.appBarShift]: openMenu
+            })}
+        >
             <ToolBar>
                 <Grid 
                     justify="space-between"

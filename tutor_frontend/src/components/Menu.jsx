@@ -18,6 +18,9 @@ const useStyles = makeStyles(theme => ({
     drawer: {
         width: drawerWidth,
         flexShrink: 0
+    },
+    drawerPaper: {
+        width: drawerWidth
     }
 }))
 
@@ -69,7 +72,9 @@ function Menu(props) {
     }
 
     return (
-        <Drawer anchor="left" open={props.open} variant="persistent" className={classes.drawer}>
+        <Drawer anchor="left" open={props.open} variant="persistent" className={classes.drawer} classes={{
+            paper: classes.drawerPaper
+        }}>
                 <div>
                     <IconButton onClick={handleClose}>
                         <ChevronLeftIcon />
