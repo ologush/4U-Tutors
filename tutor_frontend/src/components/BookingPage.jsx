@@ -98,6 +98,7 @@ function BookingPage(props) {
     const [posting, setPosting] = useState({});
     const [hasPosting, setHasPosting] = useState(false);
     const [user, setUser] = useState(useSelector(state => state.auth.user));
+    const [unavailableTimes, setUnavailableTimes] = useState([]);
 
     useEffect(() => {
         axios
@@ -107,6 +108,14 @@ function BookingPage(props) {
             setHasPosting(true);
         })
         .catch(err => console.log(err));
+
+        axios
+        .get("/tutors/unavailableTimes", { params: { tutorID: user.id } })
+        .then(res => {
+            setUnavailableTimes(res.data);
+            console.log(res.data)
+        })
+        .catch(err => console.log(err))
     }, []);
 
     const handleSubmit = (date) => {
@@ -128,6 +137,31 @@ function BookingPage(props) {
         .catch(err => console.log(err))
     };
 
+    const isConflict = (date) => {
+
+        
+        let conflict = false;
+
+         unavailableTimes.forEach( (time, index) => {
+            const unavailable = new Date(time);
+            console.log('a')
+            if(date.getTime() >= unavailable.getTime() && date.getTime() <= (unavailable.getTime() + 3600000)) {
+                console.log(date);
+                console.log(unavailable);
+                console.log(index)
+                console.log('conflict')
+                conflict = true;
+                return;
+            } else {
+                console.log("no conflict")
+            }
+        })
+        
+        
+
+        return conflict;
+    }
+
     return(
         <div>
         {
@@ -145,7 +179,7 @@ function BookingPage(props) {
                             return (
                                 <div>
                                     <Typography variant="h5">{date.toLocaleDateString("en-US", dateOptions)} {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
-                                    <Button onClick={() => handleSubmit(date)}>Select</Button>
+                                    <Button onClick={() => handleSubmit(date)} disabled={isConflict(date)}>Select</Button>
                                 </div>
                             )
                         })

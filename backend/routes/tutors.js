@@ -200,14 +200,14 @@ router.get("/unavailableTimes", passport.authenticate('tutor', { session: false 
             times.push(lesson.dateAndTime);
         });
 
-        res.json(times);
+        
     })
     .catch(err => console.log(err))
 
     await LessonBid.find({ tutorID: tutorID })
     .then(docs => {
         docs.forEach(bid => {
-            times.push(lessonBid.date)
+            times.push(bid.date)
         });
     });
 
