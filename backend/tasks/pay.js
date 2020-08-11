@@ -29,14 +29,19 @@ module.exports = async function pay() {
                 payout
                 .save()
                 .then(pay => {
-                    const message = {
-                        to: payment.tutorEmail,
-                        from: "payments@4uacademics.com",
-                        text: "You have recieved a payment"
-                    };
-        
-                    sgMail.send(message)
-                    .catch(err => console.log(err))
+
+                    PendingPayment.deleteOne({ _id: payment._id })
+                    .then(del => {
+                        const message = {
+                            to: payment.tutorEmail,
+                            from: "payments@4uacademics.com",
+                            text: "You have recieved a payment"
+                        };
+            
+                        sgMail.send(message)
+                        .catch(err => console.log(err))
+                    })
+                    .catch(err => console.log(err));
                 })
                 .catch(err => console.log(err));
 
