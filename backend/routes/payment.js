@@ -83,7 +83,10 @@ router.post("/payOut", passport.authenticate('user', { session: false }), async 
             console.log(transfer);
             res.json(transfer);
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log("error")
+            console.log(err.raw)
+        })
 
         //res.json(transfer);
     })
