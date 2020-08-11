@@ -7,6 +7,20 @@ import ListItemText from "@material-ui/core/ListItemText"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import { withRouter } from "react-router-dom"
 import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon, ContactMail as ContactMailIcon} from "@material-ui/icons"
+import Divider from "@material-ui/core/Divider"
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
+import IconButton from "@material-ui/core/IconButton"
+import { makeStyles, useTheme } from "@material-ui/core/styles"
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles(theme => ({
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0
+    }
+}))
+
 
 const options = [
     {
@@ -41,34 +55,33 @@ const options = [
     }
 ];
 
+function Menu(props) {
 
-class Menu extends Component {
-    constructor(props) {
-        super(props);
+    const classes = useStyles();
 
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(path) {
-        
-        //will switch to window.location.href after done
-        this.props.menuState();
+    const onClick = (path) => {
+        props.menuState();
         window.location.href = path;
-        //this.props.history.push(path);
-        
-      
     }
 
+    const handleClose = (e) => {
+        props.menuState();
+    }
 
-    render() {
-        return(
-            <Drawer anchor="left" open={this.props.open}>
+    return (
+        <Drawer anchor="left" open={props.open} variant="persistent" className={classes.drawer}>
+                <div>
+                    <IconButton onClick={handleClose}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                    <Divider />
+                </div>
                 <List>
                     {
                         options.map((option, index) => {
                             const { name, path, icon} = option;
                             return (
-                                <ListItem button onClick={() => this.onClick(path)} key={path}>
+                                <ListItem button onClick={() => onClick(path)} key={path}>
                                     <ListItemIcon>{icon}</ListItemIcon>
                                     <ListItemText primary={name} />
                                 </ListItem>
@@ -78,7 +91,7 @@ class Menu extends Component {
                 </List>
             </Drawer>
         );
-    }
+    
 }
 
 Menu.propTypes = {
@@ -87,4 +100,5 @@ Menu.propTypes = {
 
 }
 
-export default withRouter(Menu);
+//export default withRouter(Menu);
+export default Menu;
