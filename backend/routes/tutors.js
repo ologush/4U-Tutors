@@ -211,6 +211,14 @@ router.get("/unavailableTimes", passport.authenticate('tutor', { session: false 
         });
     });
 
+    await LessonConfirm.find({ tutorID: tutorID })
+    .then(docs => {
+        docs.forEach(confirm => {
+            times.push(confirm.dateAndTime);
+        })
+    })
+    .catch(err => console.log(err))
+
     res.json(times);
 })
 

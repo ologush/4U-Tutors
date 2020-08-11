@@ -43,8 +43,12 @@ class MultipleDateTimePicker extends Component {
     }
 
     addDate(e) {
-        const dateToAdd = this.state.currentDate;
+        let dateToAdd = new Date(this.state.currentDate);
+
+        dateToAdd.setMilliseconds(0);
+        dateToAdd.setSeconds(0);
         
+
         if(this.state.selectedDates.includes(dateToAdd)) {
             //Date has already been added, show a message
         } else {
