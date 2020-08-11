@@ -68,13 +68,24 @@ router.post("/payOut", passport.authenticate('user', { session: false }), async 
     Tutor.findOne({ _id: req.body.tutorID })
     .then( async tutor => {
         console.log(tutor.stripeID)
-        const transfer = await stripe.transfers.create({
+        // const transfer = await stripe.transfers.create({
+        //     amount: 20 * 100,
+        //     currency: 'cad',
+        //     destination: "acct_1H9axUIm10TqtFjV"
+        // });
+
+        stripe.transfers.create({
             amount: 20 * 100,
             currency: 'cad',
             destination: "acct_1H9axUIm10TqtFjV"
-        });
+        })
+        .then(transfer => {
+            console.log(transfer);
+            res.json(transfer);
+        })
+        .catch(err => console.log(err))
 
-        res.json(transfer);
+        //res.json(transfer);
     })
     .catch(err => console.log(err));
 
