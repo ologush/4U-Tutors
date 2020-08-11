@@ -86,15 +86,16 @@ function App() {
             <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
             <PrivateRoute exact path="/myPostings" component={MyPostings} />
             <PrivateRoute exact path="/editPosting/:postingID" component={MakePosting} />
-            <Elements stripe={stripePromise}>
-              <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
-            </Elements>
+            
             
             
             <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
             <PrivateRoute exact path="/pastLessons" component={PastLessons} />
             <PrivateRoute exact path="/requestLesson" component={LessonRequest} />
             <PrivateRoute exact path="/accountsettings" component={AccountSettings} />
+            <Elements stripe={stripePromise}>
+              <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
+            </Elements>
           </Switch>
           </Paper>
           </Grid>

@@ -20,6 +20,7 @@ function Requests(props) {
         axios
         .get("/tutors/getRequests", { params: { tutorID: user.id}})
         .then(res => {
+            setNoRequests(false);
             setRequests(res.data);
         })
         .catch(err => console.log(err))
@@ -34,7 +35,7 @@ function Requests(props) {
         axios
         .post("/tutors/denyRequest", { requestID: requestID })
         .then(res => {
-            setNoRequests(false);
+            
             console.log(res);
         })
         .catch(err => {

@@ -13,6 +13,7 @@ function Request(props) {
     const [request, setRequest] = useState({});
     const [user, setUser] = useState(useSelector(state => state.auth.user));
     const [busy, setBusy] = useState(true);
+    const [unavailableTimes, setUnavailableTimes] = useState([]);
     const requestID = props.match.params.requestID;
     let date;
     useEffect(() => {
@@ -26,11 +27,43 @@ function Request(props) {
             setBusy(false);
             
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
+
+        axios
+        .get("/tutors/unavailableTimes", { params: { tutorID: user.id } })
+        .then(res => {
+            setUnavailableTimes(res.data);
+        })
+        .catch(err => console.log(err));
     }, []);
 
     console.log(request);
     console.log(busy);
+
+    const isConflict = (date) => {
+
+        
+        let conflict = false;
+
+         unavailableTimes.forEach( (time, index) => {
+            const unavailable = new Date(time);
+            console.log('a')
+            if(date.getTime() >= unavailable.getTime() && date.getTime() <= (unavailable.getTime() + 3600000)) {
+                console.log(date);
+                console.log(unavailable);
+                console.log(index)
+                console.log('conflict')
+                conflict = true;
+                return;
+            } else {
+                console.log("no conflict")
+            }
+        })
+        
+        
+
+        return conflict;
+    }
 
 
 
@@ -68,6 +101,7 @@ function Request(props) {
         .post("/tutors/denyRequest", submissionData)
         .then(res => {
             //redirect to requests page
+            props.history.push("/requests")
         })
         .catch(err => console.log(err))
     }
@@ -94,7 +128,7 @@ function Request(props) {
                     
                     <Typography variant="body1">Time: {date.toLocaleTimeString('en-CA', timeOptions)}</Typography>
                     
-                    <Button onClick={() => onSubmit(time)}>Select this Time</Button>
+                    <Button onClick={() => onSubmit(time)} disabled={isConflict(date)}>Select this Time</Button>
                     <br />
                     <br />
                     </div>

@@ -12,6 +12,7 @@ const Lesson = require('../models/Lesson');
 const Posting = require('../models/Posting');
 const PastLesson = require("../models/PastLesson");
 const LessonRequest = require("../models/LessonRequest");
+const LessonConfirm = require('../models/LessonConfirm');
 
 
 router.post('/register', (req, res) => {
@@ -181,6 +182,29 @@ router.post("/lessonOver", passport.authenticate('user', { session: false }), (r
     .catch(err => console.log(err));
   })
   .catch(err => console.log(err))
+});
+
+router.get("/unavailableTimes", passport.authenticate('user', { session: false }), async (req, res) => {
+  let times = [];
+  const { studentID } = req.query.params;
+  await Lesson.find({ studentID: studentID })
+  .then(docs => {
+    docs.forEach(lesson => {
+      times.push(lesson.dateAndTime);
+    })
+  })
+  .catch(err => console.log(err));
+
+  await LessonConfirm.find({ studentID: studentID })
+  .then(docs => {
+    docs.forEach(confirm => {
+      times.push(confirm.dateAndTime)
+    })
+  })
+  .catch(err => console.log(err));
+
+  res.json(times);
+
 });
 
 module.exports = router;
