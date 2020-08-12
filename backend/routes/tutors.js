@@ -130,6 +130,8 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
     if(req.body.feedback) {
         feedbackProto.feedback = req.body.feedback
     };
+
+    console.log('a');
     //Still gotta update the tutors overall rating
     Lesson.findOne({ _id: req.body.lessonID })
         .then(lesson => {

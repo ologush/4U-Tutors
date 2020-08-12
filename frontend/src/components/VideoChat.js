@@ -28,7 +28,7 @@ import Timer from "./Timer"
 
     useEffect(() => {
         axios
-        .get("/lesson/user/getLessonByID", { params: { lessonID: lessonID }})
+        .get("/lesson/user/lessonByID", { params: { lessonID: lessonID }})
         .then(res => {
             setLesson(res.data);
             setLoading(false);
@@ -88,6 +88,7 @@ import Timer from "./Timer"
      }, []);
 
      const handleTimeout = () => {
+         console.log('over')
          handleLogout()
      }
 

@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
+import Paper from "@material-ui/core/Paper"
+
 
 const Participant = ({ participant }) => {
     const [videoTracks, setVideoTracks] = useState([]);
@@ -52,9 +54,8 @@ const Participant = ({ participant }) => {
     }, [videoTracks]);
 
     return (
-        <div className="participant">
-            <h3>{participant.identity}</h3>
-            <video ref={videoRef} autoPlay={true} />
+        <div>
+            <video ref={videoRef} autoPlay={true} width="100%" height="100%" />
             <audio ref={audioRef} autoPlay={true} muted={true}/>
         </div>
     );

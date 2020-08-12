@@ -47,7 +47,7 @@ class DisplayLessons extends Component {
         }
 
         axios
-        .post("/payment/addPendingPayment", submissionData)
+        .post("/payments/addPendingPayment", submissionData)
         .then(res => {
             this.props.setCurrentLesson(this.state.lessons[index])
             this.props.history.push('/videoChat/' + lessonID);

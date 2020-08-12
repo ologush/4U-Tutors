@@ -4,10 +4,21 @@ import axios from "axios"
 import { useSelector } from "react-redux"
 import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
+import Bid from "./Bid"
+
+import { makeStyles } from "@material-ui/core/styles"
+
+const useStyles = makeStyles((theme) => ({
+    grid: {
+        padding: theme.spacing(2)
+    }
+}))
 
 const dateOptions = { weekday: "long", month: "long", day: "numeric" };
 const timeOptions = { hour: "numeric", minute: "numeric" };
 function MyBids(props) {
+
+    const classes = useStyles();
 
     const [user, setUser] = useState(useSelector(state => state.auth.user));
     const [bids, setBids] = useState([]);
@@ -28,6 +39,7 @@ function MyBids(props) {
         .post("/tutors/deleteBid", { bidID: bidID })
         .then(res => {
             console.log(res);
+            window.location.reload();
         })
         .catch(err => console.log(err));
     }
@@ -38,16 +50,27 @@ function MyBids(props) {
             loading ? (
                 <Typography variant="h4">Loading...</Typography>
             ) : (
-                <Grid container>
+                <Grid container spacing={2}>
                     {
                         bids.map((bid, index) => {
                             const date = new Date(bid.date);
+                            const dateString = date.toLocaleDateString("en-US", dateOptions) + " " + date.toLocaleTimeString("en-US", timeOptions);
 
-                            return(
+                            // return(
+                            //     <Grid item xs={4}>
+                            //         <Typography variant="h4">Need to update the bid schema to add more relevant information</Typography>
+                            //         <Typography variant="h4">{date.toLocaleDateString("en-US", dateOptions)} {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
+                            //         <Button variant="contained" color="secondary" onClick={() => deleteBid(bid._id)}>Delete</Button>
+                            //     </Grid>
+                            // )
+                            return (
                                 <Grid item xs={4}>
-                                    <Typography variant="h4">Need to update the bid schema to add more relevant information</Typography>
-                                    <Typography variant="h4">{date.toLocaleDateString("en-US", dateOptions)} {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
-                                    <Button variant="contained" color="secondary" onClick={() => deleteBid(bid._id)}>Delete</Button>
+                                <Bid
+                                    course={bid.course}
+                                    description={bid.description}
+                                    time={dateString}
+                                    cancel={() => deleteBid(bid._id)} 
+                                />
                                 </Grid>
                             )
                         })

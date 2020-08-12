@@ -146,7 +146,7 @@ router.post('/user/token', passport.authenticate('user', { session: false }), (r
             pastLesson.save()
             .then(save => {
                 res.send(token.toJwt());
-                console.log('issued token for: ' + identity + 'for room: ' + roomName);
+                console.log('issued token for: ' + identity + 'for room: ' + lessonID);
                 console.log(save);
             })
             .catch(err => console.log(err))
@@ -156,8 +156,8 @@ router.post('/user/token', passport.authenticate('user', { session: false }), (r
 
 router.post('/tutor/token', passport.authenticate('tutor', { session: false }), (req, res) => {
 
-    const { identity, lessonID } = req.body;
-
+    const { identity, lessonID, subject, startTime } = req.body;
+    
     const token = new AccessToken(twilioAccountSid, twilioApiKeySID, twilioApiKeySecret, {
         ttl: MAX_ALLOWED_SESSION_DURATION,
     });
@@ -178,7 +178,7 @@ router.post('/tutor/token', passport.authenticate('tutor', { session: false }), 
             doc.save()
             .then(save => {
                 res.send(token.toJwt());
-                console.log('issued token for: ' + identity + 'for room: ' + roomName);
+                console.log('issued token for: ' + identity + 'for room: ' + lessonID);
                 console.log(save);
             })
             .catch(err => console.log(err));
@@ -190,8 +190,12 @@ router.post('/tutor/token', passport.authenticate('tutor', { session: false }), 
                 startTime: req.body.startTime,
                 tutorID: req.body.tutorID,
                 tutorName: req.body.tutorName,
-                tutorEmail: req.body.tutorEmail
+                tutorEmail: req.body.tutorEmail,
+                subject: req.body.subject,
+                startTime: req.body.startTime
             }
+
+            console.log(submissionData)
 
             const pastLesson = new PastLesson(submissionData);
             pastLesson.save()

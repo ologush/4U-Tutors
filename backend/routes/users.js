@@ -95,7 +95,7 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/getLessons', passport.authenticate('user', { session: false }), (req, res) => {
-  console.log(req);
+  
   Lesson.find({ studentID: req.body.studentID })
     .then(docs => {
       if(docs) {

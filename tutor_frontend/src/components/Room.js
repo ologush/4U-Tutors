@@ -5,8 +5,13 @@ import Grid from "@material-ui/core/Grid"
 import Typography from "@material-ui/core/Typography"
 import Paper from "@material-ui/core/Paper"
 import Button from "@material-ui/core/Button"
+import Card from "@material-ui/core/Card"
+import CardActions from "@material-ui/core/CardActions"
+import CardContent from "@material-ui/core/CardContent"
+import CardMedia from "@material-ui/core/CardMedia"
+import Timer from "./Timer"
 
-const Room = ({ roomName, token, handleLogout}) => {
+const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
     const [room, setRoom] = useState(null);
     const [participants, setParticipants] = useState([]);
 
@@ -50,6 +55,10 @@ const Room = ({ roomName, token, handleLogout}) => {
         <Participant key={participant.sid} participant={participant} />
     ));
 
+    const handleTimeout = () => {
+        handleLogout();
+    };
+
     // return (
     //     <div className="room">
     //         <h2>Room: {roomName}</h2>
@@ -69,7 +78,7 @@ const Room = ({ roomName, token, handleLogout}) => {
     // );
 
     return (
-        <Grid container>
+        <Grid container spacing={2}>
             <Grid item container xs={8}>
                 {
                     remoteParticipants.length > 3 ? (
@@ -88,7 +97,7 @@ const Room = ({ roomName, token, handleLogout}) => {
                 }
             </Grid>
             <Grid item container xs={4} direction="column">
-                <Grid item>
+                {/* <Grid item>
                     <Typography variant="h5">Room: {roomName}</Typography>
                 </Grid>
                 <Grid item>
@@ -102,7 +111,30 @@ const Room = ({ roomName, token, handleLogout}) => {
                 </Grid>
                 <Grid item>
                     <Button variant="contained" onClick={handleLogout}>Exit Lesson</Button>
-                </Grid>
+                </Grid> */}
+                <Card>
+                    <CardContent>
+                        <Typography variant="h6">Room: {subject}</Typography>
+                        <Timer 
+                            startTime={new Date(startTime)}
+                            onTimeOut={handleTimeout}
+                        />
+                    </CardContent>
+                    <CardMedia>
+                        {
+                            room ? (
+                                <Participant key={room.localParticipant.sid}
+                                    participant={room.localParticipant}
+                                />
+                            ) : (
+                                ""
+                            )
+                        }
+                    </CardMedia>
+                    <CardActions>
+                        <Button variant="contained" onClick={handleLogout}>Exit Lesson</Button>
+                    </CardActions>
+                </Card>
             </Grid>
         </Grid>
     )

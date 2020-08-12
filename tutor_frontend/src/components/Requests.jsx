@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button"
 
 import { useSelector } from "react-redux"
 
+import RequestCard from "./RequestCard"
+
 
 function Requests(props) {
 
@@ -53,7 +55,7 @@ function Requests(props) {
                 !noRequests ? (
                     requests.map((request, index) => (
                         <Grid item xs={4}>
-                            <Paper>
+                            {/* <Paper>
                                 <Typography variant="h6">Name: {request.studentName}</Typography>
                                 <br />
                                 <Typography variant="h6">Course: {request.course} </Typography>
@@ -65,7 +67,13 @@ function Requests(props) {
                                 <Button onClick={() => enterRequest(request._id)}>Enter Booking</Button>
                                 <Button onClick={() => declineRequest(request._id)}>Decline Request</Button>
                                 
-                            </Paper>
+                            </Paper> */}
+                            <RequestCard 
+                                course={request.course}
+                                description={request.description}
+                                decline={() => declineRequest(request._id)}
+                                enterRequest={() => enterRequest(request._id)}
+                            />
                         </Grid>
                     ))
 
