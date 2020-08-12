@@ -4,6 +4,8 @@ import Typography from "@material-ui/core/Typography"
 import Paper from "@material-ui/core/Paper"
 import axios from "axios";
 import Button from "@material-ui/core/Button"
+import RequestTime from "./RequestTime"
+import Grid from "@material-ui/core/Grid"
 
 function Request(props) {
 
@@ -87,6 +89,7 @@ function Request(props) {
         .post("/tutors/acceptRequest", submissionData)
         .then(res => {
             //Redirect to pending lessons on student payment
+            
         })
         .catch(err => console.log(err))
     }
@@ -106,44 +109,85 @@ function Request(props) {
         .catch(err => console.log(err))
     }
 
-    return(
-        <div>
-        { !busy ? (
+    // return(
+    //     <div>
+    //     { !busy ? (
 
-            <Paper>
-            <Typography variant="h5">Lesson Request</Typography>
+    //         <Paper>
+    //         <Typography variant="h5">Lesson Request</Typography>
 
-            <br />
+    //         <br />
 
-            <Typography variant="body1">Course: {request.course}</Typography>
-            <br />
-            <Typography variant="body1">Description: {request.description}</Typography>
+    //         <Typography variant="body1">Course: {request.course}</Typography>
+    //         <br />
+    //         <Typography variant="body1">Description: {request.description}</Typography>
 
-            {
-               request.availableTimes && request.availableTimes.map((time, index) => {
-                const date = new Date(time);
-                return (
-                    <div>
-                    <Typography variant="body1">Date: {date.toLocaleDateString('en-CA', dateOptions)}</Typography>
+    //         {
+    //            request.availableTimes && request.availableTimes.map((time, index) => {
+    //             const date = new Date(time);
+    //             return (
+    //                 <div>
+    //                 <Typography variant="body1">Date: {date.toLocaleDateString('en-CA', dateOptions)}</Typography>
                     
-                    <Typography variant="body1">Time: {date.toLocaleTimeString('en-CA', timeOptions)}</Typography>
+    //                 <Typography variant="body1">Time: {date.toLocaleTimeString('en-CA', timeOptions)}</Typography>
                     
-                    <Button onClick={() => onSubmit(time)} disabled={isConflict(date)}>Select this Time</Button>
-                    <br />
-                    <br />
-                    </div>
-                )})
-            }
+    //                 <Button onClick={() => onSubmit(time)} disabled={isConflict(date)}>Select this Time</Button>
+    //                 <br />
+    //                 <br />
+    //                 </div>
+    //             )})
+    //         }
 
-            <Button onClick={deny}>Decline Request</Button>
+    //         <Button onClick={deny}>Decline Request</Button>
 
-        </Paper>
+    //     </Paper>
 
-        ) : (
-            <Typography variant="body1">Loading...</Typography>
-        )}
-        </div>
+    //     ) : (
+    //         <Typography variant="body1">Loading...</Typography>
+    //     )}
+    //     </div>
         
+    // )
+
+    return (
+        <div>
+            {
+                !busy ? (
+                    <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography variant="h5">Course: {request.course}</Typography>
+                            <Typography variant="body1">{request.description}</Typography>
+                        </Paper>
+                    </Grid>
+                    {
+                        request.availableTimes.map((time, index) => {
+                            const date = new Date(time);
+
+                            const dateString = date.toLocaleString("en-CA", dateOptions);
+                            const timeString = time.toLocaleString("en-CA", timeOptions);
+
+                            return (
+                                <Grid item xs={4}>
+                                    <RequestTime
+                                        disabled={isConflict(date)}
+                                        timeString={timeString}
+                                        dateString={dateString}
+                                        select={() => onSubmit(time)}
+                                    />
+                                </Grid>
+                            )
+                        })
+                    }
+                    <Grid item xs={12}>
+                        <Button onClick={deny} fullWidth variant="contained" color="secondary">Decline Request</Button>
+                    </Grid>
+                    </Grid>
+                ) : (
+                    <Typography variant="h5">Loading...</Typography>
+                )
+            }
+        </div>
     )
 
 }

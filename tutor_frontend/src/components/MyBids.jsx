@@ -39,6 +39,7 @@ function MyBids(props) {
         .post("/tutors/deleteBid", { bidID: bidID })
         .then(res => {
             console.log(res);
+            window.location.reload();
         })
         .catch(err => console.log(err));
     }
