@@ -22,6 +22,9 @@ const lessonConfirmSchema = new Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String
+    },
     studentName: {
         type: String,
         required: true

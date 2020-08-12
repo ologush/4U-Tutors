@@ -29,6 +29,8 @@ import MyBids from "./components/MyBids"
 import Test from "./components/Test"
 import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core/styles"
 
+import LessonsPending from "./components/LessonsPending"
+
 import theme from "./theme";
 import CssBaseline from "@material-ui/core/CssBaseline"
 
@@ -122,6 +124,7 @@ function App() {
             <PrivateRoute exact path="/accountSettings" component={AccountSettings} />
             <PrivateRoute path="/savestripe" component={SaveStripe} />
             <PrivateRoute exact path="/myBids" component={MyBids} />
+            <PrivateRoute exact path="/lessonsPendingPayment" component={LessonsPending} />
           </Switch>
           
           </main>

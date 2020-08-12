@@ -6,7 +6,7 @@ import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import { withRouter } from "react-router-dom"
-import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon, ContactMail as ContactMailIcon} from "@material-ui/icons"
+import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon, ContactMail as ContactMailIcon, AccountBalanceWallet as AccountBalanceWalletIcon} from "@material-ui/icons"
 import Divider from "@material-ui/core/Divider"
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft"
 import IconButton from "@material-ui/core/IconButton"
@@ -55,6 +55,11 @@ const options = [
         name: "My Bids",
         path: "/myBids",
         icon: <ContactMailIcon />
+    },
+    {
+        name: "Lessons Pending Payment",
+        path: "/lessonsPendingPayment",
+        icon: <AccountBalanceWalletIcon />
     }
 ];
 

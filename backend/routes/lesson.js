@@ -8,6 +8,7 @@ const passport = require('passport')
 const PastLesson = require("../models/PastLesson");
 const LessonRequest = require("../models/LessonRequest");
 const Lesson = require('../models/Lesson');
+const LessonConfirm = require('../models/LessonConfirm');
 
 router.post("/addRequest", passport.authenticate('user', { session: false }), (req, res) => {
 
@@ -172,6 +173,16 @@ router.post("/tutor/cancel", passport.authenticate('tutor', { session: false }),
         sgMail.send(tutorMessage);
     })
     .catch(err => console.log(err))
+});
+
+router.get("/tutor/getPendingLessons", passport.authenticate('tutor', { session: false }), (req, res) => {
+    const { tutorID } = req.query;
+    console.log(tutorID);
+    LessonConfirm.find({ tutorID: tutorID })
+    .then(docs => {
+        res.json(docs);
+    })
+    .catch(err => console.log(err));
 })
 
 module.exports = router;
