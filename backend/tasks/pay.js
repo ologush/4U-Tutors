@@ -15,14 +15,14 @@ module.exports = async function pay() {
             stripe.transfers.create({
                 amount: 20 * 100,
                 currency: 'cad',
-                destination: payments.stripeID
+                destination: payment.stripeID
             })
-            .then(payment => {
+            .then(pay => {
                 let payoutProto = {
                     tutorID: payment.tutorID,
-                    stripeID: payments.stripeID,
+                    destination: payments.stripeID,
                     amount: payment.amount,
-                    transferID: payment.id
+                    transferID: pay.id
                 }
 
                 const payout = new SuccessfulPayout(payoutProto);
@@ -53,7 +53,7 @@ module.exports = async function pay() {
                     tutorID: payment.tutorID,
                     stripeID: payment.stripeID,
                     tutorEmail: payment.tutorEmail,
-                    amount: payment.amount,
+                    amount: 20 * 100,
                     code: err.raw.code
                 };
 

@@ -6,6 +6,9 @@ import axios from "axios";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
+import BookingCard from "./BookingCard"
+import Paper from "@material-ui/core/Paper"
 
 const dateOptions = { weekday: "long", month: "long", day: "numeric" };
 const timeOptions = { hour: "numeric", minute: "numeric" };
@@ -165,28 +168,62 @@ function BookingPage(props) {
     }
 
     return(
+        // <div>
+        // {
+        //     hasPosting ? (
+        //         <div>
+        //             <Typography variant="h3">Submit a Bid</Typography>
+        //             <Typography variant="h5">Course: {posting.course}</Typography>
+        //             <Typography variant="h5">Student Name: {posting.studentName}</Typography>
+        //             <Typography variant="h5">Description: {posting.description}</Typography>
+
+        //             {
+        //                 posting.availableTimes.map((time, index) => {
+        //                     const date = new Date(time);
+
+        //                     return (
+        //                         <div>
+        //                             <Typography variant="h5">{date.toLocaleDateString("en-US", dateOptions)} {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
+        //                             <Button onClick={() => handleSubmit(date)} disabled={isConflict(date)}>Select</Button>
+        //                         </div>
+        //                     )
+        //                 })
+        //             }
+        //         </div>
+        //     ) : (
+        //         <Typography variant="h5">Loading...</Typography>
+        //     )
+        // }
+        // </div>
         <div>
         {
             hasPosting ? (
-                <div>
-                    <Typography variant="h3">Submit a Bid</Typography>
-                    <Typography variant="h5">Course: {posting.course}</Typography>
-                    <Typography variant="h5">Student Name: {posting.studentName}</Typography>
-                    <Typography variant="h5">Description: {posting.description}</Typography>
-
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Paper>
+                            <Typography variant="h5">Select a time you are available</Typography>
+                            <Typography variant="h5">Course: {posting.course}</Typography>
+                            <Typography variant="body1">Description: {posting.description}</Typography>
+                        </Paper>
+                    </Grid>
                     {
                         posting.availableTimes.map((time, index) => {
                             const date = new Date(time);
+                            const dateString = date.toLocaleDateString("en-CA", dateOptions) + ", " + date.toLocaleTimeString("en-CA", timeOptions);
 
                             return (
-                                <div>
-                                    <Typography variant="h5">{date.toLocaleDateString("en-US", dateOptions)} {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
-                                    <Button onClick={() => handleSubmit(date)} disabled={isConflict(date)}>Select</Button>
-                                </div>
+                                <Grid item xs={4}>
+                                <BookingCard 
+                                    dateString={dateString}
+                                    onSubmit={() => handleSubmit(date)}
+                                    disabled={isConflict(date)}
+                                />
+                                </Grid>
                             )
                         })
                     }
-                </div>
+                    
+                </Grid>
             ) : (
                 <Typography variant="h5">Loading...</Typography>
             )

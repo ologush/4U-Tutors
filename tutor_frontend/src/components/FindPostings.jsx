@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
 import PropTypes from "prop-types";
+import Posting from "./Posting"
 
 import { enterBooking } from "../actions/lessonActions";
 
@@ -215,23 +216,28 @@ function FindPostings(props) {
                     
                     <div>
                         {console.log("a")}
-                        <Grid container>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
                             {
+                                
                                 filter.map((value, index) => (
                                     <FormControlLabel
                                     control={<CheckBox checked={value.checked} onChange={() => handleCheckbox(value.name, index)} name={value.name} />}
                                     label={value.name} />
                                 ))
+                                
                             }
+                            </Grid>
                             {
                                 postings.map((posting, index) => (
-                                    <div>
-                                        <Typography variant="h3">Course: {posting.course}</Typography>
-                                        <Typography variant="h3">Grade: {posting.year}</Typography>
-                                        <Typography variant="h4">Description: {posting.description}</Typography>
-                        
-                                        <Button variant="contained" color="primary" onClick={() => handleSubmit(posting._id)}>Schedule a Time</Button>
-                                    </div>
+                                    <Grid item xs={4}>
+                                        <Posting 
+                                            course={posting.course}
+                                            description={posting.description}
+                                            grade={posting.year}
+                                            enterBooking={() => handleSubmit(posting._id)}
+                                        />
+                                    </Grid>
                                 ))
                             }
                             
