@@ -7,7 +7,7 @@ function Timer(props) {
     const calculateTimeLeft = () => {
         let year = new Date().getFullYear();
 
-        let finishTime = props.startTime.getTime() + 10000;
+        let finishTime = props.startTime.getTime() + 3600000;
         
 
         const difference = +new Date(finishTime) - +new Date();
@@ -22,7 +22,7 @@ function Timer(props) {
                 seconds: Math.floor((difference / 1000) % 60)
             };
 
-            console.log(timeLeft);
+            //console.log(timeLeft);
         } else if(difference > -300000) {
             const newDifference = +new Date(finishTime + 300000) - +new Date();
             timeLeft = {

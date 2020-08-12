@@ -126,7 +126,9 @@ function BookingPage(props) {
             tutorName: user.name,
             otherStudentIDs: posting.otherStudentIDs,
             tutorDescription: user.description,
-            tutorRating: user.rating
+            tutorRating: user.rating,
+            description: posting.description,
+            course: posting.course
         };
 
         axios

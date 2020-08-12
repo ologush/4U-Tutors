@@ -97,24 +97,32 @@ router.post("/payOut", passport.authenticate('user', { session: false }), async 
 
 });
 
-router.post("/addPendingPayment", (req, res) => {
+router.post("/addPendingPayment", passport.authenticate('tutor', { session: false }), (req, res) => {
+    console.log(req.body);
     PendingPayment.findOne({ lessonID: req.body.lessonID })
     .then(doc => {
+        console.log(doc)
         if(!doc) {
-            const pendingProto = {
-                tutorID: req.body.tutorID,
-                tutorEmail: req.body.tutorEmail,
-                stripeID: req.body.stripeID,
-                lessonID: req.body.lessonID
-            }
-
-            const pending = new PendingPayment(pendingProto);
-            pending
-            .save()
-            .then(save => {
-                res.json(save)
+            Tutor.findOne({ _id: req.body.tutorID })
+            .then(tutor => {
+                const { stripeID } = tutor;
+                const pendingProto = {
+                    tutorID: req.body.tutorID,
+                    tutorEmail: req.body.tutorEmail,
+                    stripeID: stripeID,
+                    lessonID: req.body.lessonID
+                }
+                const pending = new PendingPayment(pendingProto);
+                pending
+                .save()
+                .then(save => {
+                    res.status(200).json({ success: true });
+                })
+                .catch(err => console.log(err));
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
+        } else {
+            res.status(304).json({ alreadyEntered: true })
         }
     })
     .catch(err => console.log(err));

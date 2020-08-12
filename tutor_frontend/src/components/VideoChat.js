@@ -12,9 +12,9 @@ import Typography from "@material-ui/core/Typography"
     const { lessonID } = props.match.params;
 
     const [username, setUsername] = useState('');
-    const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
+    const [roomName, setRoomName] = useState(lessonID);
     const [token, setToken] = useState(null);
-    const [lesson, setLesson] = useState([]);
+    const [lesson, setLesson] = useState({});
     const [loading, setLoading] = useState(true);
 
      const user = useSelector(state => state.auth.user);
@@ -30,6 +30,8 @@ import Typography from "@material-ui/core/Typography"
 
      const handleSubmit = useCallback(async event => {
          event.preventDefault();
+
+         console.log(lesson)
 
         const submissionData = {
             identity: user.email,
@@ -48,7 +50,7 @@ import Typography from "@material-ui/core/Typography"
                 setToken(res.data)
             })
             .catch(err => console.log(err))
-     }, [username, roomName]);
+     }, [username, roomName, lesson]);
 
     
 
@@ -81,9 +83,16 @@ import Typography from "@material-ui/core/Typography"
      let render;
 
      if(token) {
+         console.log(roomName)
          render = (
              <div>
-                 <Room roomName={roomName} token={token} handleLogout={handleLogout} />
+                 <Room 
+                    roomName={roomName} 
+                    token={token} 
+                    handleLogout={handleLogout} 
+                    subject={lesson.subject} 
+                    startTime={lesson.dateAndTime}    
+                />
              </div>
          );
      } else {

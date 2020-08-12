@@ -25,6 +25,14 @@ const lessonBidSchema = new Schema({
     tutorName: {
         type: String,
         required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    course: {
+        type: String,
+        required: true
     }
 });
 

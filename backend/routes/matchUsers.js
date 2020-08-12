@@ -150,7 +150,9 @@ router.post('/addBid', passport.authenticate('tutor', { session: false }), (req,
         tutorRating: req.body.tutorRating,
         tutorDescription: req.body.tutorDescription,
         tutorName: req.body.tutorName,
-        date: req.body.date
+        date: req.body.date,
+        description: req.body.description,
+        course: req.body.course
     });
 
     newBid

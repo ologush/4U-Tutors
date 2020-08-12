@@ -29,7 +29,7 @@ function LessonDisplay(props) {
                 <Typography variant="body1">Time: {props.date.toLocaleTimeString("en-US", timeOptions)}</Typography>
             </CardContent>
             <CardActions>
-                <Button onClick={props.onClick} disabled={props.date.getTime() - currentDate.getTime() > 300000}>Enter Lesson</Button>
+                <Button onClick={props.onClick} disabled={/*props.date.getTime() - currentDate.getTime() > 300000*/ false}>Enter Lesson</Button>
                 {props.date.getTime() - currentDate.getTime() > 300000 ? (<Typography variant="body1">Lesson will be available within 5 minutes of the start time</Typography>) : (null)}
             </CardActions>
         </Card>

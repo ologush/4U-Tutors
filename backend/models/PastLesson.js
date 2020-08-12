@@ -4,32 +4,32 @@ const Schema = mongoose.Schema;
 const pastLessonSchema = new Schema({
     tutorID: {
         type: String, 
-        required: true,
+        required: false,
         default: null
     },
     tutorName: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     tutorEmail: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     studentID: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     studentName: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     studentEmail: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     startTime: {
@@ -39,22 +39,22 @@ const pastLessonSchema = new Schema({
     },
     studentJoinTime: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     studentExitTime: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     tutorExitTime: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     tutorJoinTime: {
         type: String,
-        required: true,
+        required: false,
         default: null
     },
     subject: {

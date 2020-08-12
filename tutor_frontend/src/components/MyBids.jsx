@@ -66,8 +66,8 @@ function MyBids(props) {
                             return (
                                 <Grid item xs={4}>
                                 <Bid
-                                    course="Need to add to schema"
-                                    description="Need to add to schema"
+                                    course={bid.course}
+                                    description={bid.description}
                                     time={dateString}
                                     cancel={() => deleteBid(bid._id)} 
                                 />

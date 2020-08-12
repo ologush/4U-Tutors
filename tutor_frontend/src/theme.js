@@ -4,13 +4,16 @@ const theme = createMuiTheme({
     palette: {
         type: 'dark',
         primary: {
-            main: "#002c73"
+            main: "#348feb"
         },
         background: {
             default: "#303030",
-            paper: "#002c73"
+            paper: "#348feb"
         }
 
+    },
+    typography: {
+        fontFamily: 'Raleway, Arial'
     }
 });
 
