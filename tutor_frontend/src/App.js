@@ -10,6 +10,7 @@ import { setCurrentUser, logoutUser } from "./actions/authActions"
 import { Provider } from "react-redux"
 import store from "./store"
 
+import HomePage from "./components/HomePage"
 import BookingPage from "./components/BookingPage"
 import Register from "./components/Register"
 import Login from "./components/Login"
@@ -26,11 +27,16 @@ import NavBar from "./components/NavBar"
 import SaveStripe from "./components/SaveStripe"
 import MyBids from "./components/MyBids"
 import Test from "./components/Test"
-import { makeStyles } from "@material-ui/core/styles"
+import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core/styles"
+
+import theme from "./theme";
+import CssBaseline from "@material-ui/core/CssBaseline"
 
 import clsx from 'clsx'
 
 const drawerWidth = 240;
+
+
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -91,6 +97,8 @@ function App() {
     <Provider store={store}>
       <Router>
         <div className="App">
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
           <NavBar handleMenu={handleMenu} />
           <main
             className={clsx(classes.content, {
@@ -103,6 +111,7 @@ function App() {
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Switch>
+            <PrivateRoute exact path="/homePage" component={HomePage} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/myLessons" component={DisplayLessons} />
             <PrivateRoute exact path="/videoChat/:lessonID" component={VideoChat} />
@@ -116,7 +125,7 @@ function App() {
           </Switch>
           
           </main>
-          
+          </ThemeProvider>
         </div>
       </Router>
     </Provider>

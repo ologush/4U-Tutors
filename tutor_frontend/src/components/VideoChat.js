@@ -75,6 +75,7 @@ import Typography from "@material-ui/core/Typography"
             setLesson(res.data);
             setLoading(false);
         })
+        .catch(err => console.log(err))
      }, [])
 
      let render;
@@ -93,6 +94,7 @@ import Typography from "@material-ui/core/Typography"
                 handleUsernameChange={handleUsernameChange}
                 handleRoomNameChange={handleRoomNameChange}
                 handleSubmit={handleSubmit}
+                date={new Date(lesson.dateAndTime)}
              />
          );
      }
@@ -105,7 +107,9 @@ import Typography from "@material-ui/core/Typography"
              loading ? (
                  <Typography varaint="h5">Loading...</Typography>
              ) : (
+                 <div>
                  {render}
+                 </div>
              )
          }
          </div>
