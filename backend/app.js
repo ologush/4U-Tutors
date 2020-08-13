@@ -75,6 +75,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-cron.schedule("* * * * Thursday", payout());
+//cron.schedule("* * * * Thursday", payout());
 
 module.exports = app;

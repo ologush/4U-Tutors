@@ -142,6 +142,8 @@ router.post('/user/token', passport.authenticate('user', { session: false }), (r
                 studentEmail: req.body.studentEmail
             }
 
+            console.log(submissionData)
+
             const pastLesson = new PastLesson(submissionData);
             pastLesson.save()
             .then(save => {

@@ -48,6 +48,10 @@ const lessonSchema = new Schema({
     },
     tutorEmail: {
         type: String
+    },
+    description: {
+        type: String,
+        required: true
     }
 });
 

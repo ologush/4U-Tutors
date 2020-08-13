@@ -154,7 +154,8 @@ function BookingPage(props) {
                 console.log(date);
                 console.log(unavailable);
                 console.log(index)
-                console.log('conflict')
+                console.log('conflict');
+                console.log("conflict at: " + unavailable.toLocaleDateString("en-CA", dateOptions) + ", " + unavailable.toLocaleTimeString("en-CA", timeOptions))
                 conflict = true;
                 return;
             } else {

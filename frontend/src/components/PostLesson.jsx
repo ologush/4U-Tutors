@@ -16,17 +16,7 @@ function PostLesson(props) {
     //may implement a rebook feature, for now wont;
 
     useEffect(() => {
-        axios
-        .post("/lesson/deleteLesson", { lessonID: lessonID })
-        .then(res => {
-            axios
-            .post("/payments/payOut", { tutorID: res.data.tutorID })
-            .then(trans => {
-                console.log(trans)
-            })
-            .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err))
+        
     }, [])
 
     return(

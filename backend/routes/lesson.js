@@ -92,6 +92,7 @@ router.get("/tutor/lessonByID", passport.authenticate('tutor', { session: false 
 
 //May need to add auth/ may delete if unused
 router.post("/deleteLesson", (req, res) => {
+    console.log(req)
     Lesson.findOneAndDelete({ _id: req.body.lessonID })
     .then(del => {
         res.json(del);

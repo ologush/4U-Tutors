@@ -66,7 +66,7 @@ import Timer from "./Timer"
                 setToken(res.data)
             })
             .catch(err => console.log(err))
-     }, [username, roomName]);
+     }, [username, roomName, lesson]);
 
      const handleLogout = useCallback(event => {
          setToken(null);

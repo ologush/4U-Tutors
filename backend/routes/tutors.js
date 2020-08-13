@@ -127,9 +127,7 @@ router.post('/getLessons', passport.authenticate('tutor', { session: false }), (
 router.post('/giveFeedback', passport.authenticate('user', { session: false }), (req, res) => {
     
 
-    if(req.body.feedback) {
-        feedbackProto.feedback = req.body.feedback
-    };
+    
 
     console.log('a');
     //Still gotta update the tutors overall rating
@@ -140,11 +138,16 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                 const feedbackProto = {
                     tutorID: lesson.tutorID,
                     rating: req.body.rating,
+                    description: lesson.description,
+                    course: lesson.subject,
+                    date: lesson.dateAndTime
                 }
 
                 if(req.body.feedback) {
                     feedbackProto.feedback = req.body.feedback;
-                };
+                } else {
+                    feedbackProto.feedback = "You recieved no feedback for the lesson"
+                }
 
                 console.log(feedbackProto)
 
@@ -153,6 +156,7 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                 tutorFeedback.save()
                 .then(feedback => {
                     updateRating(lesson.tutorID);
+                    lesson.remove();
                     res.json(feedback);
                 })
                 .catch(err => console.log(err))
@@ -160,6 +164,17 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
             }
         })
         .catch(err => console.log(err))
+});
+
+router.get("/getFeedback", passport.authenticate("tutor", { session: false }), (req, res) => {
+    const { tutorID } = req.query;
+    console.log(tutorID)
+
+    TutorFeedback.find({ tutorID: tutorID })
+    .then(docs => {
+        res.json(docs)
+    })
+    .catch(err => console.log(err));
 });
 
 function updateRating(tutorID) {
@@ -194,12 +209,16 @@ function updateRating(tutorID) {
 router.get("/unavailableTimes", passport.authenticate('tutor', { session: false }), async (req, res) => {
     const tutorID = req.query.tutorID;
     let times = [];
+    const dateOptions = { weekday: "long", month: "long", day: "numeric"}
+    const timeOptions = { hour: "numeric", minute: "numeric"}
     await Lesson.find({ tutorID: tutorID })
     .then(docs => {
         
 
         docs.forEach(lesson => {
             times.push(lesson.dateAndTime);
+            date = new Date(lesson.dateAndTime);
+            console.log("lesson: " + date.toLocaleDateString("en-CA", dateOptions) + ", " + date.toLocaleTimeString("en-CA", timeOptions))
         });
 
         
@@ -210,6 +229,8 @@ router.get("/unavailableTimes", passport.authenticate('tutor', { session: false 
     .then(docs => {
         docs.forEach(bid => {
             times.push(bid.date)
+            date = new Date(bid.date)
+            console.log("bid: " + date.toLocaleDateString("en-CA", dateOptions) + ", " + date.toLocaleTimeString("en-CA", timeOptions))
         });
     });
 

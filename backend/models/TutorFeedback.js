@@ -13,6 +13,18 @@ const tutorFeedbackSchema = new Schema({
     feedback: {
         type: String,
         required: false
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    course: {
+        type: String,
+        required: true
+    },
+    date: {
+        type: Date,
+        required: true
     }
 });
 

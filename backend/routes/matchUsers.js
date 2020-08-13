@@ -174,6 +174,7 @@ router.post('/selectBid', passport.authenticate('user', { session: false }), (re
                 studentName: posting.studentName,
                 type: posting.type,
                 dateCreated: Date.now(),
+                description: posting.description
             };
 
             console.log(newLessonProto)
@@ -183,7 +184,16 @@ router.post('/selectBid', passport.authenticate('user', { session: false }), (re
             const newLesson = new Lesson(newLessonProto);
             newLesson.save()
                 .then(lesson => {
-                    res.json(lesson)
+
+                    LessonBid.deleteMany({ postingID: req.body.postingID })
+                    .then(del => {
+                        console.log(del);
+                        res.json(lesson);
+                    })
+                    .catch(err => console.log(err))
+                    
+
+
                 })
                 .catch(err => {
                     console.log(err);

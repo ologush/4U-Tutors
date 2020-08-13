@@ -89,7 +89,7 @@ function Request(props) {
         .post("/tutors/acceptRequest", submissionData)
         .then(res => {
             //Redirect to pending lessons on student payment
-            
+            props.history.push("/lessonsPendingPayment")
         })
         .catch(err => console.log(err))
     }
@@ -164,8 +164,8 @@ function Request(props) {
                         request.availableTimes.map((time, index) => {
                             const date = new Date(time);
 
-                            const dateString = date.toLocaleString("en-CA", dateOptions);
-                            const timeString = time.toLocaleString("en-CA", timeOptions);
+                            const dateString = date.toLocaleDateString("en-CA", dateOptions);
+                            const timeString = date.toLocaleTimeString("en-CA", timeOptions);
 
                             return (
                                 <Grid item xs={4}>
