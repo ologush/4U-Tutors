@@ -123,7 +123,6 @@ function App() {
 
           
           
-            <Paper>
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
@@ -151,7 +150,7 @@ function App() {
               <PrivateRoute exact path="/pay/:paymentID" component={PayForRequest} />
             </Elements>
           </Switch>
-          </Paper>
+          
           
           </main>
           </ThemeProvider>
