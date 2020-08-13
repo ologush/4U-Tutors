@@ -43,6 +43,7 @@ function Feedback(props) {
                 .then(res => {
                     console.log(res);
                     setHasSubmitted(true);
+                    props.history.push("/homePage");
                 })
                 .catch(err => console.log(err))
         }

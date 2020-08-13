@@ -207,4 +207,12 @@ router.get("/unavailableTimes", passport.authenticate('user', { session: false }
 
 });
 
+router.get("/pendingPayments", passport.authenticate('user', { session: false }), (req, res) => {
+  LessonConfirm.find({ studentID: req.query.studentID})
+  .then(docs => {
+    res.json(docs);
+  })
+  .catch(err => console.log(err))
+});
+
 module.exports = router;

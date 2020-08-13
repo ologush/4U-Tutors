@@ -18,6 +18,10 @@ const lessonRequestSchema = new Schema({
         type: String,
         required: true
     },
+    tutorName: {
+        type: String,
+        required: true
+    },
     tutorID: {
         type: String,
         required: true

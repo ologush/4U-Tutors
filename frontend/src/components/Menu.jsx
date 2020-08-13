@@ -6,7 +6,7 @@ import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import { withRouter } from "react-router-dom"
-import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon} from "@material-ui/icons"
+import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon, Ballot as BallotIcon, Payment as PaymentIcon } from "@material-ui/icons"
 
 const options = [
     {
@@ -38,6 +38,16 @@ const options = [
         name: "Request a Lesson",
         path: "/requestLesson",
         icon: <PostAddIcon />
+    },
+    {
+        name: "My Requests",
+        path: "/myRequests",
+        icon: <BallotIcon />
+    },
+    {
+        name: "Pending Payments",
+        path: "/pendingPayments",
+        icon: <PaymentIcon />
     }
 ];
 
@@ -84,7 +94,6 @@ class Menu extends Component {
 Menu.propTypes = {
     open: PropTypes.bool.isRequired,
     menuState: PropTypes.func.isRequired
-
 }
 
 export default withRouter(Menu);
