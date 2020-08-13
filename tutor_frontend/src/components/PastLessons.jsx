@@ -31,7 +31,7 @@ function PastLessons(props) {
             !loading ? (
                 pastLessons.map(pastLesson => {
 
-                    const date = new Date(pastLesson.dateAndTime);
+                    const date = new Date(pastLesson.date);
                     const dateString = date.toLocaleDateString("en-CA", dateOptions) + ", " + date.toLocaleTimeString("en-CA", timeOptions);
 
                     return (
