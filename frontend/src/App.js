@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
@@ -41,7 +41,41 @@ import PendingPayments from "./components/PendingPayments"
 
 import Paper from "@material-ui/core/Paper"
 
+import { makeStyles, ThemeProvider } from "@material-ui/core/styles"
+import clsx from "clsx"
+import CssBaseline from "@material-ui/core/CssBaseline"
+import theme from "./theme"
+const drawerWidth = 240;
+
+
+
 const stripePromise = loadStripe('pk_test_51H7oaAFvYqAjSG5i5XoVmFeBNE7rPgvwrXbA9GNOFuFc6RkCevXgfVMLFTVBmMGRKMH7zwOSqOZiO3KvKxBUztBV00j6fEfFKo');
+
+const useStyles = makeStyles((theme) => ({
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    marginTop: 64
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    marginLeft: drawerWidth,
+  },
+  header: {
+    display: 'flex',
+    alighItems: 'center',
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end'
+  }
+}))
 
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
@@ -65,15 +99,30 @@ if(localStorage.jwtToken) {
 
 
 function App() {
+
+  const classes = useStyles();
+  const [openMenu, setOpenMenu] = useState(false);
+
+  const handleMenu = () => {
+    setOpenMenu(prev => !prev);
+  };
+
   return (
     <Provider store={store}>
       <Router>
         <div className="App">
-          <Grid container spacing={4} direction="column">
-          <Grid item>
-          <NavBar />
-          </Grid>
-          <Grid item>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+          
+          <NavBar handleMenu={handleMenu}/>
+          <main
+            className={clsx(classes.content, {
+              [classes.contentShift]: openMenu,
+            })}
+          >
+
+          
+          
             <Paper>
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
@@ -103,8 +152,9 @@ function App() {
             </Elements>
           </Switch>
           </Paper>
-          </Grid>
-          </Grid>
+          
+          </main>
+          </ThemeProvider>
         </div>
       </Router>
     </Provider>
