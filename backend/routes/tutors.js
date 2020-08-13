@@ -293,7 +293,8 @@ router.post("/acceptRequest", passport.authenticate('tutor', { session: false })
         tutorName: req.body.tutorName,
         studentName: req.body.studentName,
         type: req.body.type,
-        tutorEmail: req.body.tutorEmail
+        tutorEmail: req.body.tutorEmail,
+        description: req.body.description
     };
 
     console.log(submissionData);

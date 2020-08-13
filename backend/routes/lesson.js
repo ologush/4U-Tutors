@@ -10,6 +10,9 @@ const LessonRequest = require("../models/LessonRequest");
 const Lesson = require('../models/Lesson');
 const LessonConfirm = require('../models/LessonConfirm');
 
+const dateOptions = { month: "long", weekday: "long", day: "numeric" }
+const timeOptions = { hour: "numeric", minute: "numeric" }
+
 router.post("/addRequest", passport.authenticate('user', { session: false }), (req, res) => {
 
     let message = {
@@ -27,7 +30,8 @@ router.post("/addRequest", passport.authenticate('user', { session: false }), (r
         tutorEmail: req.body.tutorEmail,
         availableTimes: req.body.availableTimes,
         course: req.body.course,
-        description: req.body.description
+        description: req.body.description,
+        tutorName: req.body.tutorName
     };
 
     const newRequest = new LessonRequest(submissionData);
@@ -77,7 +81,18 @@ router.get("/user/lessonByID", passport.authenticate('user', { session: false })
         res.json(doc)
     })
     .catch(err => console.log(err));
-})
+});
+
+router.get("/user/lessonConfirm", passport.authenticate('user', { session: false }), (req, res) => {
+    const { confirmID } = req.query;
+    console.log('a');
+    LessonConfirm.findOne({ _id: confirmID })
+    .then(doc => {
+        console.log(doc);
+        res.json(doc);
+    })
+    .catch(err => console.log(err))
+});
 
 router.get("/tutor/lessonByID", passport.authenticate('tutor', { session: false }), (req, res) => {
     
@@ -182,6 +197,64 @@ router.get("/tutor/getPendingLessons", passport.authenticate('tutor', { session:
     LessonConfirm.find({ tutorID: tutorID })
     .then(docs => {
         res.json(docs);
+    })
+    .catch(err => console.log(err));
+});
+
+router.post("/cancelRequest", passport.authenticate('user', { session: false }), (req, res) => {
+
+    let message = {
+        from: "bookings@4uacademics.com",
+    };
+
+    LessonRequest.findOneAndDelete({ _id: req.body.requestID })
+    .then(del => {
+        message.to = del.tutorEmail;
+        message.text = "Your lesson request from " + del.studentName + ", has been cancelled";
+
+        sgMail.send(message)
+        .catch(err => console.log(err));
+
+        res.status(200).json({cancelSuccess: "successfully cancelled request"});
+    })
+    .catch(err => console.log(err));
+});
+
+router.post("/setLessonFromConfirm", passport.authenticate('user', { session: false}), (req, res) => {
+    LessonConfirm.findOneAndDelete({ _id: req.body.confirmID })
+    .then(del => {
+        let date = new Date(del.dateAndTime);
+        let dateString = date.toLocaleDateString("en-CA", dateOptions) + ", " + date.toLocaleTimeString("en-CA", timeOptions);
+        let message = {
+            from: "bookings@4uacademics.com",
+            to: del.tutorEmail,
+            message: "The student has payed for the lesson, it is now confirmed for: " + dateString
+        }
+
+        const lessonProto = {
+            studentID: del.studentID,
+            tutorID: del.tutorID,
+            dateAndTime: del.dateAndTime,
+            subject: del.subject,
+            tutorName: del.tutorName,
+            studentName: del.studentName,
+            type: "SINGLE_SINGLE",
+            studentEmail: del.studentEmail,
+            tutorEmail: del.tutorEmail,
+            description: del.description
+        }
+
+        const lesson = new Lesson(lessonProto);
+
+        lesson
+        .save()
+        .then(save => {
+            sgMail.send(message)
+            .catch(err => console.log(err))
+            res.status(200).json({ lessonConfirmSuccess: "lesson confirm successful" });
+        })
+        .catch(err => console.log(err));
+
     })
     .catch(err => console.log(err));
 })

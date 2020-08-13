@@ -43,7 +43,8 @@ function LessonRequest(props) {
             tutorEmail: tutor.email,
             availableTimes: dates,
             course: course,
-            description: description
+            description: description,
+            tutorName: tutor.name
         }
 
         console.log(data)
@@ -51,7 +52,7 @@ function LessonRequest(props) {
         axios
         .post("/lesson/addRequest", data)
         .then(res => {
-            console.log(res)
+            props.history.push("/myRequests");
         })
         .catch(err => console.log(err))
     }

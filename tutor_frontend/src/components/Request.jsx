@@ -80,7 +80,8 @@ function Request(props) {
             type: "SINGLE_SINGLE",
             studentEmail: request.studentEmail,
             tutorEmail: request.tutorEmail,
-            requestID: requestID
+            requestID: requestID,
+            description: request.description
         };
 
         console.log(request.subject)
