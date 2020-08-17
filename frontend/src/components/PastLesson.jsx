@@ -12,11 +12,11 @@ function PastLesson(props) {
         <Card>
             <CardContent>
                 <Typography variant="h5">
-                    With: {props.tutorName}
+                    With: {props.tutorEmail}
                 </Typography>
                 <br />
                 <Typography variant="h5">
-                    On: {props.date.toLocaleDate("en-CA", )}
+                    On: {props.date}
                 </Typography>
             </CardContent>
             <CardActions>
@@ -28,7 +28,7 @@ function PastLesson(props) {
 }
 
 PastLesson.propTypes = {
-    tutorName: PropTypes.string.isRequired,
+    tutorEmail: PropTypes.string.isRequired,
     date: PropTypes.object.isRequired,
     onRequest: PropTypes.func.isRequired,
     complain: PropTypes.func.isRequired

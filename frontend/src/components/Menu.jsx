@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import Divider from "@material-ui/core/Divider"
 import IconButton from "@material-ui/core/IconButton"
 import { ChevronLeft as ChevronLeftIcon } from "@material-ui/icons"
-import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon, Ballot as BallotIcon, Payment as PaymentIcon } from "@material-ui/icons"
+import {Create as CreateIcon, Home as HomeIcon, List as ListIcon, ListAlt as ListAltIcon, Archive as ArchiveIcon, PostAdd as PostAddIcon, Ballot as BallotIcon, Payment as PaymentIcon, Input as InputIcon } from "@material-ui/icons"
 
 const drawerWidth = 240;
 
@@ -64,6 +64,11 @@ const options = [
         name: "Pending Payments",
         path: "/pendingPayments",
         icon: <PaymentIcon />
+    },
+    {
+        name: "Complaints",
+        path: "/complaints",
+        icon: <InputIcon />
     }
 ];
 

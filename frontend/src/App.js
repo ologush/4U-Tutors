@@ -38,6 +38,9 @@ import AccountSettings from "./components/AccountSettings"
 import MyRequests from "./components/MyRequests"
 import PayForRequest from "./components/PayForRequest"
 import PendingPayments from "./components/PendingPayments"
+import Complaint from "./components/Complaint"
+import ComplaintSuccessful from "./components/ComplaintSuccessful"
+import Complaints from "./components/Complaints"
 
 import Paper from "@material-ui/core/Paper"
 
@@ -145,6 +148,9 @@ function App() {
             <PrivateRoute exact path="/accountsettings" component={AccountSettings} />
             <PrivateRoute exact path="/myRequests" component={MyRequests} />
             <PrivateRoute exact path="/pendingPayments" component={PendingPayments} />
+            <PrivateRoute exact path="/complain/:pastLessonID" component={Complaint} />
+            <PrivateRoute exact path="/complaintSuccessful" component={ComplaintSuccessful} />
+            <PrivateRoute exact path="/complaints" component={Complaints} />
             <Elements stripe={stripePromise}>
               <PrivateRoute exact path="/selectBid/:postingID" component={SelectBid} />
               <PrivateRoute exact path="/pay/:paymentID" component={PayForRequest} />
