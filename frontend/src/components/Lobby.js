@@ -1,21 +1,32 @@
 import React from 'react'
 import Button from "@material-ui/core/Button"
+import Paper from "@material-ui/core/Paper"
+import Typography from "@material-ui/core/Typography"
+
+const timeOptions = { hour: "numeric", minute: "numeric"}
 
 const Lobby = ({
     username,
     handleUsernameChange,
     roomName,
     handleRoomNameChange,
-    handleSubmit
+    handleSubmit,
+    date,
+    description
 }) => {
     return(
+        <Paper>
         <form onSubmit={handleSubmit}>
-            <h2>Welcome {username}</h2>
-            <h2>Lobby for lesson: {roomName}</h2>
+            <Typography variant="h4">
+                Welcome {username} to the lesson lobby. Your lesson is scheduled to begin at 
+                {date.toLocaleTimeString("en-CA", timeOptions)}. Click the Begin Lesson Button to enter the lesson.
+            </Typography>
+            <Typography variant="h5">Course: {roomName}</Typography>
 
-            <button type="submit">Enter Lesson</button>
+            <Button type="submit">Begin Lesson</Button>
 
         </form>
+        </Paper>
     );
 };
 

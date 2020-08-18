@@ -117,11 +117,11 @@ function MyPostings(props) {
     }
 
     const handleEdit = (postingID) => {
-        props.history.push("/editPosting" + postingID);
+        props.history.push("/editPosting/" + postingID);
     }
 
     const selectBid = (postingID) => {
-        props.location.push("/selectBid/" + postingID);
+        props.history.push("/selectBid/" + postingID);
     }
 
     return (

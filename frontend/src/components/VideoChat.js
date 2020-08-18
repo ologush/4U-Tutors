@@ -5,7 +5,7 @@ import Room from './Room';
 import { useSelector, useDispatch } from 'react-redux'
 import { endLesson } from '../actions/lessonActions'
 import Timer from "./Timer"
-
+import Typography from "@material-ui/core/Typography"
 
  const VideoChat = (props) => {
     
@@ -13,15 +13,15 @@ import Timer from "./Timer"
 
      const [username, setUsername] = useState('');
      
-     //const [roomName, setRoomName] = useState(useSelector(state => state.lesson.lesson._id));
+     
      const [roomName, setRoomName] = useState(lessonID);
      const [token, setToken] = useState(null);
      const [lesson, setLesson] = useState({});
     const [loading, setLoading] = useState(true);
 
      const user = useSelector(state => state.auth.user);
-     const startTime = localStorage.getItem("startTime");
-     console.log(startTime)
+     
+     
      console.log(user)
      //const lesson = useSelector(state => state.lesson.lesson);
      const dispatch = useDispatch();
@@ -56,7 +56,7 @@ import Timer from "./Timer"
             studentID: user.id,
             studentName: user.name,
             studentEmail: user.email,
-            startTime: startTime,
+            startTime: lesson.dateAndTime,
             subject: lesson.subject
         };
 
@@ -97,10 +97,12 @@ import Timer from "./Timer"
      if(token) {
          render = (
              <div>
-                <Room roomName={roomName} token={token} handleLogout={handleLogout} />
-                <Timer
-                    onTimeOut={handleTimeout}
-                    startTime={new Date(startTime)}
+                <Room 
+                    roomName={roomName} 
+                    token={token} 
+                    handleLogout={handleLogout} 
+                    subject={lesson.subject}
+                    startTime={lesson.dateAndTime}    
                 />
              </div>
          );
@@ -113,6 +115,7 @@ import Timer from "./Timer"
                     handleUsernameChange={handleUsernameChange}
                     handleRoomNameChange={handleRoomNameChange}
                     handleSubmit={handleSubmit}
+                    date={new Date(lesson.dateAndTime)}
                 />
              
              </div>
@@ -120,7 +123,17 @@ import Timer from "./Timer"
          );
      }
 
-     return render;
+     return (
+         <div>
+             {
+                 loading ? (
+                    <Typography variant="h5">Loading...</Typography>
+                 ) : (
+                     render
+                 )
+             }
+         </div>
+     )
  };
 
  export default VideoChat;

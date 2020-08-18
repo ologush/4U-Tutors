@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography"
 import { DateTimePicker } from "@material-ui/pickers"
 import PropTypes from "prop-types"
 import addDate from "date-fns/add"
+import IconButton from "@material-ui/core/IconButton"
+import { DeleteForever as DeleteForeverIcon } from "@material-ui/icons/"
 
 const dateOptions = { weekday: "long", month: "long", day: "numeric" };
 const timeOptions = { hour: 'numeric', minute: 'numeric' };
@@ -59,9 +61,9 @@ class MultipleDateTimePicker extends Component {
         this.props.addDate(dateToAdd);
     }
     
-    removeDate(e) {
-        e.preventDefault();
-        const dateToRemove = e.target.id;
+    removeDate(dateToRemove) {
+        //e.preventDefault();
+        //const dateToRemove = e.target.id;
 
         this.setState(prevState => ({
             selectedDates: prevState.selectedDates.filter(date => {
@@ -85,7 +87,10 @@ class MultipleDateTimePicker extends Component {
                             {console.log(typeof date)}
 
                             <Typography variant="h5">{date.toLocaleDateString("en-US", dateOptions)} at {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
-                            <button id={date} onClick={this.removeDate}>X</button>
+                            
+                            <IconButton aria-label="delete" size="small" onClick={() => this.removeDate(date)}>
+                                <DeleteForeverIcon />
+                            </IconButton>
                         </div>
                     ))
                 }

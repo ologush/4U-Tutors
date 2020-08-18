@@ -57,7 +57,38 @@ function LessonRequest(props) {
         .catch(err => console.log(err))
     }
 
-    return(
+    let newReturn = (
+        <Grid container spacing={2} direction="column">
+            <Grid item container xs={12} spacing={2}>
+                <Grid item xs={4}>
+                    <Paper>
+                        <TutorFinder onEnter={addTutor} />
+                    </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                    <Paper>
+                        <TextField label="Course" onChange={(e) => setCourse(e.target.value)} value={course} />
+                        <TextField label="Description" onChange={(e) => setDescription(e.target.value)} value={description} />
+                    </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                    <Paper>
+                        <MultipleDateTimePicker 
+                            addDate={addDate}
+                            removeDate={removeDate}
+                            alreadySelectedDates={dates}
+                        />
+                    </Paper>
+                </Grid>
+            </Grid>
+            <Grid item xs={12}>
+                <Button fullWidth variant="contained">Submit Request</Button>
+            </Grid>
+        </Grid> 
+    )
+
+    let oldReturn = (
+
         <Grid container>
             <Grid item xs={4}>
                 <TutorFinder onEnter={addTutor} />
@@ -83,6 +114,11 @@ function LessonRequest(props) {
             </Grid>
             <Button onClick={sendRequest}>Submit Request</Button>
         </Grid>
+
+    )
+
+    return(
+        newReturn
     )
 }
 
