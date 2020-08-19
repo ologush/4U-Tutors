@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 
 import MenuItem from '@material-ui/core/MenuItem'
@@ -103,10 +103,24 @@ function NavBar(props) {
 
     const [auth, setAuth] = useState(useSelector(state => state.auth));
 
+    useEffect(() => {
+
+        if(auth.isAuthenticated) {
+            console.log("menu open")
+            props.setMenu(true);
+        } else {
+            console.log("menu closed")
+            props.setMenu(false);
+        }
+
+    }, [])
+
     const onLogoutClick = (e) => {
         e.preventDefault();
+        console.log("navbarlogout")
+        props.setMenu(true);
         props.logoutUser();
-        props.history.push("/")
+        //props.history.push("/")
     }
 
     const handleAccountMenu = (e) => {
@@ -117,15 +131,17 @@ function NavBar(props) {
     const handleMenu = (e) => {
         console.log(auth);
         setOpenMenu(prev => !prev);
-        props.handleMenu();
+        
     };
+
+
 
     const handleClose = (e) => {
         setAnchorEl(null);
 
         handleMenu();
         setOpenAccountMenu(false);
-
+        console.log(e.target.id)
         if(e.target.id == "Logout") {
             onLogoutClick(e);
         } else if(e.target.id == "Account Settings") {
@@ -139,7 +155,7 @@ function NavBar(props) {
         <AppBar 
             position="fixed"
             className={clsx(classes.appBar, {
-                [classes.appBarShift]: openMenu
+                [classes.appBarShift]: auth.isAuthenticated
             })}
         >
             <ToolBar>
@@ -186,7 +202,7 @@ function NavBar(props) {
                                 >
                                     {
                                         accountOptions.map(option => (
-                                            <MenuItem id={option} key={option} selected={option === "Pyxis"}>
+                                            <MenuItem id={option} key={option} onClick={handleClose} selected={option === "Pyxis"}>
                                                 {option}
                                             </MenuItem> 
                                         ))

@@ -82,7 +82,7 @@ class Login extends Component {
                     </span>
                 </CardActions>
                 <CardActions>
-                    <TextField error={errors.password} id="password" onChange={this.onChange} label="Password" className={classnames("", {
+                    <TextField type="password" error={errors.password} id="password" onChange={this.onChange} label="Password" className={classnames("", {
                         invalid: errors.password || errors.passwordIncorrect
                     })}/>
                     <span className="red-text">

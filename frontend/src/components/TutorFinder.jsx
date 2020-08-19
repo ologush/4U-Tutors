@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
 import PropTypes from "prop-types"
@@ -9,9 +9,23 @@ function TutorFinder(props) {
 
     const [value, setValue] = useState("");
 
+
+    useEffect(() => {
+
+        console.log(props);
+
+        if(props.fromPastLesson) {
+            setValue(props.existingEmail);
+            console.log('a')
+        }
+
+    }, [])
+
     const updateValue = (e) => {
         setValue(e.target.value);
     }
+
+    
 
     const submitEmail = (e) => {
         axios
@@ -36,7 +50,9 @@ function TutorFinder(props) {
 }
 
 TutorFinder.propTypes = {
-    onEnter: PropTypes.func.isRequired
+    onEnter: PropTypes.func.isRequired,
+    existingEmail: PropTypes.string,
+    fromPastLesson: PropTypes.bool
 }
 
 export default TutorFinder;

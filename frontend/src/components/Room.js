@@ -9,6 +9,9 @@ import Button from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
 import Timer from "./Timer"
 import Typography from "@material-ui/core/Typography"
+import { makeStyles } from "@material-ui/styles/"
+
+import "./ParticipantGrid.css"
 
 
 const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
@@ -60,7 +63,7 @@ const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
     }
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} >
             <Grid item container xs={8}>
                 {
                     remoteParticipants.length > 3 ? (
@@ -78,7 +81,7 @@ const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
                     )
                 }
             </Grid>
-            <Grid item container xs={4} direction="column">
+            <Grid item container xs={4} direction="column" wrap="nowrap">
                 <Card>
                     <CardContent>
                         <Typography variant="h6">Room: {subject}</Typography>

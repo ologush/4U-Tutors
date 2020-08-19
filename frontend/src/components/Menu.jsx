@@ -85,7 +85,7 @@ function Menu(props) {
     }
 
     return (
-        <Drawer anchor="left" open={props.open} variant="persistent" className={classes.drawer} classes={{
+        <Drawer anchor="left" open={props.open} variant="permanent" className={classes.drawer} classes={{
             paper: classes.drawerPaper
         }}>
             <div>

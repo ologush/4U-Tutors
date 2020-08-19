@@ -61,7 +61,7 @@ router.post("/editPosting", passport.authenticate('user', { session: false }), (
         numberOfParticipants: req.body.numberOfParticipants,
         numberOfRecurringLessons: req.body.numberOfRecurringLessons
     };
-    Posting.findOneAndUpdate({ _id: req.body.postingID }, update)
+    Posting.findOneAndUpdate({ _id: req.body.postingID }, update, { new: true})
         .then(doc => {
             res.json(doc);
         })

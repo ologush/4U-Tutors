@@ -96,7 +96,7 @@ import Typography from "@material-ui/core/Typography"
 
      if(token) {
          render = (
-             <div>
+             
                 <Room 
                     roomName={roomName} 
                     token={token} 
@@ -104,7 +104,7 @@ import Typography from "@material-ui/core/Typography"
                     subject={lesson.subject}
                     startTime={lesson.dateAndTime}    
                 />
-             </div>
+             
          );
      } else {
          render = (

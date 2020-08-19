@@ -27,8 +27,8 @@ function PastLessons(props) {
             .catch(err => console.log(err))
     }, []);
 
-    const onRequest = (id) => {
-        window.location.href = "/request/" + id
+    const onRequest = (tutorID) => {
+        window.location.href = "/request/" + tutorID;
     };
 
     const complain = (id) => {
@@ -50,7 +50,7 @@ function PastLessons(props) {
                             <PastLesson 
                                 tutorEmail={lesson.tutorEmail}
                                 date={dateString}
-                                onRequest={() => onRequest(lesson._id)}
+                                onRequest={() => onRequest(lesson.tutorID)}
                                 complain={() => complain(lesson._id)}
                             />
                         </Grid>

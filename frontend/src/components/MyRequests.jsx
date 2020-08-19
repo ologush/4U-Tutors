@@ -40,7 +40,7 @@ function MyRequests(props) {
 
     if(!requestsEmpty) {
         display = 
-        (<div>
+        (<Grid container spacing={2}>
         {requests.map(request => 
 
             (
@@ -55,14 +55,14 @@ function MyRequests(props) {
                     />
                 </Grid>
             ))}
-            </div>)
+            </Grid>)
         
     } else {
         display = <Typography variant="h5">No Pending Requests</Typography>
     }
 
     return (
-        <Grid container spacing={2}>
+        <div>
         {
             !loading ? (
                 display
@@ -71,7 +71,7 @@ function MyRequests(props) {
                 <Typography variant="h5">Loading...</Typography>
             )
         }
-        </Grid>
+        </div>
     )
 }
 

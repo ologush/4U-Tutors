@@ -7,7 +7,7 @@ import setAuthToken from "./utils/setAuthToken"
 import { setCurrentUser, logoutUser} from "./actions/authActions"
 
 
-import { Provider } from "react-redux"
+import { Provider, useSelector } from "react-redux"
 import store from "./store"
 
 
@@ -80,6 +80,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+let isAuthenticated = false;
+
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
   setAuthToken(token);
@@ -94,6 +96,8 @@ if(localStorage.jwtToken) {
     store.dispatch(logoutUser());
 
     window.location.href = "./login";
+  } else {
+    isAuthenticated = true;
   }
 }
 
@@ -105,10 +109,12 @@ function App() {
 
   const classes = useStyles();
   const [openMenu, setOpenMenu] = useState(false);
+  
 
-  const handleMenu = () => {
-    setOpenMenu(prev => !prev);
-  };
+  const setMenu = (toSet) => {
+    console.log("setting menu to:")
+    setOpenMenu(toSet);
+  }
 
   return (
     <Provider store={store}>
@@ -117,10 +123,10 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline />
           
-          <NavBar handleMenu={handleMenu}/>
+          <NavBar setMenu={setMenu}/>
           <main
             className={clsx(classes.content, {
-              [classes.contentShift]: openMenu,
+              [classes.contentShift]: isAuthenticated,
             })}
           >
 
@@ -129,9 +135,7 @@ function App() {
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
-          <Elements stripe={stripePromise}>
-            <Route exact path="/test" component={Payout} />
-          </Elements>
+          
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/displayLessons" component={DisplayLessons} />
@@ -145,6 +149,7 @@ function App() {
             <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
             <PrivateRoute exact path="/pastLessons" component={PastLessons} />
             <PrivateRoute exact path="/requestLesson" component={LessonRequest} />
+            <PrivateRoute exact path="/request/:tutorID" component={LessonRequest} />
             <PrivateRoute exact path="/accountsettings" component={AccountSettings} />
             <PrivateRoute exact path="/myRequests" component={MyRequests} />
             <PrivateRoute exact path="/pendingPayments" component={PendingPayments} />

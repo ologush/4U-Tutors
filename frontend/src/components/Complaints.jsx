@@ -25,7 +25,7 @@ function Complaints(props) {
     }, []);
 
     return (
-        <Grid>
+        <Grid container spacing={2}>
             {
                 !loading ? (
                     complaints.map(complaint => {

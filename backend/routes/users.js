@@ -15,6 +15,7 @@ const LessonRequest = require("../models/LessonRequest");
 const LessonConfirm = require('../models/LessonConfirm');
 const TutorFeedback = require('../models/TutorFeedback');
 const Complaint = require('../models/Complaint');
+const Tutor = require('../models/Tutor');
 
 
 router.post('/register', (req, res) => {
@@ -254,5 +255,14 @@ router.get("/pendingPayments", passport.authenticate('user', { session: false })
   })
   .catch(err => console.log(err))
 });
+
+router.get("/getTutorByID", passport.authenticate('user', { session: false }), (req, res) => {
+  const { tutorID } = req.query;
+  Tutor.findOne({ _id: tutorID })
+  .then(doc => {
+    res.json(doc);
+  })
+  .catch(err => console.log(err));
+})
 
 module.exports = router;

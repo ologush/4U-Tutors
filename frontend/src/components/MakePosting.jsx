@@ -726,9 +726,17 @@ function MakePosting(props) {
                 setOtherStudentIDs(data.otherStudentIDs);
                 setType(data.type);
                 setNumberOfParticipants(data.numberOfParticipants);
-                setAvailableDates(data.availableTimes);
+                //setAvailableDates(data.availableTimes);
 
-                
+                let dates = [];
+
+                data.availableTimes.forEach(date => {
+                    let dateObj = new Date(date);
+                    dates.push(dateObj);
+                });
+
+
+                setAvailableDates(dates);
 
                 // setInfoTags({
                 //     data.infoTags.forEach(tag => {
@@ -814,10 +822,14 @@ function MakePosting(props) {
             otherStudentEmails: otherStudentEmails
         };
 
+        console.log(submissionData);
+
         axios
         .post("/match/editPosting", submissionData)
         .then(res => {
-            props.history.push('/myPostings');
+            //props.history.push('/myPostings');
+            console.log(res.data)
+
         })
         .catch(err => console.log(err))
     }
@@ -894,12 +906,15 @@ function MakePosting(props) {
         setAvailableDates(prevDates => [...prevDates, dateToAdd]);
     };
 
+    
+
     const removeDate = (dateToRemove) => {
-        setAvailableDates(prevDates => {
-            prevDates.filter(date => {
-                return date != dateToRemove;
-            })
-        })
+        
+       
+
+        
+
+        setAvailableDates(availableDates.filter(date => dateToRemove.valueOf() != date.valueOf()));
     }
 
     return (
