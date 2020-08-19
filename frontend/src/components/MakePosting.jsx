@@ -105,10 +105,8 @@ const groupOptions = [
 ];
 
 const lessonTypes = [
-    "SINGLE_SINGLE",
-    "SINGLE_RECURRING",
-    "GROUP_SINGLE",
-    "GROUP_RECURRING"
+    "SINGLE",
+    "GROUP"
 ];
 
 const tags = {
@@ -689,7 +687,7 @@ const tags = {
 
 function MakePosting(props) {
 
-    console.log("edit")
+    
 
     const [studentID, setStudentID] = useState(useSelector(state => state.auth.user.id)); //meh
     const [course, setCourse] = useState("");
@@ -709,7 +707,7 @@ function MakePosting(props) {
 
     useEffect(() => {
         
-        console.log("edit");
+        
         if(props.match.params.postingID) {
             const { postingID } = props.match.params;
 
@@ -726,7 +724,7 @@ function MakePosting(props) {
                 setOtherStudentIDs(data.otherStudentIDs);
                 setType(data.type);
                 setNumberOfParticipants(data.numberOfParticipants);
-                //setAvailableDates(data.availableTimes);
+                
 
                 let dates = [];
 
@@ -738,11 +736,6 @@ function MakePosting(props) {
 
                 setAvailableDates(dates);
 
-                // setInfoTags({
-                //     data.infoTags.forEach(tag => {
-                //         prevTags.set(tag, true);
-                //     })
-                // });
 
                 const tagKeys = Object.keys(tags);
                 let newTags = new Map();
@@ -754,12 +747,9 @@ function MakePosting(props) {
 
                 setInfoTags(new Map(infoTags))
                 setIsEdit(true);
-                // data.infoTags.forEach(tag => {
-                //     newTags.set(tag, true);
-                // })
+                
                 console.log(newTags);
-                //setInfoTags(new Map(newTags));
-                //setInfoTags(newTags);
+                
                 console.log(infoTags);
                 setLoading(false);
             }) 
@@ -827,16 +817,13 @@ function MakePosting(props) {
         axios
         .post("/match/editPosting", submissionData)
         .then(res => {
-            //props.history.push('/myPostings');
-            console.log(res.data)
-
+            props.history.push('/myPostings');
         })
         .catch(err => console.log(err))
     }
 
     const handleCourse = (e) => {
         setCourse(e.target.value);
-        console.log(infoTags)
     }
 
     const handleDescription = (e) => {
@@ -849,17 +836,8 @@ function MakePosting(props) {
     
     //need to fix
     const handleCheckbox = (e) => {
-        console.log(e.target)
         const { id, checked } = e.target;
-
-        //setInfoTags(prevTags => { prevTags.set(id, checked)})
-        console.log(infoTags.get(id))
-        console.log(checked)
-        //setInfoTags(infoTags.set(id, checked));
         setInfoTags(new Map(infoTags.set(id, checked)))
-
-        console.log(infoTags);
-
     }
 
     const handleSelect = (e) => {
@@ -886,7 +864,8 @@ function MakePosting(props) {
         setOtherStudentIDs(prevState => [...prevState.otherStudentIDs, student._id]);
     };
 
-    //Need to fix
+
+    //May need to fix
     const deleteStudent = (student) => {
         setOtherStudentEmails(prevState => {
             prevState.filter((email, index) => {
@@ -909,11 +888,6 @@ function MakePosting(props) {
     
 
     const removeDate = (dateToRemove) => {
-        
-       
-
-        
-
         setAvailableDates(availableDates.filter(date => dateToRemove.valueOf() != date.valueOf()));
     }
 
@@ -953,7 +927,7 @@ function MakePosting(props) {
                 </Select>
 
                 {
-                    (type === "GROUP_SINGLE" || type === "GROUP_RECURRING" 
+                    (type === "GROUP"
                         ?
                         (
                             <div>
@@ -977,31 +951,6 @@ function MakePosting(props) {
 
                         ) : null
                     )
-                }
-
-                {
-                    (type === "SINGLE_RECURRING" || type === "GROUP_RECURRING" ) 
-                    ? 
-                    (
-                        <div>
-
-                        <Typography variant="h4">Select the number of recurring lessons</Typography>
-                        <Select 
-                            onChange={handleSelect}
-                            value={numberOfRecurringLessons}
-                            name="RECURRING_NUMBER"
-                        >
-                            {
-                                recurringOptions.map(option => (
-                                    <MenuItem value={option}>{option}</MenuItem>
-                                ))
-                            }
-
-                        </Select>
-
-                        </div>
-                    ) : null
-                    
                 }
 
                 <Typography variant="h4">Select the times you are available:</Typography>
@@ -1028,25 +977,4 @@ function MakePosting(props) {
     )
 }
 
-// MakePosting.propTypes = {
-//     auth: PropTypes.object.isRequired,
-//     errors: PropTypes.object.isRequired,
-//     posting: PropTypes.object,
-//     isEdit: PropTypes.bool,
-//     test: PropTypes.number
-// };
-
-// MakePosting.defaultProps = {
-//     posting: null,
-
-// };
-
-// const mapStateToProps = state => ({
-//     auth: state.auth,
-//     errors: state.errors
-// });
-
-// export default connect(
-//     mapStateToProps
-// )(withRouter(MakePosting));
 export default MakePosting;

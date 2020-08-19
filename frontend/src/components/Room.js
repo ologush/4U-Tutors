@@ -29,7 +29,6 @@ const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
                 prevParticipants.filter(p => p != participant)
             );
         };
-        console.log(roomName);
         Video.connect(token, {
             name: roomName
         }).then(room => {

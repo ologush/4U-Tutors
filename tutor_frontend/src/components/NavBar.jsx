@@ -18,6 +18,8 @@ import { Link, withRouter } from 'react-router-dom'
 import Menu from "./Menu"
 import { FormatColorTextSharp } from '@material-ui/icons'
 import clsx from 'clsx'
+import Button from "@material-ui/core/Button"
+
 
 const accountOptions = [
     "Account Settings",
@@ -133,7 +135,7 @@ function NavBar(props) {
                     </Grid>
                     <Grid item xs={1}>
                         {
-                            props.auth.isAuthenticated &&
+                            props.auth.isAuthenticated ? (
                             <div>
                                 <IconButton edge="end" color="inherit" aria-label="Account" onClick={handleAccountMenu}>
                                     <AccountCircle />
@@ -162,7 +164,9 @@ function NavBar(props) {
                                     }
 
                                 </AccountMenu>
-                            </div>
+                            </div> ) : (
+                                <Button onClick={() => props.history.push("/login")} variant="contained">Login</Button>
+                            )
                         }
                     </Grid>
                 </Grid>
