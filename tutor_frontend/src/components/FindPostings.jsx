@@ -19,85 +19,10 @@ import { enterBooking } from "../actions/lessonActions";
 
 import { Link, withRouter } from 'react-router-dom'
 
-// class FindPostings extends Component {
-//     constructor() {
-//         super();
 
-//         this.state = {
-//             postings: []
-//         };
-
-//         this.handleSubmit = this.handleSubmit.bind(this);
-//     }
-
-//     handleSubmit(postingID) {
-
-//         //e.preventDefault();
-
-        
-
-//         //this.props.enterBooking(this.state.postings[e.target.id]);
-
-//         this.props.history.push('/booking/' + postingID);
-
-
-
-//     }
-
-//     componentWillMount() {
-
-//         //Accesses the db twice
-        
-//         axios
-//             .get("/match/getPostings")
-//             .then(res => {
-//                 console.log(res);
-//                 this.setState({
-//                     postings: res.data
-//                 });
-//             })
-//             .catch(err => console.log(err))
-
-
-//     }
-
-//     render() {
-//         return(
-//             <div>
-//                 <Typography variant="h2">Welcome to the postings page</Typography>
-
-//                 {this.state.postings.map((posting, index) => (
-//                     <div>
-//                         <Typography variant="h3">Course: {posting.course}</Typography>
-//                         <Typography variant="h3">Grade: {posting.year}</Typography>
-//                         <Typography variant="h4">Description: {posting.description}</Typography>
-                        
-//                         <Button variant="contained" color="primary" onClick={() => this.handleSubmit(posting._id)}>Schedule a Time</Button>
-//                     </div>
-//                 ))}
-//             </div>
-//         );
-//     }
-// };
-
-// FindPostings.propTypes = {
-//     auth: PropTypes.object.isRequired,
-//     enterBooking: PropTypes.func.isRequired
-// };
-
-// const mapStateToProps = state => ({
-//     auth: state.auth
-// });
-
-// export default connect(
-//     mapStateToProps,
-//     { enterBooking }
-// )(withRouter(FindPostings));
 
 
 function FindPostings(props) {
-
-    //const [filter, setFilter] = useState(null);
 
     
 
@@ -137,7 +62,6 @@ function FindPostings(props) {
 
     const [postings, setPostings] = useState([]);
     const [loading, setLoading] = useState(true);
-    //const [filters, setFilters] = useState([]);
 
 
     useEffect(() => {
@@ -163,7 +87,6 @@ function FindPostings(props) {
             axios
             .post("/match/getPostingsByTags", { tags: filters })
             .then(res => {
-                console.log(res);
                 setPostings(res.data);
                 setLoading(false);
             })
@@ -180,22 +103,10 @@ function FindPostings(props) {
 
         tempFilter[index].checked = !tempFilter[index].checked;
 
-        //console.log(tempFilter);
+    
         
         setFilter([...tempFilter]);
         setLoading(true);
-
-        // setFilters([
-        //     filter.map((filter) => {
-        //         if(filter.checked) return filter.tag;
-        //         else return;
-        //     })
-        // ])
-
-       
-
-        
-        console.log(filter)
     };
 
     const handleSubmit = (postingID) => {
@@ -215,7 +126,6 @@ function FindPostings(props) {
                 ) : (
                     
                     <div>
-                        {console.log("a")}
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                             {
@@ -236,6 +146,7 @@ function FindPostings(props) {
                                             description={posting.description}
                                             grade={posting.year}
                                             enterBooking={() => handleSubmit(posting._id)}
+                                            type={posting.type}
                                         />
                                     </Grid>
                                 ))

@@ -131,8 +131,11 @@ router.post("/addPendingPayment", passport.authenticate('tutor', { session: fals
 //may or may not need
 router.get("/secret", passport.authenticate('user', { session: false }), async (req, res) => {
 
+    const amount = req.query.cost * 100;
+    console.log(amount);
+
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: 25 * 100,
+        amount: amount,
         currency: 'cad',
 
         metadata: {integration_check: 'accept_a_payment'}

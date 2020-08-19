@@ -22,6 +22,9 @@ router.post("/addRequest", passport.authenticate('user', { session: false }), (r
         text: 'You have a request from a lesson: \n' + req.body.description 
     };
 
+    let cost = req.body.numberOfParticipants * 20 + 5;
+    let payout = req.body.numberOfParticipants * 15 + 5;
+
     const submissionData = {
         studentID: req.body.studentID,
         tutorID: req.body.tutorID,
@@ -31,7 +34,13 @@ router.post("/addRequest", passport.authenticate('user', { session: false }), (r
         availableTimes: req.body.availableTimes,
         course: req.body.course,
         description: req.body.description,
-        tutorName: req.body.tutorName
+        tutorName: req.body.tutorName,
+        type: req.body.type,
+        otherStudentEmails: req.body.otherStudentEmails,
+        otherStudentIDs: req.body.otherStudentIDs,
+        numberOfParticipants: req.body.numberOfParticipants,
+        cost: cost,
+        payout: payout
     };
 
     const newRequest = new LessonRequest(submissionData);
@@ -61,16 +70,6 @@ router.get("/getRequest", passport.authenticate('tutor', { session: false }), (r
     .catch(err => console.log(err))
 });
 
-//May need to make for tutor and student
-router.get("/lessonByID", (req, res) => {
-    const { lessonID } = req.query;
-
-    Lesson.findOne({ _id: lessonID })
-    .then(doc => {
-        res.json(doc);
-    })
-    .catch(err => console.log(err))
-});
 
 router.get("/user/lessonByID", passport.authenticate('user', { session: false }), (req, res) => {
     
@@ -238,10 +237,13 @@ router.post("/setLessonFromConfirm", passport.authenticate('user', { session: fa
             subject: del.subject,
             tutorName: del.tutorName,
             studentName: del.studentName,
-            type: "SINGLE_SINGLE",
+            type: del.type,
             studentEmail: del.studentEmail,
             tutorEmail: del.tutorEmail,
-            description: del.description
+            description: del.description,
+            payout: del.payout,
+            otherStudentIDs: del.otherStudentIDs,
+            otherStudentEmails: del.otherStudentEmails
         }
 
         const lesson = new Lesson(lessonProto);

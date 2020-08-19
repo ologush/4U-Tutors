@@ -36,6 +36,22 @@ const lessonConfirmSchema = new Schema({
     tutorEmail: {
         type: String,
         required: true
+    },
+    cost: {
+        type: Number,
+        required: true
+    },
+    otherStudentIDs: {
+        type: Array,
+        required: true
+    },
+    otherStudentEmails: {
+        type: Array,
+        required: true
+    },
+    payout: {
+        type: Number,
+        required: true
     }
 });
 

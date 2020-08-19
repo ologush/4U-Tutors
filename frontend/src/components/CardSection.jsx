@@ -5,12 +5,12 @@ const CARD_ELEMENT_OPTIONS = {
     hidePostalCode: true,   //should remove needing to enter a postal code
     style: {
         base: {
-            color: "#32325d",
+            color: "#ffffff",
             fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
             fontSmoothing: "antialiased",
             fontSize: "16px",
             "::placeholder": {
-                color: "#aab7c4"
+                color: "#ffffff"
             },
         },
         invalid: {

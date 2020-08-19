@@ -77,11 +77,15 @@ function Request(props) {
             subject: request.course,
             tutorName: user.name,
             studentName: request.studentName,
-            type: "SINGLE_SINGLE",
+            type: request.type,
             studentEmail: request.studentEmail,
             tutorEmail: request.tutorEmail,
             requestID: requestID,
-            description: request.description
+            description: request.description,
+            cost: request.cost,
+            payout: request.payout,
+            otherStudentIDs: request.otherStudentIDs,
+            otherStudentEmails: request.otherStudentEmails,
         };
 
         console.log(request.subject)

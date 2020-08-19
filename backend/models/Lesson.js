@@ -52,6 +52,14 @@ const lessonSchema = new Schema({
     description: {
         type: String,
         required: true
+    },
+    otherStudentEmails: {
+        type: Array,
+        required: true
+    },
+    payout: {
+        type: Number,
+        required: true
     }
 });
 

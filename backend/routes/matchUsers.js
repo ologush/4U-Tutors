@@ -16,6 +16,10 @@ router.post('/addPosting', passport.authenticate('user', { session: false }),  (
     User.findOne({ _id: req.body.studentID })
         .then(user => {
             if(user) {
+                
+                let cost = req.body.numberOfParticipants * 25;
+                cost = cost - (req.body.numberOfParticipants - 1) * 5;
+
                 const newPosting = new Posting({
                     studentID: req.body.studentID,
                     course: req.body.course,
@@ -29,7 +33,8 @@ router.post('/addPosting', passport.authenticate('user', { session: false }),  (
                     otherStudentIDs: req.body.otherStudentIDs,
                     numberOfParticipants: req.body.numberOfParticipants,
                     numberOfRecurringLessons: req.body.numberOfRecurringLessons,
-                    otherStudentEmails: req.body.otherStudentEmails
+                    otherStudentEmails: req.body.otherStudentEmails,
+                    cost: cost
                 });
 
                 newPosting
@@ -214,8 +219,9 @@ router.post('/getBids', passport.authenticate('user', { session: false}), (req, 
         .catch(err => console.log(err))
 });
 
-//May need to secure, not sure yet
-router.get('/postingByID', (req, res) => {
+
+
+router.get('/user/postingByID', passport.authenticate('user', { session: false }), (req, res) => {
     const { postingID } = req.query;
 
     Posting.findOne({ _id: postingID })
@@ -226,10 +232,8 @@ router.get('/postingByID', (req, res) => {
             res.status(404).json({error: "No posting found with that ID"})
         }
     })
-    .catch(err => console.log(err))
 });
-
-router.get('/user/postingByID', passport.authenticate('user', { session: false }), (req, res) => {
+router.get("/tutor/postingByID", passport.authenticate('tutor', { session: false}), (req, res) => {
     const { postingID } = req.query;
 
     Posting.findOne({ _id: postingID })

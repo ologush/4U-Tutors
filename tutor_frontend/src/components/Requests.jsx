@@ -55,24 +55,14 @@ function Requests(props) {
                 !noRequests ? (
                     requests.map((request, index) => (
                         <Grid item xs={4}>
-                            {/* <Paper>
-                                <Typography variant="h6">Name: {request.studentName}</Typography>
-                                <br />
-                                <Typography variant="h6">Course: {request.course} </Typography>
-                                <br />
-                                <Typography variant="body1">Description: {request.description} </Typography>
-    
-                                <br />
-    
-                                <Button onClick={() => enterRequest(request._id)}>Enter Booking</Button>
-                                <Button onClick={() => declineRequest(request._id)}>Decline Request</Button>
-                                
-                            </Paper> */}
+                            
                             <RequestCard 
                                 course={request.course}
                                 description={request.description}
                                 decline={() => declineRequest(request._id)}
                                 enterRequest={() => enterRequest(request._id)}
+                                type={request.type}
+                                payout={request.payout}
                             />
                         </Grid>
                     ))

@@ -37,6 +37,30 @@ const lessonRequestSchema = new Schema({
     description: {
         type: String,
         required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    otherStudentEmails: {
+        type: Array,
+        required: true
+    },
+    otherStudentIDs: {
+        type: Array,
+        required: true
+    },
+    numberOfParticipants: {
+        type: Number,
+        required: true
+    },
+    cost: {
+        type: Number,
+        required: true
+    },
+    payout: {
+        type: Number,
+        required: true
     }
 });
 

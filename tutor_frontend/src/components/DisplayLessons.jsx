@@ -18,7 +18,8 @@ class DisplayLessons extends Component {
         super();
 
         this.state = {
-            lessons: []
+            lessons: [],
+            lessonEmpty: true
         };
 
         this.enterLesson = this.enterLesson.bind(this);
@@ -29,10 +30,13 @@ class DisplayLessons extends Component {
         axios
             .post("/tutors/getLessons", {tutorID: this.props.auth.user.id})
             .then(res => {
-                console.log(res.data);
-                this.setState({
-                    lessons: res.data
-                });
+                
+                if(res.data.length > 0) {
+                    this.setState({
+                        lessons: res.data,
+                        lessonEmpty: false
+                    });
+                } 
             })
             .catch(err => console.log(err));
     }
@@ -53,7 +57,6 @@ class DisplayLessons extends Component {
             this.props.history.push('/videoChat/' + lessonID);
         })
         .catch(err => {
-            console.log(err)
             this.props.history.push('/videoChat/' + lessonID);
         });
 
@@ -64,6 +67,7 @@ class DisplayLessons extends Component {
         return(
             <Grid container spacing={4}>
                 {
+                    !this.state.lessonEmpty ? (
                     this.state.lessons.map((lesson, index) => (
                         <Grid item xs={6}>
                             <LessonDisplay
@@ -73,7 +77,9 @@ class DisplayLessons extends Component {
                                 onClick={() => this.enterLesson(lesson._id, index)}
                             />
                         </Grid>
-                    ))
+                    )) ) : (
+                        <Typography variant="h5">You have no lessons, go to the find postings page to start booking lessons</Typography>
+                    )
                 }
             </Grid>
         );

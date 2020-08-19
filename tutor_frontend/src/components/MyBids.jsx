@@ -23,13 +23,19 @@ function MyBids(props) {
     const [user, setUser] = useState(useSelector(state => state.auth.user));
     const [bids, setBids] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [hasBids, setHasBids] = useState(false);
 
     useEffect(() => {
         axios
         .get("/tutors/getBids", { params: { tutorID: user.id}})
         .then(res => {
-            setBids(res.data);
-            setLoading(false);
+            if(res.data.length > 0) {
+                setBids(res.data);
+                setHasBids(true);
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
         })
         .catch(err => console.log(err))
     }, []);
@@ -55,14 +61,6 @@ function MyBids(props) {
                         bids.map((bid, index) => {
                             const date = new Date(bid.date);
                             const dateString = date.toLocaleDateString("en-US", dateOptions) + " " + date.toLocaleTimeString("en-US", timeOptions);
-
-                            // return(
-                            //     <Grid item xs={4}>
-                            //         <Typography variant="h4">Need to update the bid schema to add more relevant information</Typography>
-                            //         <Typography variant="h4">{date.toLocaleDateString("en-US", dateOptions)} {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
-                            //         <Button variant="contained" color="secondary" onClick={() => deleteBid(bid._id)}>Delete</Button>
-                            //     </Grid>
-                            // )
                             return (
                                 <Grid item xs={4}>
                                 <Bid
@@ -74,6 +72,7 @@ function MyBids(props) {
                                 </Grid>
                             )
                         })
+                        //!hasBids && <Typography variant="h5">You have not bidded on a lesson, go to the postings page to get started</Typography>
                     }
                 </Grid>
             )

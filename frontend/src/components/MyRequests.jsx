@@ -29,7 +29,7 @@ function MyRequests(props) {
 
     const cancelRequest = (requestID) => {
         axios
-        .post("/lessons/cancelRequest", { requestID: requestID })
+        .post("/lesson/cancelRequest", { requestID: requestID })
         .then(res => {
             window.location.reload();
         })

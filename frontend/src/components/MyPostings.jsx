@@ -14,95 +14,27 @@ import Grid from "@material-ui/core/Grid"
 
 import Posting from "./Posting";
 
-// class MyPostings extends Component {
-//     constructor() {
-//         super();
 
-//         this.state = {
-//             postings: []
-//         };
-
-//         this.handleDelete = this.handleDelete.bind(this);
-        
-//     }
-
-//     componentWillMount() {
-
-//         axios
-//             .post("/users/getPostings", { studentID: this.props.auth.user.id})
-//             .then(res => {
-//                 console.log(res.data);
-//                 this.setState({
-//                     postings: res.data
-//                 });
-//             })
-//             .catch(err => console.log(err))
-            
-//     }
-
-//     handleDelete(e) {
-
-        
-//         axios
-//             .post("/users/deletePosting", { postingID: this.state.postings[e.target.id]._id} )
-//             .then(res => {
-//                 window.location.reload();
-//             })
-//             .catch(err => console.log(err));
-//     }
-
-//     handleEdit(postingID) {
-//         window.location.href = "/editPosting/" + postingID;
-//     }
-
-    
-
-
-//     render() {
-//         return(
-//             <div>
-//                 <Typography variant="h1">This is your postings page</Typography>
-//                 {this.state.postings.map((posting, index) => (
-//                     <div>
-//                         {console.log(this.state.postings)}
-//                         <Typography variant="h2">Course: {posting.course}</Typography>
-//                         <Typography variant="h2">Tags: {posting.tags}</Typography>
-//                         <Typography variant="h2">Description: {posting.description}</Typography>
-//                         <Typography variant="h2">Year: {posting.year}</Typography>
-//                         <button id={index} name="delete" onClick={this.handleDelete}>Delete</button>
-//                         <Link to={{
-//                             pathname: "/makePosting",
-//                             posting: this.state.postings[index]
-//                         }}>
-//                             <button id={index} name="edit">Edit</button>
-//                         </Link>
-//                         <Button onClick={() => this.props.history.push("/editPosting/" + posting._id)}>Edit</Button>
-//                         <Link to={{
-//                             pathname: "/selectBid/" + this.state.postings[index]._id
-//                         }}>
-//                             <button id={index} name="bids">Select Bid</button>
-//                         </Link>
-                        
-//                     </div>
-//                 ))}
-//             </div>
-//         );
-//     }
-// }
 
 function MyPostings(props) {
     
     const [postings, setPostings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(useSelector(state => state.auth.user));
+    const [hasPostings, setHasPostings] = useState(false);
 
     useEffect(() => {
         axios
         .post("/users/getPostings", { studentID: user.id})
         .then(res => {
-            console.log(res.data);
-            setPostings(res.data);
-            setLoading(false);
+            if(res.data.length > 0) {
+                console.log(res.data)
+                setPostings(res.data);
+                setHasPostings(true);
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
         })
         .catch(err => console.log(err))
     }, []);
@@ -143,6 +75,7 @@ function MyPostings(props) {
                             </Grid>
                         )
                     })
+                    //!hasPostings && <Typography variant="h5">You have no postings, go to the my postings page to get started</Typography>
                 ) : (
                     <Typography variant="h5">Loading...</Typography>
                 )

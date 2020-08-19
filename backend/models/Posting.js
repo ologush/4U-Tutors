@@ -53,6 +53,10 @@ const postingSchema = new Schema({
     },
     otherStudentEmails: {
         type: Array
+    },
+    cost: {
+        type: Number,
+        required: true
     }
 });
 

@@ -296,7 +296,11 @@ router.post("/acceptRequest", passport.authenticate('tutor', { session: false })
         studentName: req.body.studentName,
         type: req.body.type,
         tutorEmail: req.body.tutorEmail,
-        description: req.body.description
+        description: req.body.description,
+        cost: req.body.cost,
+        payout: req.body.payout,
+        otherStudentIDs: req.body.otherStudentIDs,
+        otherStudentEmails: req.body.otherStudentEmails
     };
 
     console.log(submissionData);
