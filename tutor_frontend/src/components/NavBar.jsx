@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
     appBarShift: {
         width: `calc(100% - ${drawerWidth}px)`,
-        marginLEft: drawerWidth,
+        marginLeft: drawerWidth,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
@@ -75,7 +75,7 @@ function NavBar(props) {
     const onLogoutClick = (e) => {
         e.preventDefault();
         props.logoutUser();
-        window.location.href = "http://localhost:4000"
+        props.history.push("/")
     };
 
     const handleAccountMenu = (e) => {
@@ -155,7 +155,7 @@ function NavBar(props) {
                                 >
                                     {
                                         accountOptions.map((option) => (
-                                            <MenuItem id={option} key={option} slected={option === "Pyxis"} onClick={handleClose}>
+                                            <MenuItem id={option} key={option} selected={option === "Pyxis"} onClick={handleClose}>
                                                 {option}
                                             </MenuItem>
                                         ))

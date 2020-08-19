@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TutorFinder from "./TutorFinder"
 import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
@@ -7,6 +7,7 @@ import MultipleDateTimePicker from "./MultipleDateTimePicker"
 import Grid from "@material-ui/core/Grid"
 import axios from "axios"
 import { useSelector } from "react-redux"
+import Typography from "@material-ui/core/Typography"
 
 function LessonRequest(props) {
 
@@ -14,7 +15,9 @@ function LessonRequest(props) {
     const [description, setDescription] = useState("");
     const [course, setCourse] = useState("");
     const [dates, setDates] = useState([]);
-    const [user, setUser] = useState(useSelector(state => state.auth.user))
+    const [user, setUser] = useState(useSelector(state => state.auth.user));
+    const [loading, setLoading] = useState(true);
+    const [fromPastLesson, setFromPastLesson] = useState(false);
 
     const addTutor = (tutorToAdd) => {
         setTutor(tutorToAdd)
@@ -29,10 +32,30 @@ function LessonRequest(props) {
     const removeDate = (dateToRemove) => {
         setDates(prevState => {
             return prevState.filter(date => {
-                return dateToRemove != date;
+                return dateToRemove.valueOf() != date.valueOf();
             });
         });
     }
+
+    useEffect(() => {
+        if(props.match.params.tutorID) {
+            const { tutorID } = props.match.params;
+            
+
+            axios
+            .get("/users/getTutorByID", { params: { tutorID: tutorID } })
+            .then(res => {
+                console.log(res.data)
+                setFromPastLesson(true);
+                setTutor(res.data);
+                setLoading(false);
+                
+            })
+            .catch(err => console.log(err));
+        } else {
+            setLoading(false);
+        }
+    }, [])
 
     const sendRequest = () => {
         const data = {
@@ -57,32 +80,48 @@ function LessonRequest(props) {
         .catch(err => console.log(err))
     }
 
+    
+
     return(
-        <Grid container>
-            <Grid item xs={4}>
-                <TutorFinder onEnter={addTutor} />
-            </Grid>
-            <Grid item xs={4}>
-                <Paper>
-                <TextField label="Course" onChange={(e) => setCourse(e.target.value)} value={course} />
+        <div>
+        {
+            !loading ? (
+                <Grid container spacing={2} direction="column">
+            <Grid item container xs={12} spacing={2}>
+                <Grid item xs={4}>
+                    <Paper>
+                        <TutorFinder onEnter={addTutor} fromPastLesson={fromPastLesson} existingEmail={tutor.email} />
+                    </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                    <Paper>
+                        <TextField label="Course" onChange={(e) => setCourse(e.target.value)} value={course} />
 
-                <br />
-                <br />
+                        <br />
+                        <br />
 
-                <TextField label="Description" onChange={(e) => setDescription(e.target.value)} value={description} />
-                </Paper>
+                        <TextField label="Description" fullWidth multiline rows={6} onChange={(e) => setDescription(e.target.value)} value={description} />
+                    </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                    <Paper>
+                        <MultipleDateTimePicker 
+                            addDate={addDate}
+                            removeDate={removeDate}
+                            alreadySelectedDates={dates}
+                        />
+                    </Paper>
+                </Grid>
             </Grid>
-            <Grid item xs={4}>
-                <Paper>
-                    <MultipleDateTimePicker
-                        addDate={addDate}
-                        removeDate={removeDate}
-                        alreadySelectedDates={dates}
-                    />
-                </Paper>
+            <Grid item xs={12}>
+                <Button fullWidth variant="contained" onClick={sendRequest}>Submit Request</Button>
             </Grid>
-            <Button onClick={sendRequest}>Submit Request</Button>
-        </Grid>
+        </Grid> 
+            ) : (
+                <Typography variant="h5">Loading...</Typography>
+            )
+        }
+        </div>
     )
 }
 

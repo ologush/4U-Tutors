@@ -13,6 +13,9 @@ const Posting = require('../models/Posting');
 const PastLesson = require("../models/PastLesson");
 const LessonRequest = require("../models/LessonRequest");
 const LessonConfirm = require('../models/LessonConfirm');
+const TutorFeedback = require('../models/TutorFeedback');
+const Complaint = require('../models/Complaint');
+const Tutor = require('../models/Tutor');
 
 
 router.post('/register', (req, res) => {
@@ -146,16 +149,54 @@ router.post('/findUserByEmail', passport.authenticate('user', { session: false})
 })
 
 router.get("/getPastLessons", passport.authenticate('user', { session: false }), (req, res) => {
-  PastLesson.find({ studentID: req.query.studentID })
-    .then(docs => {
-      if(docs) {
-        return res.json(docs)
-      } else {
-        return res.status(400).json({ noPastLessons: "You have no past lessons"})
-      }
-    })
-    .catch(err => console.log(err))
+  TutorFeedback.find({ studentID: req.query.studentID})
+  .then(docs => {
+    res.json(docs);
+  })
+  .catch(err => console.log(err))
 });
+
+router.get("/getPastLessonByID", passport.authenticate('user', { session: false } ), (req, res) => {
+  const { pastLessonID } = req.query;
+
+  TutorFeedback.findOne({ _id: pastLessonID })
+  .then(doc => {
+    res.json(doc);
+  })
+  .catch(err => console.log(err));
+});
+
+router.post("/submitComplaint", passport.authenticate('user', { session: false} ), (req, res) => {
+
+  const submissionData = {
+    tutorID: req.body.tutorID,
+    studentID: req.body.studentID,
+    studentEmail: req.body.studentEmail,
+    tutorEmail: req.body.tutorEmail,
+    complaintType: req.body.complaintType,
+    complaint: req.body.complaint,
+    pastLessonID: req.body.pastLessonID
+  };
+
+  const complaint = new Complaint(submissionData);
+
+  complaint
+  .save()
+  .then(save => {
+    res.status(200).json({ complaintSuccessfull: "The complaint was submitted successfully" });
+  })
+  .catch(err => console.log(err));
+
+});
+
+router.get("/getComplaints", passport.authenticate('user', { session: false }), (req, res) => {
+  const { studentID } = req.query;
+  Complaint.find({ studentID: studentID})
+  .then(docs => {
+    res.json(docs);
+  })
+  .catch(err => console.log(err))
+})
 
 router.get("/getRequests", passport.authenticate('user', { session: false }), (req, res) => {
   
@@ -214,5 +255,14 @@ router.get("/pendingPayments", passport.authenticate('user', { session: false })
   })
   .catch(err => console.log(err))
 });
+
+router.get("/getTutorByID", passport.authenticate('user', { session: false }), (req, res) => {
+  const { tutorID } = req.query;
+  Tutor.findOne({ _id: tutorID })
+  .then(doc => {
+    res.json(doc);
+  })
+  .catch(err => console.log(err));
+})
 
 module.exports = router;

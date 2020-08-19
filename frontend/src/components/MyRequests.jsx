@@ -11,6 +11,7 @@ function MyRequests(props) {
     const [loading, setLoading] = useState(true);
     const [requests, setRequests] = useState([]);
     const [user, setUser] = useState(useSelector(state => state.auth.user));
+    const [requestsEmpty, setRequestsEmpty] = useState(false);
 
     useEffect(() => {
         axios
@@ -19,7 +20,11 @@ function MyRequests(props) {
             setRequests(res.data);
             setLoading(false);
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log('damn')
+            setLoading(false);
+            setRequestsEmpty(true);
+        })
     }, []);
 
     const cancelRequest = (requestID) => {
@@ -31,30 +36,42 @@ function MyRequests(props) {
         .catch(err => console.log(err));
     }
 
+    let display;
+
+    if(!requestsEmpty) {
+        display = 
+        (<Grid container spacing={2}>
+        {requests.map(request => 
+
+            (
+                <Grid item xs={4}>
+                    <RequestCard 
+                        course={request.course}
+                        description={request.description}
+                        times={request.availableTimes}
+                        tutorName={request.tutorName}
+                        tutorEmail={request.tutorEmail}
+                        onCancel={() => cancelRequest(request._id)}
+                    />
+                </Grid>
+            ))}
+            </Grid>)
+        
+    } else {
+        display = <Typography variant="h5">No Pending Requests</Typography>
+    }
+
     return (
-        <Grid container spacing={2}>
+        <div>
         {
             !loading ? (
-                requests.map(request => {
-
-                    return (
-                        <Grid item xs={4}>
-                            <RequestCard 
-                                course={request.course}
-                                description={request.description}
-                                times={request.availableTimes}
-                                tutorName={request.tutorName}
-                                tutorEmail={request.tutorEmail}
-                                onCancel={() => cancelRequest(request._id)}
-                            />
-                        </Grid>
-                    )
-                })
+                display
+                
             ) : (
                 <Typography variant="h5">Loading...</Typography>
             )
         }
-        </Grid>
+        </div>
     )
 }
 

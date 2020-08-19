@@ -5,15 +5,19 @@ import PastLesson from "./PastLesson"
 import { useSelector } from 'react-redux'
 import Typography from "@material-ui/core/Typography"
 
+const timeOptions = { hour: "numeric", minute: "numeric"}
+const dateOptions = { weekday: "long", month: "long", day: "numeric"}
+
 function PastLessons(props) {
 
-    const user = useSelector(state => state.auth.user._id);
+    //const user = useSelector(state => state.auth.user._id);
+    const [user, setUser] = useState(useSelector(state => state.auth.user));
     const [pastLessons, setPastLessons] = useState([]);
     const [hasPastLessons, setHasPastLessons] = useState(false);
 
     useEffect(() => {
         axios
-            .get("users/getPastLessons", { studentID: user})
+            .get("/users/getPastLessons", { params: { studentID: user.id } })
             .then(res => {
                 if(res.data.length > 0) {
                     setPastLessons(res.data);
@@ -23,8 +27,8 @@ function PastLessons(props) {
             .catch(err => console.log(err))
     }, []);
 
-    const onRequest = (id) => {
-        window.location.href = "/request/" + id
+    const onRequest = (tutorID) => {
+        window.location.href = "/request/" + tutorID;
     };
 
     const complain = (id) => {
@@ -36,18 +40,24 @@ function PastLessons(props) {
 
     return(
         hasPastLessons ? (
-            <Grid container>
+            <Grid container spacing={2}>
             {
-                pastLessons.map((lesson, index) => (
-                    <Grid item xs={4}>
-                        <PastLesson 
-                            tutorName={lesson.tutorName}
-                            date={lesson.date}
-                            onRequest={() => onRequest(lesson._id)}
-                            complain={() => complain(lesson._id)}
-                        />
-                    </Grid>
-                ))
+                pastLessons.map((lesson, index) => {
+                    const date = new Date(lesson.date);
+                    const dateString = date.toLocaleDateString("en-CA", dateOptions) + ", " + date.toLocaleTimeString("en-CA", timeOptions);
+                    return (
+                        <Grid item xs={4}>
+                            <PastLesson 
+                                tutorEmail={lesson.tutorEmail}
+                                date={dateString}
+                                onRequest={() => onRequest(lesson.tutorID)}
+                                complain={() => complain(lesson._id)}
+                            />
+                        </Grid>
+                    )
+
+                    
+                })
             }
             </Grid>
         ) : (

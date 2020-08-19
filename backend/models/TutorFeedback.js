@@ -25,6 +25,14 @@ const tutorFeedbackSchema = new Schema({
     date: {
         type: Date,
         required: true
+    },
+    studentID: {
+        type: String,
+        required: true
+    },
+    tutorEmail: {
+        type: String,
+        required: true
     }
 });
 

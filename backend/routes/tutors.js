@@ -140,7 +140,9 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                     rating: req.body.rating,
                     description: lesson.description,
                     course: lesson.subject,
-                    date: lesson.dateAndTime
+                    date: lesson.dateAndTime,
+                    studentID: lesson.studentID,
+                    tutorEmail: lesson.tutorEmail
                 }
 
                 if(req.body.feedback) {

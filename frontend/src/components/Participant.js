@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 
+import { Player } from "video-react"
+
+import "./VideoStyle.css"
+
+
+
 const Participant = ({ participant }) => {
     const [videoTracks, setVideoTracks] = useState([]);
     const [audioTracks, setAudioTracks] = useState([]);
@@ -54,7 +60,8 @@ const Participant = ({ participant }) => {
     return (
         <div className="participant">
             <h3>{participant.identity}</h3>
-            <video ref={videoRef} autoPlay={true} />
+            <video ref={videoRef} autoPlay={true} className="VideoStyle" />
+            
             <audio ref={audioRef} autoPlay={true} muted={true}/>
         </div>
     );
