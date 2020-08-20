@@ -56,7 +56,6 @@ function Payment(props) {
             if(result.paymentIntent.status === 'succeeded') {
                 console.log('great success');
                 props.onPay();
-                
             }
         }
     }

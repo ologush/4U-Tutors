@@ -135,7 +135,7 @@ function MakePosting(props) {
     const [otherStudentEmails, setOtherStudentEmails] = useState([]);
     const [otherStudentIDs, setOtherStudentIDs] = useState([]);
     const [type, setType] = useState("");
-    const [numberOfParticipants, setNumberOfParticipants] = useState(0);
+    const [numberOfParticipants, setNumberOfParticipants] = useState(1);
     const [availableDates, setAvailableDates] = useState([]);
     const [numberOfRecurringLessons, setNumberOfRecurringLessons] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -255,7 +255,7 @@ function MakePosting(props) {
         axios
         .post("/match/editPosting", submissionData)
         .then(res => {
-            props.history.push('/myPostings');
+           // props.history.push('/myPostings');
         })
         .catch(err => console.log(err))
     }
@@ -298,7 +298,7 @@ function MakePosting(props) {
     }
 
     const addStudent = (student) => {
-        console.log(otherStudentEmails)
+        console.log(otherStudentEmails);
         setOtherStudentEmails(prevState => [...prevState, student.email]);
         setOtherStudentIDs(prevState => [...prevState, student._id]);
     };
@@ -398,7 +398,7 @@ function MakePosting(props) {
 
                 <MultipleDateTimePicker addDate={addDate} removeDate={removeDate} alreadySelectedDates={availableDates} />
 
-                <TextField value={description} onChange={handleDescription} required id="description" label="Description" fullWidth style={{ margin: 8 }} />
+                <TextField value={description} onChange={handleDescription} multiline rows={5} required id="description" label="Description" fullWidth style={{ margin: 8 }} />
 
                 <TextField value={year} onChange={handleYear} required id="year" label="Year" />
 

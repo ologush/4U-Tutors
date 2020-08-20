@@ -33,6 +33,10 @@ const lessonBidSchema = new Schema({
     course: {
         type: String,
         required: true
+    },
+    tutorEmail: {
+        type: String,
+        required: true
     }
 });
 

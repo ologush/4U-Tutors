@@ -104,21 +104,20 @@ function NavBar(props) {
 
     const [auth, setAuth] = useState(useSelector(state => state.auth));
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if(auth.isAuthenticated) {
-            console.log("menu open")
-            props.setMenu(true);
-        } else {
-            console.log("menu closed")
-            props.setMenu(false);
-        }
+    //     if(auth.isAuthenticated) {
+    //         console.log("menu open")
+    //         props.setMenu(true);
+    //     } else {
+    //         console.log("menu closed")
+    //         props.setMenu(false);
+    //     }
 
-    }, [])
+    // }, [])
 
     const onLogoutClick = (e) => {
         e.preventDefault();
-        console.log("navbarlogout")
         props.setMenu(true);
         props.logoutUser();
         //props.history.push("/")
@@ -132,7 +131,7 @@ function NavBar(props) {
     const handleMenu = (e) => {
         console.log(auth);
         setOpenMenu(prev => !prev);
-        
+        props.handleMenu();
     };
 
 
@@ -156,7 +155,7 @@ function NavBar(props) {
         <AppBar 
             position="fixed"
             className={clsx(classes.appBar, {
-                [classes.appBarShift]: auth.isAuthenticated
+                [classes.appBarShift]: openMenu
             })}
         >
             <ToolBar>

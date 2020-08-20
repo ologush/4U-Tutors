@@ -86,6 +86,8 @@ function Request(props) {
             payout: request.payout,
             otherStudentIDs: request.otherStudentIDs,
             otherStudentEmails: request.otherStudentEmails,
+            numberOfParticipants: request.numberOfParticipants,
+            studentEmail: request.studentEmail
         };
 
         console.log(request.subject)

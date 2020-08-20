@@ -52,6 +52,14 @@ const lessonConfirmSchema = new Schema({
     payout: {
         type: Number,
         required: true
+    },
+    numberOfParticipants: {
+        type: Number,
+        required: true
+    },
+    studentEmail: {
+        type: String,
+        required: true
     }
 });
 

@@ -131,8 +131,11 @@ function BookingPage(props) {
             tutorDescription: user.description,
             tutorRating: user.rating,
             description: posting.description,
-            course: posting.course
+            course: posting.course,
+            tutorEmail: user.email
         };
+
+        console.log(submissionData)
 
         axios
         .post("/match/addBid", submissionData)

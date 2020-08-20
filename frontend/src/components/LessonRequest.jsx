@@ -146,8 +146,10 @@ function LessonRequest(props) {
             <Grid item container xs={12} spacing={2}>
                 <Grid item xs={4}>
                     <Paper>
+                        <Typography variant="body1">Enter Tutor Email and press select</Typography>
                         <TutorFinder onEnter={addTutor} fromPastLesson={fromPastLesson} existingEmail={tutor.email} />
 
+                        <Typography variant="body">Select lesson Type</Typography>
                         <Select 
                             onChange={selectType}
                             value={type}

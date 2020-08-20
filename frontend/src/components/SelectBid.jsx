@@ -47,7 +47,8 @@ function SelectBid(props) {
             tutorID: bidSelected.tutorID,
             dateAndTime: bidSelected.date,
             tutorName: bidSelected.tutorName,
-            postingID: bidSelected.postingID
+            postingID: bidSelected.postingID,
+            tutorEmail: bidSelected.tutorEmail
         };
 
         axios

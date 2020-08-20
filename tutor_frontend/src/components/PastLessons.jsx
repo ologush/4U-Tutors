@@ -52,8 +52,8 @@ function PastLessons(props) {
                         </Grid>
                     )
                     
-                }), 
-                !hasPastLessons && <Typography variant="h5">You have no past lessons, book to get started</Typography>
+                })
+                //!hasPastLessons && <Typography variant="h5">You have no past lessons, book to get started</Typography>
             ) : (
                 <Typography variant="h5">Loading...</Typography>
             )

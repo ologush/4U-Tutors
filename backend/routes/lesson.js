@@ -146,7 +146,9 @@ router.post("/student/cancel", passport.authenticate('user', { session: false })
         subject: "Lesson Cancelled"
     }
 
-    Lesson.findOneAndDelete({ _id: req.body.studentID })
+    console.log(req.body.lessonID)
+
+    Lesson.findOneAndDelete({ _id: req.body.lessonID })
     .then(del => {
         studentMessage.to = del.studentEmail;
         studentMessage.text = "You successfully cancelled your lesson with " + del.tutorName + ". Scheduled for " + del.dateAndTime;
@@ -160,8 +162,11 @@ router.post("/student/cancel", passport.authenticate('user', { session: false })
         sgMail.send(tutorMessage)
         .catch(err => console.log(err))
 
+        res.status(200).json({ success: "Delete Successful"})
+
         //Implement a refund aswell
     })
+    .catch(err => console.log(err));
 })
 
 router.post("/tutor/cancel", passport.authenticate('tutor', { session: false }), (req, res) => {
@@ -243,7 +248,8 @@ router.post("/setLessonFromConfirm", passport.authenticate('user', { session: fa
             description: del.description,
             payout: del.payout,
             otherStudentIDs: del.otherStudentIDs,
-            otherStudentEmails: del.otherStudentEmails
+            otherStudentEmails: del.otherStudentEmails,
+            numberOfParticipants: del.numberOfParticipants
         }
 
         const lesson = new Lesson(lessonProto);

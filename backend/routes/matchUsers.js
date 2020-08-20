@@ -20,6 +20,8 @@ router.post('/addPosting', passport.authenticate('user', { session: false }),  (
                 let cost = req.body.numberOfParticipants * 25;
                 cost = cost - (req.body.numberOfParticipants - 1) * 5;
 
+                let payout = req.body.numberOfParticipants * 15 + 5;
+
                 const newPosting = new Posting({
                     studentID: req.body.studentID,
                     course: req.body.course,
@@ -34,7 +36,10 @@ router.post('/addPosting', passport.authenticate('user', { session: false }),  (
                     numberOfParticipants: req.body.numberOfParticipants,
                     numberOfRecurringLessons: req.body.numberOfRecurringLessons,
                     otherStudentEmails: req.body.otherStudentEmails,
-                    cost: cost
+                    cost: cost,
+                    payout: payout,
+                    otherStudentEmails: req.body.otherSTudentEmails,
+                    studentEmail: user.email
                 });
 
                 newPosting
@@ -51,6 +56,10 @@ router.post('/addPosting', passport.authenticate('user', { session: false }),  (
 });
 
 router.post("/editPosting", passport.authenticate('user', { session: false }), (req, res) => {
+    //May need to add stuff to properly edit posting
+
+    const cost = req.body.numberOfParticipants * 20 + 5;
+    const payout = req.body.numberOfParticipants * 15 + 5;
 
     const update = {
         studentID: req.body.studentID,
@@ -64,9 +73,12 @@ router.post("/editPosting", passport.authenticate('user', { session: false }), (
         datePosted: req.body.datePosted,
         otherStudentIDs: req.body.otherStudentIDs,
         numberOfParticipants: req.body.numberOfParticipants,
-        numberOfRecurringLessons: req.body.numberOfRecurringLessons
+        numberOfRecurringLessons: req.body.numberOfRecurringLessons,
+        otherStudentEmails: req.body.otherStudentEmails,
+        cost: cost,
+        payout: payout
     };
-    Posting.findOneAndUpdate({ _id: req.body.postingID }, update, { new: true})
+    Posting.findOneAndUpdate({ _id: req.body.postingID }, update, { new: true })
         .then(doc => {
             res.json(doc);
         })
@@ -79,8 +91,6 @@ router.post('/getPostingsByTags', passport.authenticate('tutor', { session: fals
     
 
     Posting.find({ infoTags: { $in: tags}})
-        //.skip(req.body.amountPerSet * req.body.setNumber)
-        //.limit(req.body.amountPerSet)
         .then(docs => {
             return res.json(docs);
         })
@@ -149,6 +159,8 @@ router.post('/setMatch', (req, res) => {
 });
 
 router.post('/addBid', passport.authenticate('tutor', { session: false }), (req, res) => {
+    
+    console.log(req.body.tutorEmail)
     let newBid = new LessonBid({
         postingID: req.body.postingID,
         tutorID: req.body.tutorID,
@@ -157,7 +169,8 @@ router.post('/addBid', passport.authenticate('tutor', { session: false }), (req,
         tutorName: req.body.tutorName,
         date: req.body.date,
         description: req.body.description,
-        course: req.body.course
+        course: req.body.course,
+        tutorEmail: req.body.tutorEmail
     });
 
     newBid
@@ -179,7 +192,13 @@ router.post('/selectBid', passport.authenticate('user', { session: false }), (re
                 studentName: posting.studentName,
                 type: posting.type,
                 dateCreated: Date.now(),
-                description: posting.description
+                description: posting.description,
+                payout: posting.payout,
+                otherStudentEmails: posting.otherStudentEmails,
+                otherStudentIDs: posting.otherStudentIDs,
+                studentEmail: posting.studentEmail,
+                tutorEmail: req.body.tutorEmail,
+                numberOfParticipants: posting.numberOfParticipants
             };
 
             console.log(newLessonProto)

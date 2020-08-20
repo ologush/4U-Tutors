@@ -17,6 +17,10 @@ const PendingPaymentSchema = new Schema({
     lessonID: {
         type: String,
         required: true
+    },
+    payoutAmount: {
+        type: Number,
+        requred: true
     }
 });
 

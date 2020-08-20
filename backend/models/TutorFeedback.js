@@ -33,6 +33,10 @@ const tutorFeedbackSchema = new Schema({
     tutorEmail: {
         type: String,
         required: true
+    },
+    lessonID: {
+        type: String,
+        required: true
     }
 });
 

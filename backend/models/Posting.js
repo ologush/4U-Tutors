@@ -6,6 +6,10 @@ const postingSchema = new Schema({
         type: String,
         required: true
     },
+    studentEmail : {
+        type: String,
+        required: true
+    },
     course: {
         type: String,
         required: true
@@ -55,6 +59,10 @@ const postingSchema = new Schema({
         type: Array
     },
     cost: {
+        type: Number,
+        required: true
+    },
+    payout: {
         type: Number,
         required: true
     }

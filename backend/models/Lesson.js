@@ -44,10 +44,12 @@ const lessonSchema = new Schema({
         required: false
     },
     studentEmail: {
-        type: String
+        type: String,
+        required: true
     },
     tutorEmail: {
-        type: String
+        type: String,
+        required: true
     },
     description: {
         type: String,
@@ -58,6 +60,10 @@ const lessonSchema = new Schema({
         required: true
     },
     payout: {
+        type: Number,
+        required: true
+    },
+    numberOfParticipants: {
         type: Number,
         required: true
     }

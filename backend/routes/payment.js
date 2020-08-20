@@ -106,19 +106,29 @@ router.post("/addPendingPayment", passport.authenticate('tutor', { session: fals
             Tutor.findOne({ _id: req.body.tutorID })
             .then(tutor => {
                 const { stripeID } = tutor;
-                const pendingProto = {
+                let pendingProto = {
                     tutorID: req.body.tutorID,
                     tutorEmail: req.body.tutorEmail,
                     stripeID: stripeID,
                     lessonID: req.body.lessonID
                 }
-                const pending = new PendingPayment(pendingProto);
-                pending
-                .save()
-                .then(save => {
-                    res.status(200).json({ success: true });
+
+                Lesson.findOne({ _id: req.body.lessonID})
+                .then(lesson => {
+                    pendingProto.payoutAmount = lesson.payout;
+
+                    const pending = new PendingPayment(pendingProto);
+                    pending
+                    .save()
+                    .then(save => {
+                        res.status(200).json({ success: true });
+                    })
+                    .catch(err => console.log(err));
+
                 })
                 .catch(err => console.log(err));
+
+                
             })
             .catch(err => console.log(err))
         } else {

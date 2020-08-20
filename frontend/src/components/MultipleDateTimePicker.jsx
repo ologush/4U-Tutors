@@ -17,90 +17,7 @@ import { createMuiTheme } from "@material-ui/core"
 const dateOptions = { weekday: "long", month: "long", day: "numeric" };
 const timeOptions = { hour: 'numeric', minute: 'numeric' };
 
-// class MultipleDateTimePicker extends Component {
-//     constructor(props) {
-//         super(props);
-//         console.log(this.props.alreadySelectedDates);
-//         let dates = [];
-//         this.props.alreadySelectedDates.forEach((value, index) => {
-//             dates.push(new Date(value));
-//         });
-//         this.state = {
-//             currentDate: new Date(),
-//             selectedDates: dates
-//         }
 
-//         console.log(this.state.selectedDates);
-
-//         this.handleDate = this.handleDate.bind(this);
-//         this.addDate = this.addDate.bind(this);
-//         this.removeDate = this.removeDate.bind(this);
-//     }
-
-//     handleDate(e) {
-
-//         console.log(e);
-//         this.setState({
-//             currentDate: e
-//         });
-//     }
-
-//     addDate(e) {
-//         let dateToAdd = new Date(this.state.currentDate);
-
-//         dateToAdd.setMilliseconds(0);
-//         dateToAdd.setSeconds(0);
-        
-
-//         if(this.state.selectedDates.includes(dateToAdd)) {
-//             //Date has already been added, show a message
-//         } else {
-//             this.setState(prevState => ({
-//                 selectedDates: [...prevState.selectedDates, dateToAdd]
-//             }));
-//         }
-//         this.props.addDate(dateToAdd);
-//     }
-    
-//     removeDate(dateToRemove) {
-//         //e.preventDefault();
-//         //const dateToRemove = e.target.id;
-
-//         this.setState(prevState => ({
-//             selectedDates: prevState.selectedDates.filter(date => {
-//                 return dateToRemove != date;
-//             })
-//         }));
-//         this.props.removeDate(dateToRemove);
-//     }
-
-//     render() {
-//         return(
-//             <div>
-//                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-//                     <DateTimePicker onChange={this.handleDate} minDate={addDate(Date.now(), {days: 1})} maxDate={addDate(Date.now(), {weeks: 2, days: 1})} value={this.state.currentDate} />
-//                     <Button onClick={this.addDate}>Add</Button>
-//                 </MuiPickersUtilsProvider>
-
-//                 {
-//                     this.state.selectedDates.map((date, index) => (
-//                         <div>
-//                             {console.log(typeof date)}
-
-//                             <Typography variant="h5">{date.toLocaleDateString("en-US", dateOptions)} at {date.toLocaleTimeString("en-US", timeOptions)}</Typography>
-                            
-//                             <IconButton aria-label="delete" size="small" onClick={() => this.removeDate(date)}>
-//                                 <DeleteForeverIcon />
-//                             </IconButton>
-//                         </div>
-//                     ))
-//                 }
-                
-//             </div>
-//         );
-//     }
-
-// }
 
 function MultipleDateTimePicker(props) {
 
@@ -108,7 +25,9 @@ function MultipleDateTimePicker(props) {
     const [selectedDates, setSelectedDates] = useState([]);
 
     const handleDate = (e) => {
+        console.log("date handled")
         setCurrentDate(e);
+        
     };
 
     useEffect(() => {
@@ -121,8 +40,8 @@ function MultipleDateTimePicker(props) {
         setSelectedDates(dates);
     }, []);
 
-    const addDateToArray = (e) => {
-        let dateToAdd = new Date(currentDate);
+    const addDateToArray = (date) => {
+        let dateToAdd = new Date(date);
 
         dateToAdd.setMilliseconds(0);
         dateToAdd.setSeconds(0);
@@ -148,8 +67,8 @@ function MultipleDateTimePicker(props) {
     return (
         <div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <DateTimePicker onChange={handleDate} minDate={addDate(Date.now(), {days:1})} maxDate={addDate(Date.now(), {weeks: 2, days: 1})} value={currentDate} />
-                <Button onClick={addDateToArray}>Add</Button>
+                <DateTimePicker onChange={handleDate} minDate={addDate(Date.now(), {days:1})} maxDate={addDate(Date.now(), {weeks: 2, days: 1})} value={currentDate} onAccept={addDateToArray}/>
+                
             </MuiPickersUtilsProvider>
             {console.log(selectedDates)};
             {

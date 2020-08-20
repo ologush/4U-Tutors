@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 
 import Select from "@material-ui/core/Select"
@@ -11,13 +11,50 @@ import Button from "@material-ui/core/Button"
 
 import axios from "axios"
 
+import { useSelector } from "react-redux"
+
 import PropTypes from "prop-types"
 
 function Feedback(props) {
 
+    const { lessonID } = props.match.params;
+
     const [feedBack, setFeedBack] = useState("");
     const [rating, setRating] = useState(null);
     const [hasSubmitted, setHasSubmitted] = useState(false);
+    const [lesson, setLesson] = useState({});
+    const [user, setUser] = useState(useSelector(state => state.auth.user));
+
+    const [didSubmit, setDidSubmit] = useState(false);
+
+    useEffect(() => {
+        axios
+        .get("/lesson/user/lessonByID", { params: { lessonID: lessonID } })
+        .then(res => {
+            setLesson(res.data);
+        }) 
+        .catch(err => console.log(err))
+
+        //maybe will work if feedback is not submitted
+        // return function noSubmit() {
+        //     alert("did run cleanup")
+        //     if(!didSubmit) {
+        //         const submissionData = {
+        //             lessonID: lessonID,
+        //             rating: null,
+        //             feedback: "",
+        //             studentID: user.id
+        //         };
+
+        //         axios
+        //         .post("/tutors/giveFeedback", submissionData)
+        //         .then(res => {
+        //             alert("fuck")
+        //         })
+        //         .catch(err => console.log(err));
+        //     }
+        // }
+    }, [])
 
     const handleSelect = (e) => {
         setRating(e.target.value);
@@ -28,14 +65,16 @@ function Feedback(props) {
     };
 
     const handleSubmit = (e) => {
-
+        console.log('a')
+        setHasSubmitted(true);
         if(rating == null) {
             alert('You must assign a rating to the tutor')
         } else {
             const submissionData = {
-                lessonID: props.lessonID,
+                lessonID: lessonID,
                 rating: rating,
-                feedback: feedBack
+                feedback: feedBack,
+                studentID: user.id
             }
 
             axios
@@ -43,7 +82,7 @@ function Feedback(props) {
                 .then(res => {
                     console.log(res);
                     setHasSubmitted(true);
-                    props.history.push("/homePage");
+                    props.history.push("/pastLessons")
                 })
                 .catch(err => console.log(err))
         }
@@ -76,8 +115,6 @@ function Feedback(props) {
     
 }
 
-Feedback.propTypes = {
-    lessonID: PropTypes.string.isRequired
-}
+
 
 export default Feedback;

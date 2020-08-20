@@ -47,7 +47,8 @@ class DisplayLessons extends Component {
             tutorID: this.props.auth.user.id,
             tutorEmail: this.props.auth.user.email,
             stripeID: this.props.auth.user.stripeID,
-            lessonID: lessonID
+            lessonID: lessonID,
+
         }
 
         axios
