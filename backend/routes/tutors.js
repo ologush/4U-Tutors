@@ -129,14 +129,12 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
 
     console.log(req.body.lessonID);
 
-    console.log('a');
+   
     //Still gotta update the tutors overall rating
     Lesson.findOne({ _id: req.body.lessonID })
         .then(lesson => {
             if(lesson) {
-                console.log("b");
-                console.log(lesson);
-                console.log("c")
+                
                 const feedbackProto = {
                     tutorID: lesson.tutorID,
                     rating: req.body.rating,
@@ -154,7 +152,7 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                     feedbackProto.feedback = "You recieved no feedback for the lesson"
                 }
 
-                console.log(feedbackProto)
+                
 
                 TutorFeedback.findOne({
                     $and: [
@@ -164,12 +162,12 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                 })
                 .then(doc => {
                     if(!doc) {
-                        console.log("made it")
+                        
                         tutorFeedback = new TutorFeedback(feedbackProto);
                         tutorFeedback.save()
                         .then(feedback => {
                             updateRating(lesson.tutorID);
-                            console.log("saved")
+                      
                             TutorFeedback.find({ lessonID: req.body.lessonID })
                             .then(docs => {
                                 console.log(docs);
@@ -194,14 +192,14 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                         .catch(err => console.log(err))
 
                     } else {
-                        console.log("bitch")
+                        
                         res.status(304).json({alreadySubmitted: "already submitted feedback"});
                     }
                 })
                 .catch(err => console.log(err))
 
             } else {
-                console.log("d")
+                
             }
         })
         .catch(err => console.log(err))
