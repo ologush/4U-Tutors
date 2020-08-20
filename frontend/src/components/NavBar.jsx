@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormGroup from '@material-ui/core/FormGroup'
 import MenuIcon from '@material-ui/icons/Menu'
 import AppBar from '@material-ui/core/AppBar'
-import ToolBar from '@material-ui/core/ToolBar'
+import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountCircle from '@material-ui/icons/AccountCircle'
@@ -158,7 +158,7 @@ function NavBar(props) {
                 [classes.appBarShift]: openMenu
             })}
         >
-            <ToolBar>
+            <Toolbar>
                 <Grid
                     justify="space-between"
                     container
@@ -218,7 +218,7 @@ function NavBar(props) {
                         }
                     </Grid>
                 </Grid>
-            </ToolBar>
+            </Toolbar>
             </AppBar>
     )
 }
