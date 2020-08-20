@@ -37,6 +37,9 @@ function PayForRequest(props) {
             !loading ? (
                 <Payment
                     onPay={onPay}
+                    course={lessonConfirm.subject}
+                    cost={lessonConfirm.cost}
+                    date={new Date(lessonConfirm.dateAndTime)}
                 />
             ) : (
                 <Typography variant="h5">Loading...</Typography>

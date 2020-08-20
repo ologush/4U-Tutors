@@ -14,6 +14,7 @@ function Posting(props) {
                 <Typography variant="h5">Course: {props.course}</Typography>
                 <Typography variant="body1">{props.description}</Typography>
                 <Typography variant="h6">Grade: {props.grade}</Typography>
+                <Typography variant="h6">Type: {props.type}</Typography>
             </CardContent>
             <CardActions>
                 <Button onClick={props.enterBooking} variant="contained">Book a Time</Button>
@@ -26,7 +27,8 @@ Posting.propTypes = {
     course: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     grade: PropTypes.number.isRequired,
-    enterBooking: PropTypes.func.isRequired
+    enterBooking: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired
 }
 
 export default Posting;

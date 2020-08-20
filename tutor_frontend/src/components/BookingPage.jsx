@@ -105,7 +105,7 @@ function BookingPage(props) {
 
     useEffect(() => {
         axios
-        .get("/match/postingByID", { params: { postingID: postingID }})
+        .get("/match/tutor/postingByID", { params: { postingID: postingID }})
         .then(res => {
             setPosting(res.data);
             setHasPosting(true);
@@ -131,8 +131,11 @@ function BookingPage(props) {
             tutorDescription: user.description,
             tutorRating: user.rating,
             description: posting.description,
-            course: posting.course
+            course: posting.course,
+            tutorEmail: user.email
         };
+
+        console.log(submissionData)
 
         axios
         .post("/match/addBid", submissionData)

@@ -127,22 +127,23 @@ router.post('/getLessons', passport.authenticate('tutor', { session: false }), (
 router.post('/giveFeedback', passport.authenticate('user', { session: false }), (req, res) => {
     
 
-    
+    console.log(req.body.lessonID);
 
-    console.log('a');
+   
     //Still gotta update the tutors overall rating
     Lesson.findOne({ _id: req.body.lessonID })
         .then(lesson => {
             if(lesson) {
-                console.log(lesson)
+                
                 const feedbackProto = {
                     tutorID: lesson.tutorID,
                     rating: req.body.rating,
                     description: lesson.description,
                     course: lesson.subject,
                     date: lesson.dateAndTime,
-                    studentID: lesson.studentID,
-                    tutorEmail: lesson.tutorEmail
+                    studentID: req.body.studentID,
+                    tutorEmail: lesson.tutorEmail,
+                    lessonID: lesson._id
                 }
 
                 if(req.body.feedback) {
@@ -151,42 +152,76 @@ router.post('/giveFeedback', passport.authenticate('user', { session: false }), 
                     feedbackProto.feedback = "You recieved no feedback for the lesson"
                 }
 
-                console.log(feedbackProto)
+                
 
-                tutorFeedback = new TutorFeedback(feedbackProto);
+                TutorFeedback.findOne({
+                    $and: [
+                        { studentID: req.body.studentID},
+                        { lessonID: lesson._id}
+                    ]
+                })
+                .then(doc => {
+                    if(!doc) {
+                        
+                        tutorFeedback = new TutorFeedback(feedbackProto);
+                        tutorFeedback.save()
+                        .then(feedback => {
+                            updateRating(lesson.tutorID);
+                      
+                            TutorFeedback.find({ lessonID: req.body.lessonID })
+                            .then(docs => {
+                                console.log(docs);
+                                console.log(docs.length);
+                                console.log(lesson.numberOfParticipants);
+                                if(docs.length == lesson.numberOfParticipants) {
+                                    
+                                    lesson.remove()
+                                    .then(del => {
+                                        res.json(feedback)
+                                    })
+                                    .catch(err => console.log(err));
+                                } else {
+                                    res.json(feedback);
+                                }
+                                
+                            })
+                            .catch(err => console.log(err));
 
-                tutorFeedback.save()
-                .then(feedback => {
-                    updateRating(lesson.tutorID);
-                    lesson.remove();
-                    res.json(feedback);
+                    
+                        })
+                        .catch(err => console.log(err))
+
+                    } else {
+                        
+                        res.status(304).json({alreadySubmitted: "already submitted feedback"});
+                    }
                 })
                 .catch(err => console.log(err))
 
+            } else {
+                
             }
         })
         .catch(err => console.log(err))
 });
 
-router.get("/getFeedback", passport.authenticate("tutor", { session: false }), (req, res) => {
-    const { tutorID } = req.query;
-    console.log(tutorID)
 
-    TutorFeedback.find({ tutorID: tutorID })
-    .then(docs => {
-        res.json(docs)
-    })
-    .catch(err => console.log(err));
-});
 
 function updateRating(tutorID) {
     let rating = 0;
     TutorFeedback.find({ tutorID: tutorID })
     .then(docs => {
+        let len = docs.length;
         docs.forEach(feedback => {
-            rating += feedback.rating;
+            if(rating != null)
+            {
+                rating += feedback.rating;
+            } else {
+                len--;
+            }
+            
         });
-        rating = rating / docs.length;
+        rating = rating / len;
 
         Tutor.findOne({ _id: tutorID })
         .then(tutor => {
@@ -207,6 +242,17 @@ function updateRating(tutorID) {
     })
     .catch(err => console.log(err))
 }
+
+router.get("/getFeedback", passport.authenticate("tutor", { session: false }), (req, res) => {
+    const { tutorID } = req.query;
+    console.log(tutorID)
+
+    TutorFeedback.find({ tutorID: tutorID })
+    .then(docs => {
+        res.json(docs)
+    })
+    .catch(err => console.log(err));
+});
 
 router.get("/unavailableTimes", passport.authenticate('tutor', { session: false }), async (req, res) => {
     const tutorID = req.query.tutorID;
@@ -296,7 +342,13 @@ router.post("/acceptRequest", passport.authenticate('tutor', { session: false })
         studentName: req.body.studentName,
         type: req.body.type,
         tutorEmail: req.body.tutorEmail,
-        description: req.body.description
+        description: req.body.description,
+        cost: req.body.cost,
+        payout: req.body.payout,
+        otherStudentIDs: req.body.otherStudentIDs,
+        otherStudentEmails: req.body.otherStudentEmails,
+        numberOfParticipants: req.body.numberOfParticipants,
+        studentEmail: req.body.studentEmail
     };
 
     console.log(submissionData);

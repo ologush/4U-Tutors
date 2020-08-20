@@ -18,6 +18,7 @@ import { Link, withRouter } from 'react-router-dom'
 import Menu from "./Menu"
 import { Menu as AccountMenu } from "@material-ui/core" 
 import clsx from "clsx"
+import Button from "@material-ui/core/Button"
 
 const accountOptions = [
     "Account Settings",
@@ -103,21 +104,20 @@ function NavBar(props) {
 
     const [auth, setAuth] = useState(useSelector(state => state.auth));
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if(auth.isAuthenticated) {
-            console.log("menu open")
-            props.setMenu(true);
-        } else {
-            console.log("menu closed")
-            props.setMenu(false);
-        }
+    //     if(auth.isAuthenticated) {
+    //         console.log("menu open")
+    //         props.setMenu(true);
+    //     } else {
+    //         console.log("menu closed")
+    //         props.setMenu(false);
+    //     }
 
-    }, [])
+    // }, [])
 
     const onLogoutClick = (e) => {
         e.preventDefault();
-        console.log("navbarlogout")
         props.setMenu(true);
         props.logoutUser();
         //props.history.push("/")
@@ -131,7 +131,7 @@ function NavBar(props) {
     const handleMenu = (e) => {
         console.log(auth);
         setOpenMenu(prev => !prev);
-        
+        props.handleMenu();
     };
 
 
@@ -155,7 +155,7 @@ function NavBar(props) {
         <AppBar 
             position="fixed"
             className={clsx(classes.appBar, {
-                [classes.appBarShift]: auth.isAuthenticated
+                [classes.appBarShift]: openMenu
             })}
         >
             <ToolBar>
@@ -180,7 +180,7 @@ function NavBar(props) {
                     </Grid>
                     <Grid item xs={1}>
                         {
-                            props.auth.isAuthenticated && 
+                            props.auth.isAuthenticated ? (
                             <div>
                                 <IconButton edge="end" color="inherit" aria-label="Account" onClick={handleAccountMenu}>
                                     <AccountCircle />
@@ -209,7 +209,12 @@ function NavBar(props) {
                                     }
                                 </AccountMenu>
 
-                            </div>
+                            </div> ) : (
+                                <div>
+                                <Button onClick={() => props.history.push("/login")} variant="contained">Login</Button>
+                                <Button onClick={() => props.history.push("/register")} variant="contained">Register</Button>
+                                </div>
+                            )
                         }
                     </Grid>
                 </Grid>

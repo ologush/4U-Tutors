@@ -41,6 +41,8 @@ import PendingPayments from "./components/PendingPayments"
 import Complaint from "./components/Complaint"
 import ComplaintSuccessful from "./components/ComplaintSuccessful"
 import Complaints from "./components/Complaints"
+import Feedback from "./components/Feedback"
+
 
 import Paper from "@material-ui/core/Paper"
 
@@ -111,9 +113,8 @@ function App() {
   const [openMenu, setOpenMenu] = useState(false);
   
 
-  const setMenu = (toSet) => {
-    console.log("setting menu to:")
-    setOpenMenu(toSet);
+  const handleMenu = () => {
+    setOpenMenu(prev => !prev);
   }
 
   return (
@@ -123,10 +124,10 @@ function App() {
           <ThemeProvider theme={theme}>
             <CssBaseline />
           
-          <NavBar setMenu={setMenu}/>
+          <NavBar handleMenu={handleMenu}/>
           <main
             className={clsx(classes.content, {
-              [classes.contentShift]: isAuthenticated,
+              [classes.contentShift]: openMenu,
             })}
           >
 
@@ -146,7 +147,7 @@ function App() {
             
             
             
-            <PrivateRoute exact path="/postLesson/:lessonID" component={PostLesson} />
+            <PrivateRoute exact path="/postLesson/:lessonID" component={Feedback} />
             <PrivateRoute exact path="/pastLessons" component={PastLessons} />
             <PrivateRoute exact path="/requestLesson" component={LessonRequest} />
             <PrivateRoute exact path="/request/:tutorID" component={LessonRequest} />

@@ -29,7 +29,6 @@ const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
                 prevParticipants.filter(p => p != participant)
             );
         };
-        console.log(roomName);
         Video.connect(token, {
             name: roomName
         }).then(room => {
@@ -64,7 +63,7 @@ const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
 
     return (
         <Grid container spacing={2} >
-            <Grid item container xs={8}>
+            <Grid item container xs={11}>
                 {
                     remoteParticipants.length > 3 ? (
                         remoteParticipants.map(participant => (
@@ -81,7 +80,7 @@ const Room = ({ roomName, token, handleLogout, subject, startTime}) => {
                     )
                 }
             </Grid>
-            <Grid item container xs={4} direction="column" wrap="nowrap">
+            <Grid item container xs={1} direction="column" wrap="nowrap">
                 <Card>
                     <CardContent>
                         <Typography variant="h6">Room: {subject}</Typography>

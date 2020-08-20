@@ -12,6 +12,8 @@ function RequestCard(props) {
             <CardContent>
                 <Typography variant="h5">Course: {props.course}</Typography>
                 <Typography variant="body1">{props.description}</Typography>
+                <Typography variant="h6">Type: {props.type}</Typography>
+                <Typography variant="h6">Payout: ${props.payout}</Typography>
             </CardContent>
             <CardActions>
                 <Button variant="contained" onClick={props.enterRequest}>Enter Booking</Button>
@@ -26,6 +28,8 @@ RequestCard.propTypes = {
     description: PropTypes.string.isRequired,
     decline: PropTypes.func.isRequired,
     enterRequest: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
+    payout: PropTypes.number.isRequired
 }
 
 export default RequestCard;

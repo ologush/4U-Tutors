@@ -39,6 +39,7 @@ class AccountFinder extends Component {
         axios
             .post("/users/findUserByEmail", searchData)
             .then(res => {
+                console.log("a")
                 const newUser = {
                     email: res.data.email,
                     _id: res.data._id
@@ -53,11 +54,12 @@ class AccountFinder extends Component {
 
             })
             .catch(err => {
-                if(err.response.data.userNotFound) {
-                    alert(err.response.data.userNotFound)
-                } else {
-                    alert("The server encountered an unknown error, try refreshing the page")
-                }         
+                // if(err.response.data.userNotFound) {
+                //     alert(err.response.data.userNotFound)
+                // } else {
+                //     alert("The server encountered an unknown error, try refreshing the page")
+                // }         
+                console.log(err);
             })
     }
 
@@ -82,11 +84,9 @@ class AccountFinder extends Component {
                     this.state.addedUsers.map(user => (
                        
                         <div>
-                            {console.log(user)}
+                            
                             <Typography variant="h6">{user.email}</Typography>
-                            <button id={user._id} onClick={this.deleteStudent}>
-                                X
-                            </button>
+                            
                             <IconButton aria-label="delete" onClick={() => this.deleteStudent(user)}>
                                 <DeleteIcon />
                             </IconButton>

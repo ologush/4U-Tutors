@@ -76,7 +76,7 @@ class Login extends Component {
 
                 
                 <CardActions>
-                    <TextField error={errors.email} id="email" onChange={this.onChange} label="Email" helperText="Please provide a valid Queen's University Email" className={classnames("", {
+                    <TextField error={errors.email} id="email" onChange={this.onChange} label="Email" helperText="Please provide a valid account email" className={classnames("", {
                         invalid: errors.email || errors.emailNotFound
                     })}/>
                     <span className="red-text">

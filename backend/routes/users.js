@@ -110,6 +110,26 @@ router.post('/getLessons', passport.authenticate('user', { session: false }), (r
     .catch(err => console.log(err));
 });
 
+router.get("/getLessons", passport.authenticate('user', { session: false }), async (req, res) => {
+  let response = [];
+  const { studentID } = req.query;
+  await Lesson.find({ studentID: studentID })
+  .then(docs => {
+    response.push(...docs);
+  })
+  .catch(err => console.log(err));
+
+  await Lesson.find({ otherStudentIDs: studentID })
+  .then(docs => {
+    console.log(docs);
+    response.push(...docs);
+    
+  })
+  .catch(err => console.log(err));
+
+  res.json(response);
+})
+
 //Will probably have to change to a get method along with other routes
 router.post('/getPostings', passport.authenticate('user', { session: false }), (req, res) => {
   //console.log("a")

@@ -8,6 +8,34 @@ import Grid from "@material-ui/core/Grid"
 import axios from "axios"
 import { useSelector } from "react-redux"
 import Typography from "@material-ui/core/Typography"
+import AccountFinder from "./AccountFinder"
+import Select from "@material-ui/core/Select"
+import MenuItem from "@material-ui/core/MenuItem"
+
+const groupOptions = [
+    {
+        amount: 2,
+        cost: 45
+    },
+    {
+        amount: 3,
+        cost: 65
+    },
+    {
+        amount: 4,
+        cost: 85
+    },
+    {
+        amount: 5,
+        cost: 105
+    }
+]
+
+const lessonTypes = [
+    "SINGLE",
+    "GROUP"
+]
+
 
 function LessonRequest(props) {
 
@@ -18,6 +46,10 @@ function LessonRequest(props) {
     const [user, setUser] = useState(useSelector(state => state.auth.user));
     const [loading, setLoading] = useState(true);
     const [fromPastLesson, setFromPastLesson] = useState(false);
+    const [type, setType] = useState("");
+    const [otherStudentIDs, setOtherStudentIDs] = useState([]);
+    const [otherStudentEmails, setOtherStudentEmails] = useState([]);
+    const [numberOfParticipants, setNumberOfParticipants] = useState(1);
 
     const addTutor = (tutorToAdd) => {
         setTutor(tutorToAdd)
@@ -36,6 +68,8 @@ function LessonRequest(props) {
             });
         });
     }
+
+    
 
     useEffect(() => {
         if(props.match.params.tutorID) {
@@ -67,7 +101,11 @@ function LessonRequest(props) {
             availableTimes: dates,
             course: course,
             description: description,
-            tutorName: tutor.name
+            tutorName: tutor.name,
+            otherStudentEmails: otherStudentEmails,
+            otherStudentIDs: otherStudentIDs,
+            type: type,
+            numberOfParticipants: numberOfParticipants
         }
 
         console.log(data)
@@ -80,6 +118,24 @@ function LessonRequest(props) {
         .catch(err => console.log(err))
     }
 
+    const selectType = (e) => {
+        const typeToSet = e.target.value;
+        setType(typeToSet);
+    }
+
+    const addStudent = (student) => {
+        setOtherStudentEmails(prevState => [...prevState, student.email]);
+        setOtherStudentIDs(prevState => [...prevState, student._id]);
+    }
+
+    const deleteStudent = (student) => {
+        setOtherStudentEmails(otherStudentEmails.filter(email => student.email != email));
+        setOtherStudentIDs(otherStudentIDs.filter(id => student._id != id));
+    }
+
+    const selectNumber = (e) => {
+        setNumberOfParticipants(e.target.value);
+    }
     
 
     return(
@@ -90,7 +146,46 @@ function LessonRequest(props) {
             <Grid item container xs={12} spacing={2}>
                 <Grid item xs={4}>
                     <Paper>
+                        <Typography variant="body1">Enter Tutor Email and press select</Typography>
                         <TutorFinder onEnter={addTutor} fromPastLesson={fromPastLesson} existingEmail={tutor.email} />
+
+                        <Typography variant="body">Select lesson Type</Typography>
+                        <Select 
+                            onChange={selectType}
+                            value={type}
+                            name="LESSON_TYPE"
+                        >
+                            {
+                                lessonTypes.map(lesson => (
+                                    <MenuItem value={lesson}>LessonType: {lesson}</MenuItem>
+                                ))
+                            }
+                        </Select>
+
+                        {
+                            type === "GROUP" ? (
+                                <div>
+                                <Typography variant="h5">Select the number of participants in the group</Typography>
+                                <Select 
+                                    onChange={selectNumber}
+                                    value={numberOfParticipants}
+                                    name="GROUP_SIZE"
+                                >
+                                    {
+                                        groupOptions.map(option => (
+                                            <MenuItem value={option.amount}>Participants: {option.amount}, Cost: {option.cost}</MenuItem>
+                                        ))
+                                    }
+
+                                    
+                                </Select>
+                                <Typography variant="h5">Enter the participating account emails</Typography>
+                                <AccountFinder addStudent={addStudent} deleteStudent={deleteStudent} maxEmails={numberOfParticipants - 1} addedEmails={otherStudentEmails} addedStudentIDs={otherStudentIDs} />
+                                </div>
+                            ) : (
+                                ""
+                            )
+                        }
                     </Paper>
                 </Grid>
                 <Grid item xs={4}>

@@ -13,13 +13,20 @@ function LessonsPending(props) {
     const [user, setUser] = useState(useSelector(state => state.auth.user));
     const [pendingLessons, setPendingLessons] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [hasPending, setHasPending] = useState(false);
+
     useEffect(() => {
         console.log(user);
         axios
         .get("/lesson/tutor/getPendingLessons", { params: { tutorID: user.id } })
         .then(res => {
-            setPendingLessons(res.data);
-            setLoading(false);
+            if(res.data.length > 0) {
+                setPendingLessons(res.data);
+                setLoading(false);
+                setHasPending(true);
+            } else {
+                setLoading(false);
+            }
         })
         .catch(err => console.log(err))
     }, [])
@@ -42,6 +49,7 @@ function LessonsPending(props) {
                         </Grid>
                     )
                 })
+                //!hasPending && <Typography variant="h5">You have no lessons pending student payment.</Typography>
             ) : (
                 <Typography variant="h5">Loading...</Typography>
             )

@@ -13,13 +13,19 @@ function PendingPayments(props) {
     const [user, setUser] = useState(useSelector(state => state.auth.user));
     const [pendingPayments, setPendingPayments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [hasPendingPayments, setHasPendingPayments] = useState(false);
 
     useEffect(() => {
         axios
         .get("/users/pendingPayments", { params: { studentID: user.id } })
         .then(res => {
-            setPendingPayments(res.data);
-            setLoading(false);
+            if(res.data.length > 0) {
+                setPendingPayments(res.data);
+                setHasPendingPayments(true);
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
         })
         .catch(err => console.log(err))
     }, []);
@@ -49,6 +55,7 @@ function PendingPayments(props) {
                         </Grid>
                     )
                 })
+                //!hasPendingPayments && <Typography variant="h5">You have no pending payments. All your upcoming lessons are paid for.</Typography>
             ) : (
                 <Typography variant="h5">Loading...</Typography>
             )   

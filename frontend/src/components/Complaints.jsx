@@ -13,13 +13,20 @@ function Complaints(props) {
     const [loading, setLoading] = useState(true);
     const [complaints, setComplaints] = useState([]);
     const [user, setUser] = useState(useSelector(state => state.auth.user));
+    const [hasComplaints, setHasComplaints] = useState(false);
 
     useEffect(() => {
         axios
         .get("/users/getComplaints", { params: { studentID: user.id } })
         .then(res => {
-            setComplaints(res.data);
-            setLoading(false);
+            
+            if(res.data.length > 0) {
+                setComplaints(res.data);
+                setHasComplaints(true);
+                setLoading(false);
+            } else {
+                setLoading(false);
+            }
         })
         .catch(err => console.log(err))
     }, []);
@@ -42,7 +49,8 @@ function Complaints(props) {
                                 />
                             </Grid>
                         )
-                    })
+                    }),
+                    !hasComplaints && <Typography variant="h5">You have not filed any complaints, go to your past lessons to file a complaint</Typography>
                 ) : (
                     <Typography variant="h5">Loading...</Typography>
                 )

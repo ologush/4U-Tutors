@@ -13,13 +13,19 @@ function PastLessons(props) {
     const [pastLessons, setPastLessons] = useState([]);
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(useSelector(state => state.auth.user));
+    const [hasPastLessons, setHasPastLessons] = useState(false);
 
     useEffect(() => {
         axios
         .get("/tutors/getFeedback", { params: { tutorID: user.id } })
         .then(res => {
-            setPastLessons(res.data);
-            setLoading(false);
+            if(res.data.length > 0) {
+                setPastLessons(res.data);
+                setLoading(false);
+                setHasPastLessons(true);
+            } else {
+                setLoading(false)
+            }
         })
         .catch(err => console.log(err));
     }, []);
@@ -47,6 +53,7 @@ function PastLessons(props) {
                     )
                     
                 })
+                //!hasPastLessons && <Typography variant="h5">You have no past lessons, book to get started</Typography>
             ) : (
                 <Typography variant="h5">Loading...</Typography>
             )
