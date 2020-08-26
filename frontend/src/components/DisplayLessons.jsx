@@ -84,6 +84,7 @@ function DisplayLessons(props) {
                                 tutorName={lesson.tutorName}
                                 onClick={() => enterLesson(lesson._id, index)}
                                 cancelLesson={() => cancelLesson(lesson._id)}
+                                date={date}
                             />
                         </Grid>
                     )
