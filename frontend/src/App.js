@@ -50,6 +50,8 @@ import { makeStyles, ThemeProvider } from "@material-ui/core/styles"
 import clsx from "clsx"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import theme from "./theme"
+import axios from "axios"
+axios.defaults.baseURL = "/api/";
 const drawerWidth = 240;
 
 

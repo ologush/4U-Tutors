@@ -20,6 +20,7 @@ import { Menu as AccountMenu } from "@material-ui/core"
 import clsx from "clsx"
 import Button from "@material-ui/core/Button"
 
+
 const accountOptions = [
     "Account Settings",
     "Logout"
@@ -118,7 +119,7 @@ function NavBar(props) {
 
     const onLogoutClick = (e) => {
         e.preventDefault();
-        props.setMenu(true);
+        props.handleMenu();
         props.logoutUser();
         //props.history.push("/")
     }
