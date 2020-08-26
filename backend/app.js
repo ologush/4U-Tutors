@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 const db = require("./config/keys").mongoURI;
 var passport = require("passport");
 
-const payout = require('./tasks/pay.js');
+//const payout = require('./tasks/pay.js');
 
 const cron = require('node-cron');
 
@@ -52,13 +52,13 @@ app.use(passport.initialize());
 
 require("./config/passport")(passport);
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/match', matchingRouter);
-app.use('/tutors', tutorRouter);
-app.use('/videoChat', videoChatRouter);
-app.use('/lesson', lessonRouter);
-app.use('/payments', paymentRouter);
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/match', matchingRouter);
+app.use('/api/tutors', tutorRouter);
+app.use('/api/videoChat', videoChatRouter);
+app.use('/api/lesson', lessonRouter);
+app.use('/api/payments', paymentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
