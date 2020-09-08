@@ -176,10 +176,10 @@ function NavBar(props) {
                             </div>
                         }
                     </Grid>
-                    <Grid item xs={10}>
+                    <Grid item xs={19}>
                         <Typography align="left" variant="h4">4U Academics</Typography>
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid item xs={2}>
                         {
                             props.auth.isAuthenticated ? (
                             <div>

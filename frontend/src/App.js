@@ -99,7 +99,7 @@ if(localStorage.jwtToken) {
   if(decoded.exp < currentTime) {
     store.dispatch(logoutUser());
 
-    window.location.href = "./login";
+    window.location.href = "./";
   } else {
     isAuthenticated = true;
   }
