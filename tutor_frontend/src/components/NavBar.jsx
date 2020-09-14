@@ -19,7 +19,7 @@ import Menu from "./Menu"
 import { FormatColorTextSharp } from '@material-ui/icons'
 import clsx from 'clsx'
 import Button from "@material-ui/core/Button"
-
+import Box from "@material-ui/core/Box"
 
 const accountOptions = [
     "Account Settings",
@@ -131,7 +131,7 @@ function NavBar(props) {
                         }
                     </Grid>
                     <Grid item xs={10}>
-                        <Typography align="left" variant="h4">4U Academics</Typography>
+                    <img src={require("../4uAcFull_White.png")} style={{maxWidth: "20%", height: "auto" }} />
                     </Grid>
                     <Grid item xs={1}>
                         {

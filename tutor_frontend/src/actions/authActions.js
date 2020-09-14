@@ -8,6 +8,8 @@ import {
     USER_LOADING
 } from "./types"
 
+axios.defaults.baseURL = '/api/'
+
 export const registerUser = (userData, history) => dispatch => {
     axios
         .post("/tutors/register", userData)

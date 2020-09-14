@@ -136,8 +136,6 @@ function NavBar(props) {
         props.handleMenu();
     };
 
-
-
     const handleClose = (e) => {
         setAnchorEl(null);
 
@@ -178,7 +176,8 @@ function NavBar(props) {
                         }
                     </Grid>
                     <Grid item xs={9}>
-                        <Typography align="left" variant="h4">4U Academics</Typography>
+                        <img src={require("../4uAcFull_White.png")} style={{maxWidth: "20%", height: "auto" }} />
+                        
                     </Grid>
                     <Grid item xs={2}>
                         {
