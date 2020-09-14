@@ -43,6 +43,8 @@ import ComplaintSuccessful from "./components/ComplaintSuccessful"
 import Complaints from "./components/Complaints"
 import Feedback from "./components/Feedback"
 
+import GettingStarted from "./components/GettingStarted"
+
 
 import Paper from "@material-ui/core/Paper"
 
@@ -138,6 +140,7 @@ function App() {
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/gettingStarted" component={GettingStarted} />
           
           <Switch>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
