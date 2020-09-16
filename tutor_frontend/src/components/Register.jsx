@@ -83,7 +83,7 @@ class Register extends Component {
                     <Typography variant='h3'>Register</Typography>
                 </CardContent>
                 <CardContent>
-                    <Typography>Register for engsoc dash using a valid Queen's University email</Typography>
+                    <Typography>Register to become a tutor!</Typography>
                 </CardContent>
                 <form onSubmit={this.onSubmit}>
 
@@ -121,11 +121,7 @@ class Register extends Component {
                 </CardActions>
                 <CardActions>
                     <TextField onChange={this.onChange} id="description" label="Description" />
-                </CardActions>
-                <CardActions>
-                    <Button href={URI}>Connect with Stripe</Button>
-                </CardActions>
-                <CardActions>
+                
                     <Button type="Submit">Register</Button>
                 </CardActions>
                 </form>

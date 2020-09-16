@@ -154,7 +154,7 @@ class Register extends Component {
                     <Button type="Submit">Register</Button>
                 </CardActions>
                 <Typography variant="h6">Please agree to the terms and conditions below:</Typography>
-                <Typography variant="body1">These are the example terms and conditions, will need to update later</Typography>
+                <Typography variant="body1"></Typography>
                 <CardActions>
                     <Checkbox checked={this.state.agreedToTAC} onChange={this.handleCheckbox} color="primary" />
                 </CardActions>
