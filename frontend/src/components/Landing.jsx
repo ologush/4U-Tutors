@@ -68,11 +68,11 @@ function Landing(props) {
                         <CardHeader title="Tutor of the Week"  />
                         <Divider />
                         <CardMedia>
-                            {/* <img src={require("../jon")} /> */}
+                            <img src={require("../jon.jpeg")} />
                         </CardMedia>
                         <CardContent align="left">
                             <Typography variant="h5">About Jon:</Typography>
-                            <Typography variant="body1">Description</Typography>
+                            <Typography variant="body1">Jon is a third year Applied Mathematics and Engineering Student at Queen's University. He specializes tutoring in math and science related subjects. He is passionate about skiing, and an avid chess player.</Typography>
                         </CardContent>
                     </Card>
                 </Grid>
