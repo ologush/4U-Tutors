@@ -25,7 +25,7 @@ const TutorSchema = new Schema({
      },
      stripeID: {
          type: String,
-         required: true,
+         required: false,
          default: null
      }
 

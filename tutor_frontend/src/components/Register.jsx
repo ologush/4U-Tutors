@@ -99,7 +99,7 @@ class Register extends Component {
                     
                 </CardActions>
                 <CardActions>
-                    <TextField error={errors.email} onChange={this.onChange} required id="email" label="Email" helperText="Please use a valid Queen's email" className={classnames("", {
+                    <TextField error={errors.email} onChange={this.onChange} required id="email" label="Email"  className={classnames("", {
                         invalid: errors.email
                     })} />
                     <span className="red-text">{errors.email}</span>
@@ -107,20 +107,20 @@ class Register extends Component {
 
 
                 <CardActions>
-                    <TextField error={errors.password} onChange={this.onChange} required id="password" label="Password" className={classnames("", {
+                    <TextField error={errors.password} onChange={this.onChange} required id="password" type="password" label="Password" className={classnames("", {
                         invalid: errors.password
                     })}/>
                     <span className="red-text">{errors.password}</span>
                 </CardActions>
                 <CardActions>
-                    <TextField error={errors.password2} onChange={this.onChange} required id="password2" label="Confirm Password"  className={classnames("", {
+                    <TextField error={errors.password2} onChange={this.onChange} required id="password2" type="password" label="Confirm Password"  className={classnames("", {
                         invalid: errors.password2
                     })}/>
                     <span className="red-text">{errors.password2}</span>
 
                 </CardActions>
                 <CardActions>
-                    <TextField onChange={this.onChange} id="description" label="Description" />
+                    <TextField onChange={this.onChange} id="description" label="Description" multiline rows={6} />
                 
                     <Button type="Submit">Register</Button>
                 </CardActions>

@@ -333,7 +333,7 @@ function MakePosting(props) {
     }
 
     return (
-        <div>
+        <Paper>
         {
             loading ? (
                 <Typography variant="h5">Loading...</Typography>
@@ -413,7 +413,7 @@ function MakePosting(props) {
         </div>
             )
         }
-        </div>
+        </Paper>
         
     )
 }
