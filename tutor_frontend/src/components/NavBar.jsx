@@ -21,6 +21,7 @@ import clsx from 'clsx'
 import Button from "@material-ui/core/Button"
 import Box from "@material-ui/core/Box"
 
+
 const accountOptions = [
     "Account Settings",
     "Logout"
@@ -130,10 +131,10 @@ function NavBar(props) {
                             </div>
                         }
                     </Grid>
-                    <Grid item xs={10}>
+                    <Grid item xs={9}>
                     <img src={require("../4uAcFull_White.png")} style={{maxWidth: "20%", height: "auto" }} />
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid item xs={2}>
                         {
                             props.auth.isAuthenticated ? (
                             <div>
@@ -165,7 +166,10 @@ function NavBar(props) {
 
                                 </AccountMenu>
                             </div> ) : (
-                                <Button onClick={() => props.history.push("/login")} variant="contained">Login</Button>
+                                <div>
+                                    <Button onClick={() => props.history.push("/login")} variant="contained">Login</Button>
+                                    <Button onClick={() => props.history.push("/apply")} variant="contained">Apply</Button>
+                                </div>
                             )
                         }
                     </Grid>

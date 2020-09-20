@@ -18,6 +18,7 @@ const LessonRequest = require('../models/LessonRequest');
 const LessonConfirm = require('../models/LessonConfirm');
 const LessonBid = require('../models/LessonBid');
 const PastLesson = require('../models/PastLesson');
+const TutorApplication = require('../models/TutorApplication')
 
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey('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');
@@ -53,6 +54,47 @@ router.post('/register', (req, res) => {
             }
         })
 });
+
+router.get('/getApplicants', (req, res) => {
+    
+});
+
+router.post('/apply', (req, res) => {
+
+    Tutor.findOne({ email: req.body.email })
+    .then(tutor => {
+        if(tutor) {
+            return res.status(400).json({ email: "Account with this email already exists"});
+        } else {
+            TutorApplication.findOne({ email: req.body.email })
+            .then(tutorApplication => {
+                if(tutorApplication) {
+                    return res.status(400).json({ email: "Application with this email already exists"})
+                } else {
+                    const newApplicant = new TutorApplication({
+                        email: req.body.email,
+                        name: req.body.name,
+                        password: req.body.password,
+                        description: req.body.description,
+                        applicationReason: req.body.applicationReason
+                    });
+
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newApplicant.password, salt, (err, hash) => {
+                            if(err) throw err;
+                            newApplicant.password = hash;
+                            newApplicant
+                            .save()
+                            .then(applicant => res.json(applicant))
+                            .catch(err => console.log(err));
+                        });
+                    });
+                }
+            })
+        }
+    })
+
+})
 
 //add input validation
 router.post('/login', (req, res) => {
