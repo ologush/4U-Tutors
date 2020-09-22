@@ -31,7 +31,10 @@ function Apply(props) {
         console.log(submissionData)
         axios
         .post("/tutors/apply", submissionData)
-        .then(res => console.log(res.json))
+        .then(res => {
+            console.log(res);
+            props.history.push("/applied");
+        })
         .catch(err => console.log(err));
     };
 

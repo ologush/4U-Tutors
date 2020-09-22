@@ -29,6 +29,7 @@ import SaveStripe from "./components/SaveStripe"
 import MyBids from "./components/MyBids"
 import Test from "./components/Test"
 import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core/styles"
+import Applied from "./components/Applied"
 
 import PastLessons from "./components/PastLessons"
 import LessonsPending from "./components/LessonsPending"
@@ -115,6 +116,7 @@ function App() {
           <Route exact path="/secretRegisterPage" component={Register} />
           <Route exact path="/apply" component={Apply} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/applied" component={Applied} />
           <Switch>
             <PrivateRoute exact path="/homePage" component={HomePage} />
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
