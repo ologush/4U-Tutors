@@ -26,7 +26,7 @@ sgMail.setApiKey('SG.XywI63hbQdqJ28CA_s0-JQ.HwHZ4tuB9ZXqwhuAwfQYyUEvFFdF1VsQioMp
 //Add input validation
 
 const validateLoginInput = require("../validation/login");
-const stripe = require('stripe')('sk_test_51H7oaAFvYqAjSG5imIW7Qg7F7Bb1yGe1uzadP4YECJfhJzZwfQ09NUUo3odus744L9hvZTmeR0nKOV6TbhTFfUOF002jruSSFo');
+const stripe = require('stripe')('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');
 
 router.post('/register', (req, res) => {
     Tutor.findOne({ email: req.body.email })

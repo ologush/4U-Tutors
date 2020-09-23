@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import Typography from "@material-ui/core/Typography"
 import axios from "axios"
 
-const URI = "https://connect.stripe.com/express/oauth/authorize?client_id=ca_Hhx4MECM4ayyLP7qKPVrRuZw9ompwsUj&suggested_capabilities[]=transfers&stripe_user[business_type]=individual&stripe_user[email]="
+const URI = "https://connect.stripe.com/express/oauth/authorize?client_id=ca_Hhx48Wat11MQ1x49Gjxqj5s7e9dSU0ma&suggested_capabilities[]=transfers&stripe_user[business_type]=individual&stripe_user[email]="
 
 function AccountSettings() {
 

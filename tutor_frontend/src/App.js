@@ -111,7 +111,7 @@ function App() {
             })}
           >
             
-          <Route exact path="/test" component={Test} />
+         
           <Route exact path="/" component={Landing} />
           <Route exact path="/secretRegisterPage" component={Register} />
           <Route exact path="/apply" component={Apply} />
